@@ -37,7 +37,7 @@ class PhotoListViewModel @Inject constructor(
             handleApiResponse(
                 source = getPhotosUseCase(currentPage),
                 onSuccess = { data -> handleGetPhotosSuccess(data) },
-                onError = { error -> Unit }
+                onError = { error -> handleGetPhotosError(error) }
             )
         }
     }

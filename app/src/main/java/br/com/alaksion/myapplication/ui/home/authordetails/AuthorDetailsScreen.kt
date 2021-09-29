@@ -1,25 +1,21 @@
 package br.com.alaksion.myapplication.ui.home.authordetails
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.data.model.author.components.AuthorHeaderItem
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorDetailsHeader
+import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorMediaLinks
 import br.com.alaksion.myapplication.ui.home.photolist.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import com.skydoves.landscapist.glide.GlideImage
-import com.valentinilk.shimmer.shimmer
 
 const val AUTHOR_USERNAME_ARG = "author_username"
 
@@ -88,67 +84,29 @@ fun AuthorDetailsReady(authorData: AuthorResponse) {
             profileImageUrl = authorData.profileImage,
             photoCount = authorData.totalPhotos,
             followersCount = authorData.followers,
-            followingCount = authorData.following
-        )
-    }
-
-}
-
-@Composable
-fun AuthorDetailsHeader(
-    profileImageUrl: String,
-    photoCount: Int,
-    followersCount: Int,
-    followingCount: Int
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        GlideImage(
-            imageModel = profileImageUrl,
+            followingCount = authorData.following,
             modifier = Modifier
-                .size(128.dp)
-                .clip(CircleShape)
-                .weight(2.0f),
-            loading = {
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .shimmer()
-                )
-            },
-            failure = {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    tint = MaterialTheme.colors.onBackground,
-                    contentDescription = null,
-                    modifier = Modifier.size(100.dp)
-                )
-            }
-        )
-        AuthorHeaderItem(
-            value = photoCount.toString(),
-            label = "Posts",
-            modifier = Modifier
-                .weight(1.0f)
                 .padding()
-                .padding(start = 20.dp)
+                .padding(bottom = 10.dp)
         )
-        AuthorHeaderItem(
-            value = followersCount.toString(),
-            label = "Followers",
-            modifier = Modifier
-                .weight(1.0f)
-                .padding()
-                .padding(start = 10.dp)
+        Text(
+            authorData.name,
+            style = AppTypoGraph.body_14_bold(),
+            maxLines = 1,
+            modifier = Modifier.fillMaxWidth()
         )
-        AuthorHeaderItem(
-            value = followingCount.toString(),
-            label = "Following",
+        Text(
+            authorData.bio,
+            style = AppTypoGraph.body_14(),
             modifier = Modifier
-                .weight(1.0f)
+        )
+        AuthorMediaLinks(
+            twitterUser = authorData.twitterUser,
+            instagramUser = authorData.instagramUser,
+            portfolioUrl = authorData.portfolioUrl,
+            modifier = Modifier
                 .padding()
-                .padding(start = 10.dp)
+                .padding(top = 10.dp)
         )
     }
 }

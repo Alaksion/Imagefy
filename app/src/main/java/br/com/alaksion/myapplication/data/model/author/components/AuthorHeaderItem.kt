@@ -12,6 +12,6 @@ import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 fun AuthorHeaderItem(value: String, label: String, modifier: Modifier = Modifier) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(value, style = AppTypoGraph.body_18_bold(), overflow = TextOverflow.Ellipsis, maxLines = 1)
-        Text(label, style = AppTypoGraph.body_16(), overflow = TextOverflow.Ellipsis, maxLines = 1)
+        Text(label, style = AppTypoGraph.body_14(), overflow = TextOverflow.Ellipsis, maxLines = 1)
     }
 }

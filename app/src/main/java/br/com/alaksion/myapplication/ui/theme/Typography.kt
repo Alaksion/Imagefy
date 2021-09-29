@@ -51,6 +51,13 @@ object AppTypoGraph {
     )
 
     @Composable
+    fun body_14() = TextStyle(
+        color = MaterialTheme.colors.onBackground,
+        fontSize = 16.sp,
+        fontFamily = robotoFontFamily,
+    )
+
+    @Composable
     fun body_12() = TextStyle(
         color = MaterialTheme.colors.onBackground,
         fontSize = 12.sp,
