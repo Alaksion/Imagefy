@@ -11,10 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorMediaLinks
-import br.com.alaksion.myapplication.ui.home.photolist.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
 const val AUTHOR_USERNAME_ARG = "author_username"
@@ -33,15 +35,16 @@ fun AuthorDetailsScreen(
     AuthorDetailsScreen(
         authorData = viewModel.authorData.value,
         authorUsername = authorUsername,
-        popBackStack = popBackStack
+        popBackStack = popBackStack,
+        authorPhotos = viewModel.authorPhotos.value,
     )
-
 }
 
 @Composable
 internal fun AuthorDetailsScreen(
     authorData: ViewState<AuthorResponse>,
     authorUsername: String,
+    authorPhotos: ViewState<List<AuthorPhotosResponse>>,
     popBackStack: () -> Boolean
 ) {
     Column() {
@@ -63,13 +66,14 @@ internal fun AuthorDetailsScreen(
             }
         }
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(10.dp)
+            modifier = Modifier.padding(10.dp)
         ) {
             when (authorData) {
                 is ViewState.Loading -> AuthorDetailsLoading()
-                is ViewState.Ready -> AuthorDetailsReady(authorData = authorData.data)
+                is ViewState.Ready -> AuthorDetailsReady(
+                    authorData = authorData.data,
+                    authorPhotos = authorPhotos
+                )
                 is ViewState.Error -> AuthorDetailsError {}
                 is ViewState.Idle -> Unit
             }
@@ -78,7 +82,10 @@ internal fun AuthorDetailsScreen(
 }
 
 @Composable
-fun AuthorDetailsReady(authorData: AuthorResponse) {
+fun AuthorDetailsReady(
+    authorData: AuthorResponse,
+    authorPhotos: ViewState<List<AuthorPhotosResponse>>,
+) {
     Column() {
         AuthorDetailsHeader(
             profileImageUrl = authorData.profileImage,
@@ -108,6 +115,7 @@ fun AuthorDetailsReady(authorData: AuthorResponse) {
                 .padding()
                 .padding(top = 10.dp)
         )
+        AuthorPhotosList(photos = authorPhotos, onClickTryAgain = { }) {}
     }
 }
 

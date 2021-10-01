@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.home.photolist.components
+package br.com.alaksion.myapplication.ui.components
 
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme

@@ -11,9 +11,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.InfiniteListHandler
-import br.com.alaksion.myapplication.ui.home.photolist.components.MorePhotosLoader
+import br.com.alaksion.myapplication.ui.components.MorePhotosLoader
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
-import br.com.alaksion.myapplication.ui.home.photolist.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 
 @Composable
 fun PhotoListScreen(
@@ -82,6 +82,5 @@ internal fun PhotoListScreen(
             InfiniteListHandler(listState = listState) { loadMorePhotos() }
         }
     }
-
 
 }
