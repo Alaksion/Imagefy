@@ -1,19 +1,20 @@
 package br.com.alaksion.myapplication.ui.home.photolist
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.InfiniteListHandler
 import br.com.alaksion.myapplication.ui.components.MorePhotosLoader
-import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 
 @Composable
 fun PhotoListScreen(
@@ -43,25 +44,11 @@ internal fun PhotoListScreen(
 ) {
     val listState = rememberLazyListState()
 
-    ConstraintLayout(modifier.fillMaxSize()) {
-        val (list, screenLoader, morePhotosLoader) = createRefs()
+    Box(modifier.fillMaxSize()) {
 
-        if (isScreenLoading) ProgressIndicator(Modifier.constrainAs(screenLoader) {
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            top.linkTo(parent.top)
-            bottom.linkTo(parent.bottom)
-        })
+        if (isScreenLoading) ProgressIndicator(Modifier.align(Alignment.Center))
         else {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.constrainAs(list) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                }
-            ) {
+            LazyColumn(state = listState) {
                 items(photos) { item ->
                     PhotoCard(
                         photoContent = item,
@@ -72,11 +59,8 @@ internal fun PhotoListScreen(
             }
             if (isMorePhotosLoading) MorePhotosLoader(
                 modifier = Modifier
-                    .constrainAs(morePhotosLoader) {
-                        end.linkTo(parent.end)
-                        start.linkTo(parent.start)
-                        bottom.linkTo(parent.bottom)
-                    }
+                    .align(Alignment.BottomCenter)
+                    .padding()
                     .padding(bottom = 20.dp)
             )
             InfiniteListHandler(listState = listState) { loadMorePhotos() }
