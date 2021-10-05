@@ -7,6 +7,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
+import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,17 +23,17 @@ class PhotoListViewModel @Inject constructor(
     val photos: SnapshotStateList<PhotoResponse>
         get() = _photos
 
+    private val _screenState = mutableStateOf<ViewState<Unit>>(ViewState.Loading())
+    val screenState: State<ViewState<Unit>>
+        get() = _screenState
+
     private var currentPage = 1
 
-    private val _isScreenLoading = mutableStateOf(true)
-    val isScreenLoading: State<Boolean>
-        get() = _isScreenLoading
-
-    private val _isMorePhotosLoading = mutableStateOf(false)
-    val isMorePhotosLoading: State<Boolean>
-        get() = _isMorePhotosLoading
-
     init {
+        getImages()
+    }
+
+    fun getImages() {
         viewModelScope.launch {
             handleApiResponse(
                 source = getPhotosUseCase(currentPage),
@@ -45,37 +46,24 @@ class PhotoListViewModel @Inject constructor(
     private fun handleGetPhotosSuccess(data: List<PhotoResponse>?) {
         data?.let { response ->
             _photos.addAll(response)
-            _isScreenLoading.value = false
+            _screenState.value = ViewState.Ready(Unit)
         }
     }
 
     private fun handleGetPhotosError(error: NetworkError) {
-        // If there are photos loaded show error toast
-        // if there are no photos loaded show error component with try again
-        val a = 1
+        _screenState.value = ViewState.Error(error)
     }
 
     fun loadMorePhotos() {
         viewModelScope.launch {
-            _isMorePhotosLoading.value = true
+            _screenState.value = ViewState.Loading()
             currentPage++
             handleApiResponse(
                 source = getPhotosUseCase(currentPage),
-                onSuccess = { data -> handleGetMorePhotosSuccess(data) },
-                onError = { error -> handleGetMorePhotosError(error) }
+                onSuccess = { data -> handleGetPhotosSuccess(data) },
+                onError = { error -> handleGetPhotosError(error) }
             )
         }
-    }
-
-    private fun handleGetMorePhotosSuccess(data: List<PhotoResponse>?) {
-        data?.let { response ->
-            _photos.addAll(response)
-            _isMorePhotosLoading.value = false
-        }
-    }
-
-    private fun handleGetMorePhotosError(error: NetworkError) {
-        _isMorePhotosLoading.value = false
     }
 
 }
