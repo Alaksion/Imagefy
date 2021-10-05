@@ -19,7 +19,7 @@ interface UnsplashApi {
     @GET("users/{username}/photos")
     suspend fun getAuthorPhotos(
         @Path("username") username: String,
-        @Query("per_page") resultsPerPage: Int = 6,
+        @Query("per_page") resultsPerPage: Int = 12,
         @Query("page") page: Int
     ): Response<List<AuthorPhotoData>>
 

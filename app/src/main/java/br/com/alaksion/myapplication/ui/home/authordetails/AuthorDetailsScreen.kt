@@ -1,5 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.authordetails
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -14,13 +15,14 @@ import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
-import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorMediaLinks
+import br.com.alaksion.myapplication.ui.home.authordetails.components.authorheader.AuthorDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
 const val AUTHOR_USERNAME_ARG = "author_username"
 
+@ExperimentalFoundationApi
 @Composable
 fun AuthorDetailsScreen(
     viewModel: AuthorDetailsViewModel,
@@ -37,15 +39,18 @@ fun AuthorDetailsScreen(
         authorUsername = authorUsername,
         popBackStack = popBackStack,
         authorPhotos = viewModel.authorPhotos.value,
+        getMorePhotos = { viewModel.getMoreAuthorPhotos() }
     )
 }
 
+@ExperimentalFoundationApi
 @Composable
 internal fun AuthorDetailsScreen(
     authorData: ViewState<AuthorResponse>,
     authorUsername: String,
     authorPhotos: ViewState<List<AuthorPhotosResponse>>,
-    popBackStack: () -> Boolean
+    popBackStack: () -> Boolean,
+    getMorePhotos: () -> Unit
 ) {
     Column() {
         TopAppBar(
@@ -65,26 +70,25 @@ internal fun AuthorDetailsScreen(
                 Text(authorUsername, style = AppTypoGraph.body_16_black())
             }
         }
-        Box(
-            modifier = Modifier.padding(10.dp)
-        ) {
-            when (authorData) {
-                is ViewState.Loading -> AuthorDetailsLoading()
-                is ViewState.Ready -> AuthorDetailsReady(
-                    authorData = authorData.data,
-                    authorPhotos = authorPhotos
-                )
-                is ViewState.Error -> AuthorDetailsError {}
-                is ViewState.Idle -> Unit
-            }
+        when (authorData) {
+            is ViewState.Loading -> AuthorDetailsLoading()
+            is ViewState.Ready -> AuthorDetailsReady(
+                authorData = authorData.data,
+                authorPhotos = authorPhotos,
+                getMorePhotos = getMorePhotos
+            )
+            is ViewState.Error -> AuthorDetailsError {}
+            is ViewState.Idle -> Unit
         }
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun AuthorDetailsReady(
     authorData: AuthorResponse,
     authorPhotos: ViewState<List<AuthorPhotosResponse>>,
+    getMorePhotos: () -> Unit
 ) {
     Column() {
         AuthorDetailsHeader(
@@ -93,29 +97,34 @@ fun AuthorDetailsReady(
             followersCount = authorData.followers,
             followingCount = authorData.following,
             modifier = Modifier
-                .padding()
+                .padding(horizontal = 10.dp)
                 .padding(bottom = 10.dp)
         )
         Text(
             authorData.name,
             style = AppTypoGraph.body_14_bold(),
             maxLines = 1,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)
         )
         Text(
             authorData.bio,
             style = AppTypoGraph.body_14(),
-            modifier = Modifier
+            modifier = Modifier.padding(horizontal = 10.dp)
         )
         AuthorMediaLinks(
             twitterUser = authorData.twitterUser,
             instagramUser = authorData.instagramUser,
             portfolioUrl = authorData.portfolioUrl,
             modifier = Modifier
-                .padding()
+                .padding(horizontal = 10.dp)
                 .padding(top = 10.dp)
         )
-        AuthorPhotosList(photos = authorPhotos, onClickTryAgain = { }) {}
+        AuthorPhotosList(
+            photos = authorPhotos,
+            onClickTryAgain = { }
+        ) { getMorePhotos() }
     }
 }
 

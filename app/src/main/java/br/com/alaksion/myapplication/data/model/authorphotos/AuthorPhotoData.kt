@@ -10,5 +10,5 @@ data class AuthorPhotoData(
 
 fun AuthorPhotoData.mapToDomain() = AuthorPhotosResponse(
     photoId = this.id.handleOptional(),
-    photoUrl = this.urls?.small.handleOptional()
+    photoUrl = this.urls?.regular.handleOptional()
 )

@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.home.authordetails.components
+package br.com.alaksion.myapplication.ui.home.authordetails.components.authorheader
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.myapplication.data.model.author.components.AuthorHeaderItem
+import br.com.alaksion.myapplication.ui.home.authordetails.components.authorheader.AuthorHeaderItem
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 

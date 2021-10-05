@@ -31,14 +31,6 @@ class AuthorDetailsViewModel @Inject constructor(
     val authorPhotos: State<ViewState<List<AuthorPhotosResponse>>>
         get() = _authorPhotos
 
-    private val _isAuthorPhotosLoading = mutableStateOf(true)
-    val isAuthorPhotosLoading: State<Boolean>
-        get() = _isAuthorPhotosLoading
-
-    private val _isAuthorPhotosError = mutableStateOf(false)
-    val isAuthorPhotosError: State<Boolean>
-        get() = _isAuthorPhotosError
-
     private var authorUsername: String = ""
     private var page = 0
 
@@ -61,7 +53,9 @@ class AuthorDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onGetAuthorDataError(error: NetworkError) {}
+    private fun onGetAuthorDataError(error: NetworkError) {
+        val a = 1
+    }
 
     private fun getAuthorPhotos() {
         viewModelScope.launch {
@@ -81,5 +75,19 @@ class AuthorDetailsViewModel @Inject constructor(
     }
 
     private fun onGetAuthorPhotosError(error: NetworkError) {}
+
+    fun getMoreAuthorPhotos() {
+        page++
+        viewModelScope.launch {
+            handleApiResponse(
+                source = getAuthorPhotosUseCase(
+                    username = authorUsername,
+                    page = page
+                ),
+                onSuccess = { data -> onGetAuthorPhotosSuccess(data) },
+                onError = { error -> onGetAuthorPhotosError(error) }
+            )
+        }
+    }
 
 }

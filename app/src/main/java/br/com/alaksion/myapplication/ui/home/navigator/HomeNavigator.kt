@@ -1,5 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.navigator
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -13,6 +14,7 @@ import br.com.alaksion.myapplication.ui.home.authordetails.AuthorDetailsScreen
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListScreen
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListViewModel
 
+@ExperimentalFoundationApi
 @Composable
 fun HomeNavigator(
     modifier: Modifier = Modifier,

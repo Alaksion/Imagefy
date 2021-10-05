@@ -52,6 +52,7 @@ class PhotoListViewModel @Inject constructor(
     private fun handleGetPhotosError(error: NetworkError) {
         // If there are photos loaded show error toast
         // if there are no photos loaded show error component with try again
+        val a = 1
     }
 
     fun loadMorePhotos() {
