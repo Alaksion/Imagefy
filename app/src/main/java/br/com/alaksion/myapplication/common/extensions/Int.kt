@@ -7,6 +7,6 @@ fun Int.formatNumber(): String {
         return this.toString()
     }
 
-    val getVisibleValue = this / 1000.0
+    val getVisibleValue = this / 1000
     return getVisibleValue.toString() + "K"
 }

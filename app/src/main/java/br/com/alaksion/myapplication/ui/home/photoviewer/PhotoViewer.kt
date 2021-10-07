@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowLeft
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -25,11 +24,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
+import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
 import br.com.alaksion.myapplication.ui.theme.BlackRussian
 import br.com.alaksion.myapplication.ui.theme.OffWhite
 import com.skydoves.landscapist.glide.GlideImage
@@ -125,7 +125,6 @@ internal fun PhotoViewerReady(photoData: PhotoDetailResponse) {
                 .clickable(interactionSource = MutableInteractionSource(), indication = null) {
                     toggleBottomBar()
                 },
-            alignment = Alignment.TopCenter,
             imageModel = photoData.imageUrl,
             contentScale = ContentScale.Crop,
             loading = {
@@ -158,32 +157,26 @@ internal fun PhotoViewerReady(photoData: PhotoDetailResponse) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .height(48.dp)
-                            .clickable { }
+                    PhotoInfoItem(
+                        text = photoData.likes.formatNumber()
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.FavoriteBorder,
                             contentDescription = null,
                             tint = OffWhite,
-                            modifier = Modifier
-                                .padding()
-                                .padding(end = 5.dp)
-                        )
-                        Text(
-                            photoData.likes.toString(),
-                            style = AppTypoGraph.body_14().copy(color = OffWhite),
                         )
                     }
-                    IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(48.dp)) {
+
+                    PhotoInfoItem(
+                        text = photoData.downloads.formatNumber()
+                    ) {
                         Icon(
                             imageVector = Icons.Outlined.Download,
                             contentDescription = null,
                             tint = OffWhite,
                         )
                     }
+
                     IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(48.dp)) {
                         Icon(
                             imageVector = Icons.Outlined.Share,

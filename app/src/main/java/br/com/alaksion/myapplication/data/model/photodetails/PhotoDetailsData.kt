@@ -10,7 +10,8 @@ data class PhotoDetailsData(
     val user: PhotoOwnerData?,
     val links: PhotoLinksData?,
     val urls: PhotoUrlsData?,
-    val likes: Int?
+    val likes: Int?,
+    val downloads: Int?,
 )
 
 fun PhotoDetailsData.mapToDomain() = PhotoDetailResponse(
@@ -19,5 +20,6 @@ fun PhotoDetailsData.mapToDomain() = PhotoDetailResponse(
     id = this.id.handleOptional(),
     authorName = this.user?.username.handleOptional(),
     authorProfileImage = this.user?.profileImage?.large.handleOptional(),
-    likes = this.likes.handleOptional()
+    likes = this.likes.handleOptional(),
+    downloads = this.downloads.handleOptional()
 )
