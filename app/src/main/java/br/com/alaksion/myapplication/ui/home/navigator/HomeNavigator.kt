@@ -1,5 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.navigator
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,7 +14,10 @@ import br.com.alaksion.myapplication.ui.home.authordetails.AUTHOR_USERNAME_ARG
 import br.com.alaksion.myapplication.ui.home.authordetails.AuthorDetailsScreen
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListScreen
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListViewModel
+import br.com.alaksion.myapplication.ui.home.photoviewer.PHOTO_ID_ARG
+import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerScreen
 
+@ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
 fun HomeNavigator(
@@ -31,7 +35,12 @@ fun HomeNavigator(
             )
             PhotoListScreen(
                 viewModel,
-                navigateToPhotoDetails = { photoId -> },
+                navigateToPhotoViewer = { photoId ->
+                    navigateToPhotoViewer(
+                        navHostController,
+                        photoId
+                    )
+                },
                 navigateToAuthorDetails = { authorId ->
                     navigateToAuthorDetails(
                         navHostController,
@@ -53,9 +62,28 @@ fun HomeNavigator(
                 AuthorDetailsScreen(
                     viewModel = hiltViewModel(),
                     authorUsername = authorUsername,
-                    popBackStack = { navHostController.popBackStack() }
+                    popBackStack = { navHostController.popBackStack() },
+                    navigateToPhotoViewer = { photoUrl ->
+                        navigateToPhotoViewer(navHostController, photoUrl)
+                    }
                 )
             }
+        }
+
+        composable(
+            route = "${HomeScreens.PhotoViewer().route}/{$PHOTO_ID_ARG}",
+            arguments = listOf(
+                navArgument(PHOTO_ID_ARG) { type = NavType.StringType }
+            )
+        ) {
+            it.arguments?.getString(PHOTO_ID_ARG)
+                ?.let { photoId ->
+                    PhotoViewerScreen(
+                        viewModel = hiltViewModel(),
+                        photoId = photoId,
+                        popBackStack = { navHostController.popBackStack() }
+                    )
+                }
         }
     }
 
@@ -63,4 +91,8 @@ fun HomeNavigator(
 
 fun navigateToAuthorDetails(navHostController: NavHostController, authorUsername: String) {
     navHostController.navigate("${HomeScreens.AuthorDetails().route}/$authorUsername")
+}
+
+fun navigateToPhotoViewer(navHostController: NavHostController, photoUrl: String) {
+    navHostController.navigate("${HomeScreens.PhotoViewer().route}/$photoUrl")
 }

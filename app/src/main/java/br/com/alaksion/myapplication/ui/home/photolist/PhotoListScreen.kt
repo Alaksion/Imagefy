@@ -26,7 +26,7 @@ import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 fun PhotoListScreen(
     viewModel: PhotoListViewModel,
     navigateToAuthorDetails: (authorId: String) -> Unit,
-    navigateToPhotoDetails: (photoId: String) -> Unit
+    navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
     PhotoListScreen(
         screenState = viewModel.screenState.value,
@@ -34,7 +34,7 @@ fun PhotoListScreen(
         loadMorePhotos = { viewModel.loadMorePhotos() },
         onClickTryAgain = { viewModel.getImages() },
         navigateToAuthorDetails = navigateToAuthorDetails,
-        navigateToPhotoDetails = navigateToPhotoDetails
+        navigateToPhotoViewer = navigateToPhotoViewer
     )
 }
 
@@ -46,7 +46,7 @@ internal fun PhotoListScreen(
     onClickTryAgain: () -> Unit,
     loadMorePhotos: () -> Unit,
     navigateToAuthorDetails: (authorId: String) -> Unit,
-    navigateToPhotoDetails: (photoId: String) -> Unit
+    navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
     val listState = rememberLazyListState()
     Box(modifier.fillMaxSize()) {
@@ -54,6 +54,13 @@ internal fun PhotoListScreen(
         if (screenState is ViewState.Loading) {
             if (photos.isEmpty()) {
                 ProgressIndicator(Modifier.align(Alignment.Center))
+            } else {
+                MorePhotosLoader(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding()
+                        .padding(bottom = 20.dp)
+                )
             }
         }
 
@@ -77,16 +84,10 @@ internal fun PhotoListScreen(
                 PhotoCard(
                     photoContent = item,
                     navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) },
-                    navigateToPhotoDetails = { photoId -> navigateToPhotoDetails(photoId) }
+                    navigateToPhotoViewer = navigateToPhotoViewer
                 )
             }
         }
-        if (screenState is ViewState.Loading && photos.isNotEmpty()) MorePhotosLoader(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding()
-                .padding(bottom = 20.dp)
-        )
         InfiniteListHandler(listState = listState) { loadMorePhotos() }
 
     }

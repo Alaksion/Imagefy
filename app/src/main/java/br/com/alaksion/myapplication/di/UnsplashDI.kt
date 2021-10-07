@@ -5,10 +5,7 @@ import br.com.alaksion.myapplication.data.remote.UnsplashApi
 import br.com.alaksion.myapplication.data.remote.UnsplashRemoteDataSourceImpl
 import br.com.alaksion.myapplication.data.repository.UnsplashRepositoryImpl
 import br.com.alaksion.myapplication.domain.repository.UnsplashRepository
-import br.com.alaksion.myapplication.domain.usecase.GetApiKeyUseCase
-import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
-import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
-import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
+import br.com.alaksion.myapplication.domain.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,6 +58,12 @@ object UnsplashDI {
     @Singleton
     fun provideGetAuthorPhotosUseCase(repository: UnsplashRepository): GetAuthorPhotosUseCase {
         return GetAuthorPhotosUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetPhotoDetails(repository: UnsplashRepository): GetPhotoDetailsUseCase {
+        return GetPhotoDetailsUseCase(repository)
     }
 
 }

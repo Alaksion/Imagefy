@@ -3,6 +3,7 @@ package br.com.alaksion.myapplication.data.remote
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
 import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
+import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -22,6 +23,9 @@ interface UnsplashApi {
         @Query("per_page") resultsPerPage: Int = 12,
         @Query("page") page: Int
     ): Response<List<AuthorPhotoData>>
+
+    @GET("photos/{id}")
+    suspend fun getPhotoDetails(@Path("id") photoId: String): Response<PhotoDetailsData>
 
     companion object : UnsplashServiceCompanion<UnsplashApi>()
 

@@ -6,8 +6,10 @@ import br.com.alaksion.myapplication.data.datasource.UnsplashRemoteDataSource
 import br.com.alaksion.myapplication.data.model.author.mapToDomain
 import br.com.alaksion.myapplication.data.model.authorphotos.mapToDomain
 import br.com.alaksion.myapplication.data.model.photo.mapToDomain
+import br.com.alaksion.myapplication.data.model.photodetails.mapToDomain
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.repository.UnsplashRepository
 import javax.inject.Inject
@@ -32,6 +34,10 @@ class UnsplashRepositoryImpl @Inject constructor(
     ): Source<List<AuthorPhotosResponse>> {
         return remoteDataSource.getAuthorPhotos(userName = username, page = page)
             .mapSource { photos -> photos?.map { item -> item.mapToDomain() } }
+    }
+
+    override suspend fun getPhotoDetails(photoId: String): Source<PhotoDetailResponse> {
+        return remoteDataSource.getPhotoDetails(photoId).mapSource { it?.mapToDomain() }
     }
 
 }

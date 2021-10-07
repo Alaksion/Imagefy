@@ -14,6 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
+            android:name=".ui.authentication.AuthenticationHandlerAct"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="imagefy.com.br"
+                    android:pathPrefix="/auth-callback"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.home.HomeActivity"
             android:exported="true"
             android:label="@string/app_name"

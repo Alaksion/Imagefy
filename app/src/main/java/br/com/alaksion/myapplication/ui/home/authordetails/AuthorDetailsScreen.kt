@@ -4,7 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -27,7 +27,8 @@ const val AUTHOR_USERNAME_ARG = "author_username"
 fun AuthorDetailsScreen(
     viewModel: AuthorDetailsViewModel,
     popBackStack: () -> Boolean,
-    authorUsername: String
+    authorUsername: String,
+    navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
 
     LaunchedEffect(null) {
@@ -39,7 +40,8 @@ fun AuthorDetailsScreen(
         authorUsername = authorUsername,
         popBackStack = popBackStack,
         authorPhotos = viewModel.authorPhotos.value,
-        getMorePhotos = { viewModel.getMoreAuthorPhotos() }
+        getMorePhotos = { viewModel.getMoreAuthorPhotos() },
+        navigateToPhotoViewer = navigateToPhotoViewer
     )
 }
 
@@ -50,7 +52,8 @@ internal fun AuthorDetailsScreen(
     authorUsername: String,
     authorPhotos: ViewState<List<AuthorPhotosResponse>>,
     popBackStack: () -> Boolean,
-    getMorePhotos: () -> Unit
+    getMorePhotos: () -> Unit,
+    navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
     Column() {
         TopAppBar(
@@ -58,15 +61,19 @@ internal fun AuthorDetailsScreen(
             elevation = 0.dp
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { popBackStack() }) {
+                IconButton(
+                    onClick = { popBackStack() },
+                    modifier = Modifier
+                        .size(48.dp)
+                        .padding()
+                        .padding(end = 10.dp)
+                ) {
                     Icon(
-                        imageVector = Icons.Default.KeyboardArrowLeft,
+                        imageVector = Icons.Default.ArrowBack,
                         contentDescription = null,
                         tint = MaterialTheme.colors.onBackground,
-                        modifier = Modifier.size(36.dp)
                     )
                 }
-                Spacer(Modifier.width(10.dp))
                 Text(authorUsername, style = AppTypoGraph.body_16_black())
             }
         }
@@ -75,7 +82,8 @@ internal fun AuthorDetailsScreen(
             is ViewState.Ready -> AuthorDetailsReady(
                 authorData = authorData.data,
                 authorPhotos = authorPhotos,
-                getMorePhotos = getMorePhotos
+                getMorePhotos = getMorePhotos,
+                navigateToPhotoViewer = navigateToPhotoViewer
             )
             is ViewState.Error -> AuthorDetailsError {}
             is ViewState.Idle -> Unit
@@ -88,7 +96,8 @@ internal fun AuthorDetailsScreen(
 fun AuthorDetailsReady(
     authorData: AuthorResponse,
     authorPhotos: ViewState<List<AuthorPhotosResponse>>,
-    getMorePhotos: () -> Unit
+    getMorePhotos: () -> Unit,
+    navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
     Column() {
         AuthorDetailsHeader(
@@ -123,7 +132,8 @@ fun AuthorDetailsReady(
         )
         AuthorPhotosList(
             photos = authorPhotos,
-            onClickTryAgain = { }
+            onClickTryAgain = { },
+            navigateToPhotoViewer = navigateToPhotoViewer
         ) { getMorePhotos() }
     }
 }

@@ -9,7 +9,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -34,7 +34,7 @@ fun PhotoCard(
     photoContent: PhotoResponse,
     modifier: Modifier = Modifier,
     navigateToAuthor: (authorId: String) -> Unit,
-    navigateToPhotoDetails: (photoId: String) -> Unit
+    navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -59,7 +59,7 @@ fun PhotoCard(
                 .fillMaxWidth()
                 .height(400.dp)
                 .clickable {
-                    navigateToPhotoDetails(photoContent.id)
+                    navigateToPhotoViewer(photoContent.id)
                 }
         )
         PhotoCardInfo(
@@ -154,7 +154,7 @@ internal fun PhotoCardInfo(
             .padding(top = 5.dp)
     ) {
         Icon(
-            imageVector = Icons.Default.Favorite,
+            imageVector = Icons.Default.FavoriteBorder,
             contentDescription = null,
             tint = MaterialTheme.colors.onBackground,
             modifier = Modifier
@@ -185,7 +185,7 @@ private fun PhotoCardPreview() {
                 authorProfileThumbUrl = "",
             ),
             navigateToAuthor = {},
-            navigateToPhotoDetails = {}
+            navigateToPhotoViewer = {}
         )
     }
 }

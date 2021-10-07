@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.ui.home.authordetails.components.authorpho
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,6 +37,7 @@ fun AuthorPhotosList(
     photos: ViewState<List<AuthorPhotosResponse>>,
     modifier: Modifier = Modifier,
     onClickTryAgain: () -> Unit,
+    navigateToPhotoViewer: (photoUrl: String) -> Unit,
     loadMorePhotos: () -> Unit
 ) {
     val authorPhotos = remember { mutableStateListOf<AuthorPhotosResponse>() }
@@ -69,7 +71,10 @@ fun AuthorPhotosList(
                 GlideImage(
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .border(1.dp, Color.White),
+                        .border(1.dp, Color.White)
+                        .clickable {
+                            navigateToPhotoViewer(authorPhoto.photoId)
+                        },
                     contentScale = ContentScale.Crop,
                     imageModel = authorPhoto.photoUrl,
                     loading = {

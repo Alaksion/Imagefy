@@ -6,6 +6,7 @@ import br.com.alaksion.myapplication.data.datasource.UnsplashRemoteDataSource
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
 import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
+import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 import javax.inject.Inject
 
 class UnsplashRemoteDataSourceImpl @Inject constructor(
@@ -25,6 +26,10 @@ class UnsplashRemoteDataSourceImpl @Inject constructor(
         page: Int
     ): Source<List<AuthorPhotoData>> {
         return api.getAuthorPhotos(username = userName, page = page).handleApiResponse()
+    }
+
+    override suspend fun getPhotoDetails(photoId: String): Source<PhotoDetailsData> {
+        return api.getPhotoDetails(photoId).handleApiResponse()
     }
 
 }
