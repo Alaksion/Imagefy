@@ -1,56 +1,38 @@
 package br.com.alaksion.myapplication.common.utils
 
+import android.app.DownloadManager
 import android.content.Context
-import android.content.ContextWrapper
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.widget.Toast
-import kotlinx.coroutines.*
 import java.io.File
-import java.io.FileOutputStream
-import java.net.URL
 import java.util.*
 
-/**
- * Try to download image from  [url] , returns false if download failed and true if download succeeded
- *
- * @param[url] url that will be used to download the image
- *
- * **/
-suspend fun Context.downloadImage(url: String) {
-    val parsedUrl = URL(url)
-    val result = CoroutineScope(Dispatchers.IO).async {
-        parsedUrl.mapToBitmap()
-    }
-    Toast.makeText(this@downloadImage, "Downloading image...", Toast.LENGTH_SHORT).show()
-
-    withContext(Dispatchers.IO) {
-        val bitmap = result.await()
-        bitmap?.saveToInternalStorage(this@downloadImage)
-    }
-}
-
-fun URL.mapToBitmap(): Bitmap? {
-    return try {
-        BitmapFactory.decodeStream(openStream())
-    } catch (e: Exception) {
-        null
-    }
-}
-
-fun Bitmap.saveToInternalStorage(context: Context) {
-    val wrapper = ContextWrapper(context)
-    val file = wrapper.getDir("images", Context.MODE_APPEND)
-    val savedFile = File(file, "${UUID.randomUUID()}.jpg")
-
+// TODO -> Make this work later
+fun Context.downloadImage(uri: String) {
     try {
-        val stream = FileOutputStream(savedFile)
-        compress(Bitmap.CompressFormat.JPEG, 100, stream)
-        stream.flush()
-        stream.close()
-        Uri.parse(file.absolutePath)
+        val filename = UUID.randomUUID().toString()
+        val manager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val parsedUri = Uri.parse(uri)
+        val request = DownloadManager.Request(parsedUri)
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE or DownloadManager.Request.NETWORK_WIFI)
+            .setAllowedOverRoaming(false)
+            .setTitle(filename)
+            .setMimeType("image/jpeg")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setDestinationInExternalPublicDir(
+                Environment.DIRECTORY_PICTURES,
+                File.separator + filename + "jpg"
+            )
+        manager.enqueue(request)
+        Toast.makeText(this, "Downloading image...", Toast.LENGTH_SHORT).show()
     } catch (e: Exception) {
+        Toast.makeText(
+            this,
+            "An error occurred and the image could not be downloaded",
+            Toast.LENGTH_SHORT
+        ).show()
         e.printStackTrace()
     }
+
 }

@@ -76,9 +76,9 @@ internal fun PhotoViewerScreen(
 
     fun downloadImage() {
         coroutineScope.launch {
+            toggleDropDown()
             val url = (photoData as ViewState.Ready).data.downloadLink
             context.downloadImage(url)
-            toggleDropDown()
         }
     }
 
@@ -194,7 +194,7 @@ internal fun PhotoViewerReady(
                     ProgressIndicator()
                 }
             },
-            failure = {},
+            failure = {}
         )
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.BottomCenter),
