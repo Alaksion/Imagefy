@@ -35,12 +35,6 @@ fun HomeNavigator(
             )
             PhotoListScreen(
                 viewModel,
-                navigateToPhotoViewer = { photoId ->
-                    navigateToPhotoViewer(
-                        navHostController,
-                        photoId
-                    )
-                },
                 navigateToAuthorDetails = { authorId ->
                     navigateToAuthorDetails(
                         navHostController,

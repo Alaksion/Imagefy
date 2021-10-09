@@ -25,8 +25,7 @@ import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 @Composable
 fun PhotoListScreen(
     viewModel: PhotoListViewModel,
-    navigateToAuthorDetails: (authorId: String) -> Unit,
-    navigateToPhotoViewer: (photoUrl: String) -> Unit
+    navigateToAuthorDetails: (authorId: String) -> Unit
 ) {
     PhotoListScreen(
         screenState = viewModel.screenState.value,
@@ -34,7 +33,6 @@ fun PhotoListScreen(
         loadMorePhotos = { viewModel.loadMorePhotos() },
         onClickTryAgain = { viewModel.getImages() },
         navigateToAuthorDetails = navigateToAuthorDetails,
-        navigateToPhotoViewer = navigateToPhotoViewer
     )
 }
 
@@ -46,9 +44,9 @@ internal fun PhotoListScreen(
     onClickTryAgain: () -> Unit,
     loadMorePhotos: () -> Unit,
     navigateToAuthorDetails: (authorId: String) -> Unit,
-    navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
     val listState = rememberLazyListState()
+
     Box(modifier.fillMaxSize()) {
 
         if (screenState is ViewState.Loading) {
@@ -83,8 +81,7 @@ internal fun PhotoListScreen(
             items(photos) { item ->
                 PhotoCard(
                     photoContent = item,
-                    navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) },
-                    navigateToPhotoViewer = navigateToPhotoViewer
+                    navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) }
                 )
             }
         }

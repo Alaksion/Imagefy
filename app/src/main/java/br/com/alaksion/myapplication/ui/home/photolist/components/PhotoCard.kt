@@ -1,15 +1,18 @@
 package br.com.alaksion.myapplication.ui.home.photolist.components
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -18,11 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageError
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobottomsheet.PhotoInfoBottomSheet
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
 import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
@@ -34,12 +39,12 @@ fun PhotoCard(
     photoContent: PhotoResponse,
     modifier: Modifier = Modifier,
     navigateToAuthor: (authorId: String) -> Unit,
-    navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
         PhotoCardHeader(
+            imageUrl = photoContent.photoUrl,
             userName = photoContent.authorUserName,
             name = photoContent.authorName,
             profileImageUrl = photoContent.authorProfileThumbUrl,
@@ -58,9 +63,6 @@ fun PhotoCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(400.dp)
-                .clickable {
-                    navigateToPhotoViewer(photoContent.id)
-                }
         )
         PhotoCardInfo(
             likes = photoContent.likes,
@@ -76,41 +78,58 @@ internal fun PhotoCardHeader(
     userName: String,
     name: String,
     profileImageUrl: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    imageUrl: String
 ) {
+    val fragManager = (LocalContext.current as AppCompatActivity).supportFragmentManager
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.padding(vertical = 5.dp)
+        modifier = modifier.padding(vertical = 5.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        GlideImage(
-            modifier = Modifier
-                .clip(CircleShape)
-                .size(32.dp),
-            imageModel = profileImageUrl,
-            contentScale = ContentScale.Crop,
-            loading = {
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .shimmer()
-                )
-            },
-            failure = {
-                Icon(
-                    imageVector = Icons.Default.Person,
-                    tint = Color.White,
-                    contentDescription = null,
-                    modifier = Modifier.background(DimGray)
-                )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            GlideImage(
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(32.dp),
+                imageModel = profileImageUrl,
+                contentScale = ContentScale.Crop,
+                loading = {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .shimmer()
+                    )
+                },
+                failure = {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        tint = Color.White,
+                        contentDescription = null,
+                        modifier = Modifier.background(DimGray)
+                    )
+                }
+            )
+            Column(
+                modifier = Modifier
+                    .padding()
+                    .padding(start = 10.dp)
+            ) {
+                Text(userName, style = AppTypoGraph.body_14_bold())
+                Text(name, style = AppTypoGraph.body_12())
             }
-        )
-        Column(
-            modifier = Modifier
-                .padding()
-                .padding(start = 10.dp)
+        }
+
+        IconButton(
+            onClick = { PhotoInfoBottomSheet.show(fragManager, imageUrl) },
+            modifier = Modifier.size(48.dp)
         ) {
-            Text(userName, style = AppTypoGraph.body_14_bold())
-            Text(name, style = AppTypoGraph.body_12())
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = null,
+                tint = MaterialTheme.colors.onBackground
+            )
         }
     }
 }
@@ -185,7 +204,6 @@ private fun PhotoCardPreview() {
                 authorProfileThumbUrl = "",
             ),
             navigateToAuthor = {},
-            navigateToPhotoViewer = {}
         )
     }
 }
