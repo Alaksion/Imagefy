@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.ui.PresentationConstants
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
@@ -59,7 +60,7 @@ fun AuthorMediaLinks(
                 )
                 Text(
                     text = "@$twitterUser",
-                    style = AppTypoGraph.body_14_bold(),
+                    style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
                     modifier = Modifier
                         .padding()
                         .padding(start = 10.dp)
@@ -89,7 +90,7 @@ fun AuthorMediaLinks(
                 )
                 Text(
                     text = "@$instagramUser",
-                    style = AppTypoGraph.body_14_bold(),
+                    style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
                     modifier = Modifier
                         .padding()
                         .padding(start = 10.dp)
@@ -122,7 +123,7 @@ fun AuthorMediaLinks(
                 )
                 Text(
                     text = "Personal Portfolio",
-                    style = AppTypoGraph.body_14_bold(),
+                    style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
                 )
 
             }

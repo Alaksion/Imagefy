@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
@@ -78,7 +79,7 @@ internal fun AuthorDetailsScreen(
                         tint = MaterialTheme.colors.onBackground,
                     )
                 }
-                Text(authorUsername, style = AppTypoGraph.body_16_black())
+                Text(authorUsername, style = AppTypoGraph.roboto_bold().copy(fontSize = 16.sp))
             }
         }
         when (authorData) {
@@ -115,7 +116,7 @@ fun AuthorDetailsReady(
         )
         Text(
             authorData.name,
-            style = AppTypoGraph.body_14_bold(),
+            style = AppTypoGraph.roboto_regular().copy(fontSize = 14.sp),
             maxLines = 1,
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,7 +124,7 @@ fun AuthorDetailsReady(
         )
         Text(
             authorData.bio,
-            style = AppTypoGraph.body_14(),
+            style = AppTypoGraph.roboto_regular().copy(fontSize = 14.sp),
             modifier = Modifier.padding(horizontal = 10.dp)
         )
         AuthorMediaLinks(

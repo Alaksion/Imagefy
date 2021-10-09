@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ErrorRed
 import br.com.alaksion.myapplication.ui.theme.OffWhite
@@ -23,7 +24,7 @@ fun PhotoInfoBottomSheetItem(
         icon()
         Text(
             label,
-            style = AppTypoGraph.body_12_bold().copy(color = textColor),
+            style = AppTypoGraph.roboto_bold().copy(color = textColor, fontSize = 12.sp),
             modifier = Modifier
                 .padding()
                 .padding(top = 5.dp)

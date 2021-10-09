@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageError
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
@@ -116,8 +117,8 @@ internal fun PhotoCardHeader(
                     .padding()
                     .padding(start = 10.dp)
             ) {
-                Text(userName, style = AppTypoGraph.body_14_bold())
-                Text(name, style = AppTypoGraph.body_12())
+                Text(userName, style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp))
+                Text(name, style = AppTypoGraph.roboto_regular().copy(fontSize = 12.sp))
             }
         }
 
@@ -183,7 +184,7 @@ internal fun PhotoCardInfo(
         )
         Text(
             "$likes likes",
-            style = AppTypoGraph.body_14_bold(),
+            style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
         )
     }
 }

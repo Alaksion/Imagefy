@@ -6,7 +6,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.R
 
 object AppTypoGraph {
@@ -20,56 +19,24 @@ object AppTypoGraph {
     )
 
     @Composable
-    fun body_16_black() = TextStyle(
+    fun roboto_black() = TextStyle(
         color = MaterialTheme.colors.onBackground,
-        fontSize = 16.sp,
         fontFamily = robotoFontFamily,
         fontWeight = FontWeight.Black
     )
 
     @Composable
-    fun body_16_bold() = TextStyle(
+    fun roboto_bold() = TextStyle(
         color = MaterialTheme.colors.onBackground,
-        fontSize = 16.sp,
         fontFamily = robotoFontFamily,
         fontWeight = FontWeight.Bold
     )
 
     @Composable
-    fun body_14_bold() = TextStyle(
+    fun roboto_regular() = TextStyle(
         color = MaterialTheme.colors.onBackground,
-        fontSize = 14.sp,
         fontFamily = robotoFontFamily,
-        fontWeight = FontWeight.Bold
-    )
-
-    @Composable
-    fun body_16() = TextStyle(
-        color = MaterialTheme.colors.onBackground,
-        fontSize = 16.sp,
-        fontFamily = robotoFontFamily,
-    )
-
-    @Composable
-    fun body_14() = TextStyle(
-        color = MaterialTheme.colors.onBackground,
-        fontSize = 16.sp,
-        fontFamily = robotoFontFamily,
-    )
-
-    @Composable
-    fun body_12_bold() = TextStyle(
-        color = MaterialTheme.colors.onBackground,
-        fontSize = 12.sp,
-        fontFamily = robotoFontFamily,
-        fontWeight = FontWeight.Bold
-    )
-
-    @Composable
-    fun body_12() = TextStyle(
-        color = MaterialTheme.colors.onBackground,
-        fontSize = 12.sp,
-        fontFamily = robotoFontFamily,
+        fontWeight = FontWeight.Normal
     )
 
 }

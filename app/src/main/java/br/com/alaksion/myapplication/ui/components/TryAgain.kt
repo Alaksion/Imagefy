@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
 @Composable
@@ -28,7 +29,10 @@ fun TryAgain(
         icon()
         Text(
             message,
-            style = AppTypoGraph.body_14().copy(textAlign = TextAlign.Center),
+            style = AppTypoGraph.roboto_regular()
+                .copy(
+                    textAlign = TextAlign.Center, fontSize = 14.sp
+                ),
             modifier = Modifier
                 .padding()
                 .padding(vertical = 10.dp)
@@ -42,7 +46,8 @@ fun TryAgain(
         ) {
             Text(
                 "Try Again",
-                style = AppTypoGraph.body_14().copy(color = MaterialTheme.colors.background)
+                style = AppTypoGraph.roboto_regular()
+                    .copy(color = MaterialTheme.colors.background, fontSize = 14.sp)
             )
         }
     }

@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
 @Composable
@@ -30,7 +31,7 @@ fun ImageError() {
         )
         Text(
             "Whoops, an error occurred and this image could not be loaded",
-            style = AppTypoGraph.body_14_bold()
+            style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp)
         )
     }
 }

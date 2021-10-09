@@ -17,6 +17,7 @@ import javax.inject.Singleton
 object UnsplashDI {
 
     /* General DI */
+
     @Provides
     @Singleton
     fun provideGetApiKeyUseCase(): GetApiKeyUseCase {
@@ -25,8 +26,20 @@ object UnsplashDI {
 
     @Provides
     @Singleton
-    fun provideUnsplashApi(getApiKeyUseCase: GetApiKeyUseCase): UnsplashApi {
-        return UnsplashApi.create(getApiKeyUseCase)
+    fun provideGetClientIdUseCase(getApiKeyUseCase: GetApiKeyUseCase): GetClientIdUseCase {
+        return GetClientIdUseCase(getApiKeyUseCase)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetAuthUrlUseCase(getApiKeyUseCase: GetApiKeyUseCase): GetAuthUrlUseCase {
+        return GetAuthUrlUseCase(getApiKeyUseCase)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUnsplashApi(getClientIdUseCase: GetClientIdUseCase): UnsplashApi {
+        return UnsplashApi.create(getClientIdUseCase)
     }
 
     @Provides

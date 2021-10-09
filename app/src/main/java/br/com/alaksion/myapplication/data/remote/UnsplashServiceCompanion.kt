@@ -1,11 +1,11 @@
 package br.com.alaksion.myapplication.data.remote
 
-import br.com.alaksion.myapplication.domain.usecase.GetApiKeyUseCase
+import br.com.alaksion.myapplication.domain.usecase.GetClientIdUseCase
 
 abstract class UnsplashServiceCompanion<T> {
 
-    inline fun <reified T> create(getApiKeyUseCase: GetApiKeyUseCase): T {
-        return makeRetrofitClient(getApiKeyUseCase).create(T::class.java)
+    inline fun <reified T> create(getClientIdUseCase: GetClientIdUseCase): T {
+        return makeRetrofitClient(getClientIdUseCase).create(T::class.java)
     }
 
 }

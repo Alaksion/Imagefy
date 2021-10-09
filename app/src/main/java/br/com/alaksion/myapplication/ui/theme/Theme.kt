@@ -6,7 +6,9 @@ import androidx.compose.runtime.Composable
 
 private val ColorPallet = lightColors(
     background = OffWhite,
-    onBackground = BlackRussian
+    onBackground = BlackRussian,
+    surface = BlackRussian,
+    onSurface = OffWhite
 )
 
 @Composable

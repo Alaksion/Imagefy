@@ -10,9 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.extensions.formatNumber
-import br.com.alaksion.myapplication.ui.home.authordetails.components.authorheader.AuthorHeaderItem
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 
@@ -29,6 +29,7 @@ fun AuthorDetailsHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         GlideImage(
+            contentScale = ContentScale.Crop,
             imageModel = profileImageUrl,
             modifier = Modifier
                 .size(128.dp)

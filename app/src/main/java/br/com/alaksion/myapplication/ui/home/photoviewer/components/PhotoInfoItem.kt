@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.OffWhite
 
@@ -29,7 +30,7 @@ fun PhotoInfoItem(
         icon()
         Text(
             text,
-            style = AppTypoGraph.body_14().copy(color = OffWhite),
+            style = AppTypoGraph.roboto_regular().copy(color = OffWhite, fontSize = 14.sp),
             modifier = Modifier
                 .padding()
                 .padding(start = 5.dp)
