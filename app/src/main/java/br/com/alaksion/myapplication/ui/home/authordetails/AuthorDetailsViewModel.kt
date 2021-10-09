@@ -75,7 +75,9 @@ class AuthorDetailsViewModel @Inject constructor(
         data?.let { response -> _authorPhotos.value = ViewState.Ready(response) }
     }
 
-    private fun onGetAuthorPhotosError(error: NetworkError) {}
+    private fun onGetAuthorPhotosError(error: NetworkError) {
+        _authorPhotos.value = ViewState.Error(error)
+    }
 
     fun getMoreAuthorPhotos() {
         page++

@@ -3,15 +3,15 @@ package br.com.alaksion.myapplication.ui.home.authordetails.components.authorpho
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Text
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -24,11 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
-import br.com.alaksion.myapplication.ui.components.ImageError
-import br.com.alaksion.myapplication.ui.components.InfiniteListHandler
-import br.com.alaksion.myapplication.ui.components.MorePhotosLoader
-import br.com.alaksion.myapplication.ui.components.ProgressIndicator
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
+import br.com.alaksion.myapplication.ui.components.*
 import com.skydoves.landscapist.glide.GlideImage
 
 @ExperimentalFoundationApi
@@ -56,8 +52,20 @@ fun AuthorPhotosList(
     }
 
     if (photos is ViewState.Error && authorPhotos.isEmpty()) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("Deu erro", style = AppTypoGraph.body_16_black())
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+            TryAgain(
+                message = "An error occurred and author data could not be loaded, please try again later",
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Report,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.onBackground,
+                        modifier = Modifier.size(40.dp)
+                    )
+                },
+                onClick = { onClickTryAgain() },
+                modifier = Modifier.padding(horizontal = 40.dp)
+            )
         }
     }
 
