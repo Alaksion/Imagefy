@@ -38,6 +38,7 @@ class AuthorDetailsViewModel @Inject constructor(
         this.authorUsername = authorUsername
 
         viewModelScope.launch {
+            _authorData.value = ViewState.Loading()
             handleApiResponse(
                 source = getAuthorProfileUseCase(authorUsername),
                 onError = { error -> onGetAuthorDataError(error) },
@@ -54,7 +55,7 @@ class AuthorDetailsViewModel @Inject constructor(
     }
 
     private fun onGetAuthorDataError(error: NetworkError) {
-        val a = 1
+        _authorData.value = ViewState.Error(error)
     }
 
     private fun getAuthorPhotos() {

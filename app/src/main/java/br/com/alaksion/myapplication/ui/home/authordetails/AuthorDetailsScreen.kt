@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -15,6 +16,7 @@ import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorMediaLinks
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorheader.AuthorDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
@@ -41,7 +43,8 @@ fun AuthorDetailsScreen(
         popBackStack = popBackStack,
         authorPhotos = viewModel.authorPhotos.value,
         getMorePhotos = { viewModel.getMoreAuthorPhotos() },
-        navigateToPhotoViewer = navigateToPhotoViewer
+        navigateToPhotoViewer = navigateToPhotoViewer,
+        tryAgainGetAuthorData = { viewModel.getAuthorProfileData(authorUsername) }
     )
 }
 
@@ -53,6 +56,7 @@ internal fun AuthorDetailsScreen(
     authorPhotos: ViewState<List<AuthorPhotosResponse>>,
     popBackStack: () -> Boolean,
     getMorePhotos: () -> Unit,
+    tryAgainGetAuthorData: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
     Column() {
@@ -85,7 +89,7 @@ internal fun AuthorDetailsScreen(
                 getMorePhotos = getMorePhotos,
                 navigateToPhotoViewer = navigateToPhotoViewer
             )
-            is ViewState.Error -> AuthorDetailsError {}
+            is ViewState.Error -> AuthorDetailsError { tryAgainGetAuthorData() }
             is ViewState.Idle -> Unit
         }
     }
@@ -142,7 +146,21 @@ fun AuthorDetailsReady(
 fun AuthorDetailsError(
     onTryAgain: () -> Unit
 ) {
-
+    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+        TryAgain(
+            message = "An error occurred and author data could not be loaded, please try again later",
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Report,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.size(40.dp)
+                )
+            },
+            onClick = { onTryAgain() },
+            modifier = Modifier.padding(horizontal = 40.dp)
+        )
+    }
 }
 
 @Composable

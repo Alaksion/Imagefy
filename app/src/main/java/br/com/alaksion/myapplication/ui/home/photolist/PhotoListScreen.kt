@@ -1,20 +1,25 @@
 package br.com.alaksion.myapplication.ui.home.photolist
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.InfiniteListHandler
 import br.com.alaksion.myapplication.ui.components.MorePhotosLoader
@@ -27,13 +32,22 @@ fun PhotoListScreen(
     viewModel: PhotoListViewModel,
     navigateToAuthorDetails: (authorId: String) -> Unit
 ) {
+    val lifeCycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+
     PhotoListScreen(
         screenState = viewModel.screenState.value,
         photos = viewModel.photos.toList(),
         loadMorePhotos = { viewModel.loadMorePhotos() },
         onClickTryAgain = { viewModel.getImages() },
         navigateToAuthorDetails = navigateToAuthorDetails,
+        isMorePhotosLoading = viewModel.isMorePhotosLoading.value
     )
+
+    viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
+        Toast.makeText(context, "Could not load more images, try again later", Toast.LENGTH_SHORT)
+            .show()
+    }
 }
 
 @Composable
@@ -43,49 +57,52 @@ internal fun PhotoListScreen(
     modifier: Modifier = Modifier,
     onClickTryAgain: () -> Unit,
     loadMorePhotos: () -> Unit,
+    isMorePhotosLoading: Boolean,
     navigateToAuthorDetails: (authorId: String) -> Unit,
 ) {
     val listState = rememberLazyListState()
 
     Box(modifier.fillMaxSize()) {
 
-        if (screenState is ViewState.Loading) {
-            if (photos.isEmpty()) {
-                ProgressIndicator(Modifier.align(Alignment.Center))
-            } else {
-                MorePhotosLoader(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding()
-                        .padding(bottom = 20.dp)
-                )
-            }
-        }
-
-        if (screenState is ViewState.Error) {
-            if (photos.isEmpty()) {
+        when (screenState) {
+            is ViewState.Loading -> ProgressIndicator(Modifier.align(Alignment.Center))
+            is ViewState.Error -> {
                 TryAgain(
-                    message = "An error occurred and images could not be found, please try again later",
+                    message = "An error occurred and images could not be loaded, please try again later",
                     icon = {
                         Icon(
-                            imageVector = Icons.Default.Warning,
+                            imageVector = Icons.Default.Report,
                             contentDescription = null,
-                            tint = MaterialTheme.colors.onBackground
+                            tint = MaterialTheme.colors.onBackground,
+                            modifier = Modifier.size(40.dp)
                         )
                     },
-                    onClick = { onClickTryAgain() })
-            }
-        }
-
-        LazyColumn(state = listState) {
-            items(photos) { item ->
-                PhotoCard(
-                    photoContent = item,
-                    navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) }
+                    onClick = { onClickTryAgain() },
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(horizontal = 40.dp)
                 )
             }
+            is ViewState.Ready -> {
+                LazyColumn(state = listState) {
+                    items(photos) { item ->
+                        PhotoCard(
+                            photoContent = item,
+                            navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) }
+                        )
+                    }
+                }
+                InfiniteListHandler(listState = listState) { loadMorePhotos() }
+                if (isMorePhotosLoading) {
+                    MorePhotosLoader(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding()
+                            .padding(bottom = 20.dp)
+                    )
+                }
+            }
         }
-        InfiniteListHandler(listState = listState) { loadMorePhotos() }
 
     }
 

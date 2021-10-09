@@ -1,6 +1,7 @@
 package br.com.alaksion.myapplication.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -9,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
@@ -26,19 +28,17 @@ fun TryAgain(
         icon()
         Text(
             message,
-            style = AppTypoGraph.body_14(),
+            style = AppTypoGraph.body_14().copy(textAlign = TextAlign.Center),
             modifier = Modifier
                 .padding()
-                .padding(bottom = 5.dp)
+                .padding(vertical = 10.dp)
         )
         Button(
             onClick = { onClick() },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.onBackground
             ),
-            modifier = Modifier
-                .padding()
-                .padding(bottom = 10.dp)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 "Try Again",

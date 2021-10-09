@@ -4,10 +4,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +30,14 @@ class PhotoListViewModel @Inject constructor(
     val screenState: State<ViewState<Unit>>
         get() = _screenState
 
+    private val _isMorePhotosLoading = mutableStateOf(false)
+    val isMorePhotosLoading: State<Boolean>
+        get() = _isMorePhotosLoading
+
+    private val _showLoadMorePhotosError = MutableLiveData<Event<Unit>>()
+    val showMorePhotosError: LiveData<Event<Unit>>
+        get() = _showLoadMorePhotosError
+
     private var currentPage = 1
 
     init {
@@ -45,6 +56,9 @@ class PhotoListViewModel @Inject constructor(
 
     private fun handleGetPhotosSuccess(data: List<PhotoResponse>?) {
         data?.let { response ->
+            if (_photos.size > 0) {
+                _isMorePhotosLoading.value = false
+            }
             _photos.addAll(response)
             _screenState.value = ViewState.Ready(Unit)
         }
@@ -56,14 +70,18 @@ class PhotoListViewModel @Inject constructor(
 
     fun loadMorePhotos() {
         viewModelScope.launch {
-            _screenState.value = ViewState.Loading()
+            _isMorePhotosLoading.value = true
             currentPage++
             handleApiResponse(
                 source = getPhotosUseCase(currentPage),
                 onSuccess = { data -> handleGetPhotosSuccess(data) },
-                onError = { error -> handleGetPhotosError(error) }
+                onError = { onLoadMorePhotosError() }
             )
         }
+    }
+
+    private fun onLoadMorePhotosError() {
+        _showLoadMorePhotosError.postValue(Event(Unit))
     }
 
 }
