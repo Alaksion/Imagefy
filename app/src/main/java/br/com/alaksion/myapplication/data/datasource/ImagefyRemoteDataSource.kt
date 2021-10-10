@@ -7,7 +7,7 @@ import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 
-interface UnsplashRemoteDataSource {
+interface ImagefyRemoteDataSource {
 
     suspend fun validateLogin(
         clientId: String,

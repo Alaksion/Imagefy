@@ -3,15 +3,15 @@ package br.com.alaksion.myapplication.di
 import android.content.Context
 import android.content.SharedPreferences
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
-import br.com.alaksion.myapplication.data.datasource.UnsplashRemoteDataSource
+import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.data.local.AppLocalConfig
 import br.com.alaksion.myapplication.data.local.ImagefyLocalDataSourceImpl
 import br.com.alaksion.myapplication.data.remote.AppRemoteConfig
-import br.com.alaksion.myapplication.data.remote.UnsplashRemoteDataSourceImpl
+import br.com.alaksion.myapplication.data.remote.ImagefyRemoteDataSourceImpl
 import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
 import br.com.alaksion.myapplication.data.remote.services.UnsplashService
-import br.com.alaksion.myapplication.data.repository.UnsplashRepositoryImpl
-import br.com.alaksion.myapplication.domain.repository.UnsplashRepository
+import br.com.alaksion.myapplication.data.repository.ImagefyRepositoryImpl
+import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.domain.usecase.*
 import dagger.Module
 import dagger.Provides
@@ -67,8 +67,8 @@ object UnsplashDI {
     fun provideUnsplashRemoteDataSource(
         service: UnsplashService,
         authService: UnsplashAuthService
-    ): UnsplashRemoteDataSource {
-        return UnsplashRemoteDataSourceImpl(service, authService)
+    ): ImagefyRemoteDataSource {
+        return ImagefyRemoteDataSourceImpl(service, authService)
     }
 
     @Provides
@@ -82,41 +82,41 @@ object UnsplashDI {
     @Provides
     @Singleton
     fun provideUnsplashRepository(
-        remoteDataSource: UnsplashRemoteDataSource,
+        remoteDataSource: ImagefyRemoteDataSource,
         localDataSource: ImagefyLocalDataSource
-    ): UnsplashRepository {
-        return UnsplashRepositoryImpl(remoteDataSource, localDataSource)
+    ): ImagefyRepository {
+        return ImagefyRepositoryImpl(remoteDataSource, localDataSource)
     }
 
     /* Use Cases */
     @Provides
     @Singleton
-    fun provideGetPhotosUseCase(repository: UnsplashRepository): GetPhotosUseCase {
+    fun provideGetPhotosUseCase(repository: ImagefyRepository): GetPhotosUseCase {
         return GetPhotosUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideGetUserProfileUseCase(repository: UnsplashRepository): GetAuthorProfileUseCase {
+    fun provideGetUserProfileUseCase(repository: ImagefyRepository): GetAuthorProfileUseCase {
         return GetAuthorProfileUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideGetAuthorPhotosUseCase(repository: UnsplashRepository): GetAuthorPhotosUseCase {
+    fun provideGetAuthorPhotosUseCase(repository: ImagefyRepository): GetAuthorPhotosUseCase {
         return GetAuthorPhotosUseCase(repository)
     }
 
     @Provides
     @Singleton
-    fun provideGetPhotoDetails(repository: UnsplashRepository): GetPhotoDetailsUseCase {
+    fun provideGetPhotoDetails(repository: ImagefyRepository): GetPhotoDetailsUseCase {
         return GetPhotoDetailsUseCase(repository)
     }
 
     @Provides
     @Singleton
     fun provideValidateLoginUseCase(
-        repository: UnsplashRepository,
+        repository: ImagefyRepository,
         getApiKeyUseCase: GetApiKeyUseCase,
         getApiSecretKeyUseCase: GetApiSecretKeyUseCase
     ): ValidateLoginUseCase {

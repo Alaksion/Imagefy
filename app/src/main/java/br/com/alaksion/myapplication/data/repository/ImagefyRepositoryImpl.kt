@@ -3,20 +3,20 @@ package br.com.alaksion.myapplication.data.repository
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.common.network.mapSource
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
-import br.com.alaksion.myapplication.data.datasource.UnsplashRemoteDataSource
+import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.data.model.auth.mapToDomain
 import br.com.alaksion.myapplication.data.model.author.mapToDomain
 import br.com.alaksion.myapplication.data.model.authorphotos.mapToDomain
 import br.com.alaksion.myapplication.data.model.photo.mapToDomain
 import br.com.alaksion.myapplication.data.model.photodetails.mapToDomain
 import br.com.alaksion.myapplication.domain.model.*
-import br.com.alaksion.myapplication.domain.repository.UnsplashRepository
+import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import javax.inject.Inject
 
-class UnsplashRepositoryImpl @Inject constructor(
-    private val remoteDataSource: UnsplashRemoteDataSource,
+class ImagefyRepositoryImpl @Inject constructor(
+    private val remoteDataSource: ImagefyRemoteDataSource,
     private val localDataSource: ImagefyLocalDataSource
-) : UnsplashRepository {
+) : ImagefyRepository {
 
     override suspend fun validateLogin(
         clientId: String,

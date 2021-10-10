@@ -2,7 +2,7 @@ package br.com.alaksion.myapplication.data.remote
 
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.common.network.handleApiResponse
-import br.com.alaksion.myapplication.data.datasource.UnsplashRemoteDataSource
+import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.data.model.auth.AuthValidationResponseData
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
 import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
@@ -12,10 +12,10 @@ import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
 import br.com.alaksion.myapplication.data.remote.services.UnsplashService
 import javax.inject.Inject
 
-class UnsplashRemoteDataSourceImpl @Inject constructor(
+class ImagefyRemoteDataSourceImpl @Inject constructor(
     private val service: UnsplashService,
     private val authService: UnsplashAuthService
-) : UnsplashRemoteDataSource {
+) : ImagefyRemoteDataSource {
 
     override suspend fun validateLogin(
         clientId: String,

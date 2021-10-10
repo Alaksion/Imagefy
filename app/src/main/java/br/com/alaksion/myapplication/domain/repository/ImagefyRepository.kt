@@ -3,7 +3,7 @@ package br.com.alaksion.myapplication.domain.repository
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.domain.model.*
 
-interface UnsplashRepository {
+interface ImagefyRepository {
 
     suspend fun validateLogin(
         clientId: String,
