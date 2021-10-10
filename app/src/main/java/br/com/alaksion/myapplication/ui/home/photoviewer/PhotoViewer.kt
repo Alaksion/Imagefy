@@ -102,7 +102,7 @@ internal fun PhotoViewerScreen(
                     )
                 }
                 if (photoData is ViewState.Ready) {
-                    Column() {
+                    Column {
                         IconButton(
                             onClick = { toggleDropDown() },
                             modifier = Modifier.size(48.dp)
@@ -129,7 +129,7 @@ internal fun PhotoViewerScreen(
             is ViewState.Ready -> {
                 PhotoViewerReady(photoData = photoData.data, context = context)
             }
-            is ViewState.Loading -> {
+            is ViewState.Loading, is ViewState.Idle -> {
                 Box(
                     modifier = Modifier
                         .fillMaxSize(),

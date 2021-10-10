@@ -31,7 +31,7 @@ private fun <T> handleException(e: Exception): Source.Error<T> {
     val error = when (e) {
         is ConnectException, is UnknownHostException -> NetworkError(
             code = 500,
-            message = "An unexpected error occurend"
+            message = "An unexpected error occurred"
         )
         is HttpException -> NetworkError(code = e.code(), message = e.message())
         is SocketTimeoutException -> NetworkError(code = 504, message = "Socket timed out")

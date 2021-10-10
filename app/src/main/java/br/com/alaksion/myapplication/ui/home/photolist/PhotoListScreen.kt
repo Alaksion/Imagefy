@@ -65,7 +65,7 @@ internal fun PhotoListScreen(
     Box(modifier.fillMaxSize()) {
 
         when (screenState) {
-            is ViewState.Loading -> ProgressIndicator(Modifier.align(Alignment.Center))
+            is ViewState.Loading, is ViewState.Idle -> ProgressIndicator(Modifier.align(Alignment.Center))
             is ViewState.Error -> {
                 TryAgain(
                     message = "An error occurred and images could not be loaded, please try again later",

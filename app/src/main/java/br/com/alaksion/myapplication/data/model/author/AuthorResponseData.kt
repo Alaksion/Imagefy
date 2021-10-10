@@ -27,7 +27,7 @@ data class UserResponseData(
     @SerializedName("following_count")
     val followingCount: Int?,
     @SerializedName("profile_image")
-    val profileImage: AuthormageResponseData?
+    val profileImage: AuthorImageResponseData?
 )
 
 fun UserResponseData.mapToDomain() = AuthorResponse(

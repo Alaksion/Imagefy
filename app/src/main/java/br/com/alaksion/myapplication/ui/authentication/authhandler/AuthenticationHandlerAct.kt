@@ -44,7 +44,7 @@ class AuthenticationHandlerAct : AppCompatActivity() {
         screenState: ViewState<Unit>
     ) {
         MyApplicationTheme {
-            Scaffold() {
+            Scaffold {
                 when (screenState) {
                     is ViewState.Loading, is ViewState.Ready, is ViewState.Idle ->
                         AuthHandlerContentLoading()

@@ -60,7 +60,7 @@ internal fun AuthorDetailsScreen(
     tryAgainGetAuthorData: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
-    Column() {
+    Column {
         TopAppBar(
             backgroundColor = Color.Transparent,
             elevation = 0.dp
@@ -83,7 +83,7 @@ internal fun AuthorDetailsScreen(
             }
         }
         when (authorData) {
-            is ViewState.Loading -> AuthorDetailsLoading()
+            is ViewState.Loading, is ViewState.Idle -> AuthorDetailsLoading()
             is ViewState.Ready -> AuthorDetailsReady(
                 authorData = authorData.data,
                 authorPhotos = authorPhotos,
@@ -91,7 +91,6 @@ internal fun AuthorDetailsScreen(
                 navigateToPhotoViewer = navigateToPhotoViewer
             )
             is ViewState.Error -> AuthorDetailsError { tryAgainGetAuthorData() }
-            is ViewState.Idle -> Unit
         }
     }
 }
@@ -104,7 +103,7 @@ fun AuthorDetailsReady(
     getMorePhotos: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
-    Column() {
+    Column {
         AuthorDetailsHeader(
             profileImageUrl = authorData.profileImage,
             photoCount = authorData.totalPhotos,

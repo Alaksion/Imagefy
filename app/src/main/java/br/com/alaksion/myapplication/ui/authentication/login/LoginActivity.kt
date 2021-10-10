@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationTheme() {
+            MyApplicationTheme {
                 LoginActivityContent()
             }
         }
