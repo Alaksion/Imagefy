@@ -1,10 +1,10 @@
 package br.com.alaksion.myapplication.common.network
 
-sealed class Source<out T>(data: T? = null) {
+sealed class Source<out T>() {
 
-    class Success<T>(val data: T?, val resultCode: Int? = null) : Source<T>(data)
-    class Error<T>(val errorData: NetworkError) : Source<T>(null)
-    class Loading<T>() : Source<T>(null)
+    class Success<T>(val data: T?, val resultCode: Int? = null) : Source<T>()
+    class Error<T>(val errorData: NetworkError) : Source<T>()
+    class Loading<T>() : Source<T>()
 
 }
 

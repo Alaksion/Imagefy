@@ -1,12 +1,21 @@
 package br.com.alaksion.myapplication.data.datasource
 
 import br.com.alaksion.myapplication.common.network.Source
+import br.com.alaksion.myapplication.data.model.auth.AuthValidationResponseData
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
 import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 
 interface UnsplashRemoteDataSource {
+
+    suspend fun validateLogin(
+        clientId: String,
+        clientSecret: String,
+        redirectUri: String,
+        authCode: String,
+        grantType: String
+    ): Source<AuthValidationResponseData>
 
     suspend fun getPhotos(page: Int): Source<List<PhotoData>>
 

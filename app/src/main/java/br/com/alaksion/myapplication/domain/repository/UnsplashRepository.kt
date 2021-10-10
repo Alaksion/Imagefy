@@ -1,12 +1,17 @@
 package br.com.alaksion.myapplication.domain.repository
 
 import br.com.alaksion.myapplication.common.network.Source
-import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
-import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
-import br.com.alaksion.myapplication.domain.model.PhotoResponse
+import br.com.alaksion.myapplication.domain.model.*
 
 interface UnsplashRepository {
+
+    suspend fun validateLogin(
+        clientId: String,
+        clientSecret: String,
+        redirectUri: String,
+        authCode: String,
+        grantType: String
+    ): Source<AuthResponse>
 
     suspend fun getPhotos(page: Int): Source<List<PhotoResponse>>
 

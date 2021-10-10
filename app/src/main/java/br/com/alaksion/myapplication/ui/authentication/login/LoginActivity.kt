@@ -18,6 +18,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,8 +48,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun openBrowserSignIn() {
-        val intent = Intent(Intent.ACTION_VIEW, viewModel.getLoginUrl())
-        startActivity(intent)
+        val uri = viewModel.getLoginUrl()
+        startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
     @Composable
@@ -61,6 +62,12 @@ class LoginActivity : AppCompatActivity() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .background(Color.Red)
+            )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = "Share your best moments with the internet",

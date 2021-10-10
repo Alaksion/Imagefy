@@ -1,8 +1,10 @@
 package br.com.alaksion.myapplication.di
 
 import br.com.alaksion.myapplication.data.datasource.UnsplashRemoteDataSource
-import br.com.alaksion.myapplication.data.remote.UnsplashApi
+import br.com.alaksion.myapplication.data.remote.AppRemoteConfig
 import br.com.alaksion.myapplication.data.remote.UnsplashRemoteDataSourceImpl
+import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
+import br.com.alaksion.myapplication.data.remote.services.UnsplashService
 import br.com.alaksion.myapplication.data.repository.UnsplashRepositoryImpl
 import br.com.alaksion.myapplication.domain.repository.UnsplashRepository
 import br.com.alaksion.myapplication.domain.usecase.*
@@ -38,14 +40,23 @@ object UnsplashDI {
 
     @Provides
     @Singleton
-    fun provideUnsplashApi(getClientIdUseCase: GetClientIdUseCase): UnsplashApi {
-        return UnsplashApi.create(getClientIdUseCase)
+    fun provideUnsplashApi(getClientIdUseCase: GetClientIdUseCase): UnsplashService {
+        return UnsplashService.create(getClientIdUseCase, AppRemoteConfig.SERVICE_BASE_URL)
     }
 
     @Provides
     @Singleton
-    fun provideUnsplashRemoteDataSource(api: UnsplashApi): UnsplashRemoteDataSource {
-        return UnsplashRemoteDataSourceImpl(api)
+    fun provideUnsplashAuthApi(): UnsplashAuthService {
+        return UnsplashAuthService.create(null, AppRemoteConfig.AUTH_SERVICE_BASE_URL)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUnsplashRemoteDataSource(
+        service: UnsplashService,
+        authService: UnsplashAuthService
+    ): UnsplashRemoteDataSource {
+        return UnsplashRemoteDataSourceImpl(service, authService)
     }
 
     @Provides
@@ -77,6 +88,16 @@ object UnsplashDI {
     @Singleton
     fun provideGetPhotoDetails(repository: UnsplashRepository): GetPhotoDetailsUseCase {
         return GetPhotoDetailsUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideValidateLoginUseCase(
+        repository: UnsplashRepository,
+        getApiKeyUseCase: GetApiKeyUseCase,
+        getApiSecretKeyUseCase: GetApiSecretKeyUseCase
+    ): ValidateLoginUseCase {
+        return ValidateLoginUseCase(repository, getApiKeyUseCase, getApiSecretKeyUseCase)
     }
 
 }

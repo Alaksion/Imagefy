@@ -6,14 +6,9 @@ import br.com.alaksion.myapplication.config.AuthConfig
 class GetAuthUrlUseCase(private val getApiKeyUseCase: GetApiKeyUseCase) {
 
     operator fun invoke(): Uri {
-        val baseUri = Uri.parse(AuthConfig.AUTH_FLOW_URL)
-        baseUri.buildUpon()
-            .appendQueryParameter("client_id", getApiKeyUseCase())
-            .appendQueryParameter("redirect_uri", AuthConfig.REDIRECT_URL)
-            .appendQueryParameter("response_type", AuthConfig.RESPONSE_TYPE)
-            .appendQueryParameter("scope", AuthConfig.SCOPE)
-            .build()
-        return baseUri
+        val params =
+            "client_id=${getApiKeyUseCase()}&redirect_uri=${AuthConfig.REDIRECT_URL}&response_type=${AuthConfig.RESPONSE_TYPE}&scope=${AuthConfig.SCOPE}"
+        return Uri.parse("${AuthConfig.AUTH_FLOW_URL}?$params")
     }
 
 }
