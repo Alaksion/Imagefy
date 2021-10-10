@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.ui.PresentationConstants.REGISTER_URL
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
@@ -35,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setUpObservers()
         setContent {
             MyApplicationTheme {
                 LoginActivityContent()
@@ -50,6 +52,12 @@ class LoginActivity : AppCompatActivity() {
     private fun openBrowserSignIn() {
         val uri = viewModel.getLoginUrl()
         startActivity(Intent(Intent.ACTION_VIEW, uri))
+    }
+
+    private fun setUpObservers() {
+        viewModel.isAuthenticationSuccess.observeEvent(this) {
+            this.finish()
+        }
     }
 
     @Composable

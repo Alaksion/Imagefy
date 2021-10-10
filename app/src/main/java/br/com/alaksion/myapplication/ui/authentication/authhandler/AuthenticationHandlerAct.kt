@@ -1,10 +1,11 @@
 package br.com.alaksion.myapplication.ui.authentication.authhandler
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,15 +20,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.observeEvent
+import br.com.alaksion.myapplication.ui.authentication.login.LoginViewModel
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.home.HomeActivity
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@ExperimentalFoundationApi
+@ExperimentalAnimationApi
 class AuthenticationHandlerAct : AppCompatActivity() {
 
     private val viewModel by viewModels<AuthHandlerViewModel>()
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +43,22 @@ class AuthenticationHandlerAct : AppCompatActivity() {
             AuthHandlerContent(viewModel.authenticationResult.value)
         }
 
+    }
+
+    private fun setUpObservers() {
+        with(viewModel) {
+            handleNavigationSuccess.observeEvent(this@AuthenticationHandlerAct) {
+                loginViewModel.setAuthResult()
+                HomeActivity.start(this@AuthenticationHandlerAct)
+                finishAffinity()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val authCode = intent.data?.encodedQuery?.substring(5)
+        viewModel.authenticateUser(authCode)
     }
 
     @Composable
@@ -79,20 +101,6 @@ class AuthenticationHandlerAct : AppCompatActivity() {
     @Composable
     fun AuthHandlerContentError() {
         Text("deu erro")
-    }
-
-    private fun setUpObservers() {
-        with(viewModel) {
-            handleNavigationSuccess.observeEvent(this@AuthenticationHandlerAct) {
-                Toast.makeText(this@AuthenticationHandlerAct, "Deu bom", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val authCode = intent.data?.encodedQuery?.substring(5)
-        viewModel.authenticateUser(authCode)
     }
 
 }

@@ -1,14 +1,14 @@
 package br.com.alaksion.myapplication.data.remote
 
-import br.com.alaksion.myapplication.domain.usecase.GetClientIdUseCase
+import br.com.alaksion.myapplication.domain.usecase.GetAuthorizationHeaderUseCase
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 fun makeRetrofitClient(
-    getClientIdUseCase: GetClientIdUseCase?,
+    getAuthorizationHeaderUseCase: GetAuthorizationHeaderUseCase?,
     baseUrl: String
-) = createRetrofitInstance(buildHttpClient(getClientIdUseCase), baseUrl)
+) = createRetrofitInstance(buildHttpClient(getAuthorizationHeaderUseCase), baseUrl)
 
 private fun createRetrofitInstance(httpClient: OkHttpClient, baseUrl: String): Retrofit {
     return Retrofit.Builder()
@@ -19,13 +19,16 @@ private fun createRetrofitInstance(httpClient: OkHttpClient, baseUrl: String): R
 }
 
 private fun buildHttpClient(
-    getClientIdUseCase: GetClientIdUseCase?
+    getAuthorizationHeaderUseCase: GetAuthorizationHeaderUseCase?
 ): OkHttpClient {
+
     return OkHttpClient.Builder()
         .addInterceptor { chain ->
             val request =
                 chain.request().newBuilder()
-                    .addHeader(AppRemoteConfig.AUTH_HEADER, getClientIdUseCase?.let { it() } ?: "")
+                    .addHeader(
+                        AppRemoteConfig.AUTH_HEADER,
+                        getAuthorizationHeaderUseCase?.let { "Bearer ${it()}" } ?: "")
                     .build()
             chain.proceed(request)
         }

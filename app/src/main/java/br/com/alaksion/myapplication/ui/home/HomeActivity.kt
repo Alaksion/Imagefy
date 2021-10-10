@@ -1,5 +1,7 @@
 package br.com.alaksion.myapplication.ui.home
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +32,12 @@ class HomeActivity : AppCompatActivity() {
                     )
                 }
             }
+        }
+    }
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, HomeActivity::class.java))
         }
     }
 }

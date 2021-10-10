@@ -40,14 +40,23 @@ object UnsplashDI {
 
     @Provides
     @Singleton
+    fun provideGetAuthorizationHeaderUseCase(sharedPreferences: SharedPreferences): GetAuthorizationHeaderUseCase {
+        return GetAuthorizationHeaderUseCase(sharedPreferences)
+    }
+
+    @Provides
+    @Singleton
     fun provideGetAuthUrlUseCase(getApiKeyUseCase: GetApiKeyUseCase): GetAuthUrlUseCase {
         return GetAuthUrlUseCase(getApiKeyUseCase)
     }
 
     @Provides
     @Singleton
-    fun provideUnsplashApi(getClientIdUseCase: GetClientIdUseCase): UnsplashService {
-        return UnsplashService.create(getClientIdUseCase, AppRemoteConfig.SERVICE_BASE_URL)
+    fun provideUnsplashApi(getAuthorizationHeaderUseCase: GetAuthorizationHeaderUseCase): UnsplashService {
+        return UnsplashService.create(
+            getAuthorizationHeaderUseCase,
+            AppRemoteConfig.SERVICE_BASE_URL
+        )
     }
 
     @Provides
