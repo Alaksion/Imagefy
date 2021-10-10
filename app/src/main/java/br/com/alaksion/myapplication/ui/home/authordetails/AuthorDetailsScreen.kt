@@ -79,7 +79,7 @@ internal fun AuthorDetailsScreen(
                         tint = MaterialTheme.colors.onBackground,
                     )
                 }
-                Text(authorUsername, style = AppTypoGraph.roboto_bold().copy(fontSize = 16.sp))
+                Text(authorUsername, style = AppTypoGraph.roboto_black().copy(fontSize = 16.sp))
             }
         }
         when (authorData) {
@@ -115,7 +115,7 @@ fun AuthorDetailsReady(
         )
         Text(
             authorData.name,
-            style = AppTypoGraph.roboto_regular().copy(fontSize = 14.sp),
+            style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
             maxLines = 1,
             modifier = Modifier
                 .fillMaxWidth()
