@@ -10,6 +10,7 @@ import br.com.alaksion.myapplication.common.ui.BaseViewModel
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.AuthResponse
+import br.com.alaksion.myapplication.domain.usecase.StoreAuthTokenUseCase
 import br.com.alaksion.myapplication.domain.usecase.ValidateLoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthHandlerViewModel @Inject constructor(
-    private val validateLoginUseCase: ValidateLoginUseCase
+    private val validateLoginUseCase: ValidateLoginUseCase,
+    private val storeAuthTokenUseCase: StoreAuthTokenUseCase
 ) : BaseViewModel() {
 
     private val _authenticationResult: MutableState<ViewState<Unit>> =
@@ -47,7 +49,10 @@ class AuthHandlerViewModel @Inject constructor(
     private fun onAuthenticateUserSuccess(data: AuthResponse?) {
         data?.let { response ->
             _handleNavigationSuccess.postValue(Event(Unit))
+            storeAuthTokenUseCase(response.accessToken)
+            return
         }
+        _authenticationResult.value = ViewState.Error()
     }
 
     private fun onAuthenticateUserError() {

@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.data.repository
 
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.common.network.mapSource
+import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
 import br.com.alaksion.myapplication.data.datasource.UnsplashRemoteDataSource
 import br.com.alaksion.myapplication.data.model.auth.mapToDomain
 import br.com.alaksion.myapplication.data.model.author.mapToDomain
@@ -13,7 +14,8 @@ import br.com.alaksion.myapplication.domain.repository.UnsplashRepository
 import javax.inject.Inject
 
 class UnsplashRepositoryImpl @Inject constructor(
-    private val remoteDataSource: UnsplashRemoteDataSource
+    private val remoteDataSource: UnsplashRemoteDataSource,
+    private val localDataSource: ImagefyLocalDataSource
 ) : UnsplashRepository {
 
     override suspend fun validateLogin(
@@ -52,6 +54,14 @@ class UnsplashRepositoryImpl @Inject constructor(
 
     override suspend fun getPhotoDetails(photoId: String): Source<PhotoDetailResponse> {
         return remoteDataSource.getPhotoDetails(photoId).mapSource { it?.mapToDomain() }
+    }
+
+    override fun storeAuthorizationHeader(value: String) {
+        localDataSource.storeAuthorizationHeader(value)
+    }
+
+    override fun clearAuthorizationHeader() {
+        localDataSource.clearAuthorizationHeader()
     }
 
 }

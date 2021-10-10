@@ -21,4 +21,8 @@ interface UnsplashRepository {
 
     suspend fun getPhotoDetails(photoId: String): Source<PhotoDetailResponse>
 
+    fun storeAuthorizationHeader(value: String)
+
+    fun clearAuthorizationHeader()
+
 }

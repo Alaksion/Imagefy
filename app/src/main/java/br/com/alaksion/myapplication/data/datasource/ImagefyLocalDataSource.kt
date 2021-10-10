@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.data.datasource
 
-interface UnsplashLocalDataSource {
+interface ImagefyLocalDataSource {
 
     fun storeAuthorizationHeader(value: String)
 
