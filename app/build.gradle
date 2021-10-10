@@ -93,6 +93,9 @@ dependencies {
     //Icons
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
+    // Splash Provider
+    implementation "androidx.core:core-splashscreen:1.0.0-alpha02"
+
 }
 
 kapt {

@@ -1,5 +1,6 @@
 package br.com.alaksion.myapplication.ui.authentication.login
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -135,6 +136,12 @@ class LoginActivity : AppCompatActivity() {
                     )
                 }
             }
+        }
+    }
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, LoginActivity::class.java))
         }
     }
 }
