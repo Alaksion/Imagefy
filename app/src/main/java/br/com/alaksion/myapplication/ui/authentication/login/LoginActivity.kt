@@ -73,8 +73,10 @@ class LoginActivity : AppCompatActivity() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -92,7 +94,7 @@ class LoginActivity : AppCompatActivity() {
                     ),
                     modifier = Modifier
                         .padding()
-                        .padding(10.dp)
+                        .padding(top = 10.dp, bottom = 5.dp)
                 )
                 Text(
                     text = "Bring together pictures of your backyard, pets, hobbies, morning coffee and everything that makes your day brighter.",

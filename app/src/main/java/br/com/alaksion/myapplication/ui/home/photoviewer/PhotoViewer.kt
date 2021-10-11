@@ -2,10 +2,9 @@ package br.com.alaksion.myapplication.ui.home.photoviewer
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.*
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,13 +29,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.downloadImage
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
+import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
+import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
 import br.com.alaksion.myapplication.ui.theme.OffWhite
 import com.skydoves.landscapist.glide.GlideImage
@@ -151,6 +153,7 @@ internal fun PhotoViewerScreen(
             is ViewState.Error -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     TryAgain(
+                        modifier = Modifier.padding(horizontal = 40.dp),
                         message = "An error occurred and this image could not be loaded, please try again",
                         icon = {
                             Icon(
@@ -180,6 +183,13 @@ internal fun PhotoViewerReady(
     val isImageLiked = remember { mutableStateOf(photoData.likedByUser) }
     val imageLikes = remember { mutableStateOf(photoData.likes) }
 
+    val likeIconColor =
+        animateColorAsState(
+            targetValue = if (isImageLiked.value) ErrorLightRed
+            else OffWhite,
+            animationSpec = tween(150)
+        )
+
     fun toggleBottomBar() {
         showBottomBar.value = showBottomBar.value.not()
     }
@@ -194,7 +204,7 @@ internal fun PhotoViewerReady(
     }
 
     fun rateImage() {
-        onRateImage(isImageLiked.value)
+//        onRateImage(isImageLiked.value)
         if (isImageLiked.value) imageLikes.value--
         else imageLikes.value++
 
@@ -243,15 +253,23 @@ internal fun PhotoViewerReady(
                         )
                     )
             ) {
-                PhotoInfoItem(
-                    text = imageLikes.value.formatNumber(),
-                    onClick = { rateImage() }
-                ) {
-                    Icon(
-                        imageVector = if (isImageLiked.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                        contentDescription = null,
-                        tint = if (isImageLiked.value) ErrorLightRed else OffWhite,
-                    )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(
+                        onClick = { rateImage() },
+                    ) {
+                        Icon(
+                            imageVector = if (isImageLiked.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            contentDescription = null,
+                            tint = likeIconColor.value,
+                        )
+                    }
+                    NumberScrollerAnimation(value = imageLikes.value) { currentValue ->
+                        Text(
+                            currentValue,
+                            style = AppTypoGraph.roboto_regular()
+                                .copy(color = OffWhite, fontSize = 14.sp),
+                        )
+                    }
                 }
 
                 PhotoInfoItem(

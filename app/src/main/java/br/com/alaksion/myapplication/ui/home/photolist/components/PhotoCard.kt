@@ -1,11 +1,8 @@
 package br.com.alaksion.myapplication.ui.home.photolist.components
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -35,17 +32,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageError
+import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobottomsheet.PhotoInfoBottomSheet
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
 import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
-import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.delay
@@ -62,7 +58,30 @@ fun PhotoCard(
     val isLiked = remember { mutableStateOf(photoContent.likedByUser) }
     val likeAnimationVisible = remember { mutableStateOf(false) }
     val density = LocalDensity.current
-    val corroutineScope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
+    val imageLikes = remember { mutableStateOf(photoContent.likes) }
+
+    val likeIconColor =
+        animateColorAsState(
+            targetValue = if (isLiked.value) ErrorLightRed
+            else MaterialTheme.colors.onBackground,
+            animationSpec = tween(150)
+        )
+
+    fun ratePhoto() {
+        coroutineScope.launch {
+//            ratePhoto(photoContent.id, isLiked.value)
+            isLiked.value = isLiked.value.not()
+            if (isLiked.value) {
+                imageLikes.value++
+                likeAnimationVisible.value = true
+                delay(400)
+                likeAnimationVisible.value = false
+            } else {
+                imageLikes.value--
+            }
+        }
+    }
 
     Box() {
         Column(
@@ -92,24 +111,15 @@ fun PhotoCard(
                     .height(400.dp)
                     .pointerInput(Unit) {
                         detectTapGestures(
-                            onDoubleTap = {
-                                corroutineScope.launch {
-//                                    ratePhoto(photoContent.id, isLiked.value)
-                                    if (!isLiked.value) {
-                                        likeAnimationVisible.value = true
-                                        delay(400)
-                                        likeAnimationVisible.value = false
-                                    }
-                                    isLiked.value = isLiked.value.not()
-                                }
-                            }
+                            onDoubleTap = { ratePhoto() }
                         )
                     }
             )
             PhotoCardInfo(
-                likes = photoContent.likes,
+                likes = imageLikes.value,
                 isLiked = isLiked.value,
                 authorName = photoContent.authorName,
+                iconTint = likeIconColor.value,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .padding(bottom = 15.dp)
@@ -121,11 +131,11 @@ fun PhotoCard(
                 initialOffsetY = {
                     with(density) { 420.dp.roundToPx() }
                 },
-                animationSpec = tween(durationMillis = 300)
+                animationSpec = tween(durationMillis = 400)
             ),
             exit = fadeOut(
                 targetAlpha = 0f,
-                animationSpec = tween(durationMillis = 600),
+                animationSpec = tween(durationMillis = 700),
             ),
             modifier = Modifier
                 .zIndex(1f)
@@ -232,14 +242,16 @@ internal fun PhotoCardImage(
     )
 }
 
+@ExperimentalAnimationApi
 @Composable
 internal fun PhotoCardInfo(
     isLiked: Boolean,
     modifier: Modifier = Modifier,
     likes: Int,
-    authorName: String
+    authorName: String,
+    iconTint: Color
 ) {
-    val iconTint = if (isLiked) ErrorLightRed else MaterialTheme.colors.onBackground
+
     Column(
         modifier = modifier
     ) {
@@ -258,10 +270,12 @@ internal fun PhotoCardInfo(
                     .padding()
                     .padding(end = 5.dp)
             )
-            Text(
-                "$likes likes",
-                style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
-            )
+            NumberScrollerAnimation(value = likes) { currentValue ->
+                Text(
+                    "$currentValue likes",
+                    style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
+                )
+            }
         }
         Text(
             text = buildAnnotatedString {
@@ -278,27 +292,4 @@ internal fun PhotoCardInfo(
         )
     }
 
-}
-
-@ExperimentalAnimationApi
-@Preview(showBackground = true)
-@Composable
-private fun PhotoCardPreview() {
-    MyApplicationTheme {
-        PhotoCard(
-            photoContent = PhotoResponse(
-                id = "",
-                createdAt = "",
-                likes = 10,
-                description = "",
-                authorName = "Daniel Hartman",
-                authorUserName = "Dan",
-                photoUrl = "",
-                authorProfileThumbUrl = "",
-                likedByUser = true
-            ),
-            navigateToAuthor = {},
-            ratePhoto = { _, _ -> }
-        )
-    }
 }
