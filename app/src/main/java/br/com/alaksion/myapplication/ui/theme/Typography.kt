@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.ui.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -34,6 +35,20 @@ object AppTypoGraph {
 
     @Composable
     fun roboto_regular() = TextStyle(
+        color = MaterialTheme.colors.onBackground,
+        fontFamily = robotoFontFamily,
+        fontWeight = FontWeight.Normal
+    )
+
+    @Composable
+    fun span_roboto_bold() = SpanStyle(
+        color = MaterialTheme.colors.onBackground,
+        fontFamily = robotoFontFamily,
+        fontWeight = FontWeight.Bold
+    )
+
+    @Composable
+    fun span_roboto_regular() = SpanStyle(
         color = MaterialTheme.colors.onBackground,
         fontFamily = robotoFontFamily,
         fontWeight = FontWeight.Normal

@@ -56,6 +56,14 @@ class ImagefyRepositoryImpl @Inject constructor(
         return remoteDataSource.getPhotoDetails(photoId).mapSource { it?.mapToDomain() }
     }
 
+    override suspend fun likePhoto(photoId: String): Source<Unit> {
+        return remoteDataSource.likePhoto(photoId)
+    }
+
+    override suspend fun unlikePhoto(photoId: String): Source<Unit> {
+        return remoteDataSource.unlikePhoto(photoId)
+    }
+
     override fun storeAuthorizationHeader(value: String) {
         localDataSource.storeAuthorizationHeader(value)
     }

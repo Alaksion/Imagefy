@@ -13,13 +13,15 @@ import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
+import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PhotoListViewModel @Inject constructor(
-    private val getPhotosUseCase: GetPhotosUseCase
+    private val getPhotosUseCase: GetPhotosUseCase,
+    private val ratePhotoUseCase: RatePhotoUseCase
 ) : BaseViewModel() {
 
     private val _photos = mutableStateListOf<PhotoResponse>()
@@ -45,6 +47,7 @@ class PhotoListViewModel @Inject constructor(
     }
 
     fun getImages() {
+        _screenState.value = ViewState.Loading()
         viewModelScope.launch {
             handleApiResponse(
                 source = getPhotosUseCase(currentPage),
@@ -80,8 +83,19 @@ class PhotoListViewModel @Inject constructor(
         }
     }
 
+    fun ratePhoto(photoId: String, isLike: Boolean) {
+        viewModelScope.launch {
+            handleApiResponse(
+                source = ratePhotoUseCase(photoId = photoId, isLike = isLike),
+                onSuccess = {},
+                onError = {}
+            )
+        }
+    }
+
     private fun onLoadMorePhotosError() {
         _showLoadMorePhotosError.postValue(Event(Unit))
+        _isMorePhotosLoading.value = false
     }
 
 }

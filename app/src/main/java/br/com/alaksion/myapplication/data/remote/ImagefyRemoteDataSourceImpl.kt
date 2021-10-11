@@ -47,4 +47,12 @@ class ImagefyRemoteDataSourceImpl @Inject constructor(
         return service.getPhotoDetails(photoId).handleApiResponse()
     }
 
+    override suspend fun likePhoto(photoId: String): Source<Unit> {
+        return service.likePhoto(photoId).handleApiResponse()
+    }
+
+    override suspend fun unlikePhoto(photoId: String): Source<Unit> {
+        return service.unlikePhoto(photoId).handleApiResponse()
+    }
+
 }

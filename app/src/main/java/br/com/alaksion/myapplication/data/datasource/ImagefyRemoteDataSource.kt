@@ -25,4 +25,7 @@ interface ImagefyRemoteDataSource {
 
     suspend fun getPhotoDetails(photoId: String): Source<PhotoDetailsData>
 
+    suspend fun likePhoto(photoId: String): Source<Unit>
+
+    suspend fun unlikePhoto(photoId: String): Source<Unit>
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Download
@@ -36,6 +37,7 @@ import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
+import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
 import br.com.alaksion.myapplication.ui.theme.OffWhite
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
@@ -56,7 +58,10 @@ fun PhotoViewerScreen(
 
     PhotoViewerScreen(
         photoData = viewModel.photoData.value,
-        popBackStack = popBackStack
+        popBackStack = popBackStack,
+        onRateImage = { isLike ->
+            viewModel.ratePhoto(photoId, isLike)
+        }
     )
 }
 
@@ -65,6 +70,7 @@ fun PhotoViewerScreen(
 internal fun PhotoViewerScreen(
     photoData: ViewState<PhotoDetailResponse>,
     popBackStack: () -> Boolean,
+    onRateImage: (isLike: Boolean) -> Unit
 ) {
     val showDropdown = remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -127,7 +133,11 @@ internal fun PhotoViewerScreen(
         }
         when (photoData) {
             is ViewState.Ready -> {
-                PhotoViewerReady(photoData = photoData.data, context = context)
+                PhotoViewerReady(
+                    photoData = photoData.data,
+                    context = context,
+                    onRateImage = onRateImage
+                )
             }
             is ViewState.Loading, is ViewState.Idle -> {
                 Box(
@@ -160,12 +170,15 @@ internal fun PhotoViewerScreen(
 @Composable
 internal fun PhotoViewerReady(
     photoData: PhotoDetailResponse,
-    context: Context
+    context: Context,
+    onRateImage: (isLike: Boolean) -> Unit
 ) {
 
     val showBottomBar = remember { mutableStateOf(true) }
     val density = LocalDensity.current
     val clipboardManager = LocalClipboardManager.current
+    val isImageLiked = remember { mutableStateOf(photoData.likedByUser) }
+    val imageLikes = remember { mutableStateOf(photoData.likes) }
 
     fun toggleBottomBar() {
         showBottomBar.value = showBottomBar.value.not()
@@ -178,6 +191,14 @@ internal fun PhotoViewerReady(
             "Image link copied to clipboard",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+    fun rateImage() {
+        onRateImage(isImageLiked.value)
+        if (isImageLiked.value) imageLikes.value--
+        else imageLikes.value++
+
+        isImageLiked.value = isImageLiked.value.not()
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -223,12 +244,13 @@ internal fun PhotoViewerReady(
                     )
             ) {
                 PhotoInfoItem(
-                    text = photoData.likes.formatNumber()
+                    text = imageLikes.value.formatNumber(),
+                    onClick = { rateImage() }
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.FavoriteBorder,
+                        imageVector = if (isImageLiked.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = null,
-                        tint = OffWhite,
+                        tint = if (isImageLiked.value) ErrorLightRed else OffWhite,
                     )
                 }
 

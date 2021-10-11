@@ -23,7 +23,7 @@ class SplashViewModel @Inject constructor(
 
     fun verifyUserIsLogged() {
         viewModelScope.launch {
-            delay(1500)
+            delay(2000)
             _isUserLogged.postValue(Event(getAuthorizationHeaderUseCase().isNotEmpty()))
         }
     }

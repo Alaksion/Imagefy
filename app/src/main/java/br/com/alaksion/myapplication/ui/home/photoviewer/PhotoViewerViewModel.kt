@@ -8,13 +8,15 @@ import br.com.alaksion.myapplication.common.ui.BaseViewModel
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
+import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PhotoViewerViewModel @Inject constructor(
-    private val getPhotoDetailsUseCase: GetPhotoDetailsUseCase
+    private val getPhotoDetailsUseCase: GetPhotoDetailsUseCase,
+    private val ratePhotoUseCase: RatePhotoUseCase
 ) : BaseViewModel() {
 
     private val _photoData = mutableStateOf<ViewState<PhotoDetailResponse>>(ViewState.Loading())
@@ -41,5 +43,14 @@ class PhotoViewerViewModel @Inject constructor(
         }
     }
 
+    fun ratePhoto(photoId: String, isLike: Boolean) {
+        viewModelScope.launch {
+            handleApiResponse(
+                source = ratePhotoUseCase(isLike, photoId),
+                onSuccess = { },
+                onError = { }
+            )
+        }
+    }
 
 }

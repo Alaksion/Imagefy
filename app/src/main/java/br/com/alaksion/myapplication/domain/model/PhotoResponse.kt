@@ -9,4 +9,5 @@ data class PhotoResponse(
     val authorUserName: String,
     val authorProfileThumbUrl: String,
     val photoUrl: String,
+    val likedByUser: Boolean
 )

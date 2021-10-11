@@ -16,7 +16,9 @@ data class PhotoData(
     val likes: Int?,
     val description: String?,
     val user: PhotoOwnerData?,
-    val urls: PhotoUrlsData?
+    val urls: PhotoUrlsData?,
+    @SerializedName("liked_by_user")
+    val likedByUser: Boolean
 )
 
 fun PhotoData.mapToDomain() = PhotoResponse(
@@ -27,5 +29,6 @@ fun PhotoData.mapToDomain() = PhotoResponse(
     authorProfileThumbUrl = this.user?.profileImage?.large.handleOptional(),
     description = this.description.handleOptional(),
     likes = this.likes.handleOptional(),
-    photoUrl = this.urls?.regular.handleOptional()
+    photoUrl = this.urls?.regular.handleOptional(),
+    likedByUser = this.likedByUser
 )

@@ -132,4 +132,10 @@ object UnsplashDI {
         return ValidateLoginUseCase(repository, getApiKeyUseCase, getApiSecretKeyUseCase)
     }
 
+    @Provides
+    @Singleton
+    fun provideRatePhotoUseCase(repository: ImagefyRepository): RatePhotoUseCase {
+        return RatePhotoUseCase(repository)
+    }
+
 }

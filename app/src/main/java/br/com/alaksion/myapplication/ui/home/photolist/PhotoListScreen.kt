@@ -1,6 +1,7 @@
 package br.com.alaksion.myapplication.ui.home.photolist
 
 import android.widget.Toast
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,7 @@ import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 
+@ExperimentalAnimationApi
 @Composable
 fun PhotoListScreen(
     viewModel: PhotoListViewModel,
@@ -41,7 +43,10 @@ fun PhotoListScreen(
         loadMorePhotos = { viewModel.loadMorePhotos() },
         onClickTryAgain = { viewModel.getImages() },
         navigateToAuthorDetails = navigateToAuthorDetails,
-        isMorePhotosLoading = viewModel.isMorePhotosLoading.value
+        isMorePhotosLoading = viewModel.isMorePhotosLoading.value,
+        ratePhoto = { photoId, isLike ->
+            viewModel.ratePhoto(photoId, isLike)
+        }
     )
 
     viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
@@ -50,6 +55,7 @@ fun PhotoListScreen(
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
 internal fun PhotoListScreen(
     screenState: ViewState<Unit>,
@@ -59,6 +65,7 @@ internal fun PhotoListScreen(
     loadMorePhotos: () -> Unit,
     isMorePhotosLoading: Boolean,
     navigateToAuthorDetails: (authorId: String) -> Unit,
+    ratePhoto: (photoId: String, isLike: Boolean) -> Unit
 ) {
     val listState = rememberLazyListState()
 
@@ -88,7 +95,8 @@ internal fun PhotoListScreen(
                     items(photos) { item ->
                         PhotoCard(
                             photoContent = item,
-                            navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) }
+                            navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) },
+                            ratePhoto = ratePhoto
                         )
                     }
                 }

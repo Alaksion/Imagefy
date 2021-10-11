@@ -6,9 +6,7 @@ import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 import br.com.alaksion.myapplication.data.remote.UnsplashServiceCompanion
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface UnsplashService {
 
@@ -27,6 +25,12 @@ interface UnsplashService {
 
     @GET("photos/{id}")
     suspend fun getPhotoDetails(@Path("id") photoId: String): Response<PhotoDetailsData>
+
+    @POST("photos/{id}/like")
+    suspend fun likePhoto(@Path("id") photoId: String): Response<Unit>
+
+    @DELETE("photos/{id}/like")
+    suspend fun unlikePhoto(@Path("id") photoId: String): Response<Unit>
 
     companion object : UnsplashServiceCompanion<UnsplashService>()
 

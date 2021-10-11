@@ -20,7 +20,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.utils.observeEvent
@@ -71,13 +73,17 @@ class LoginActivity : AppCompatActivity() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .background(Color.Red)
-            )
+
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(350.dp)
+                        .background(Color.Red),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("Put an image here")
+                }
                 Text(
                     text = "Share your best moments with the internet",
                     style = AppTypoGraph.roboto_bold().copy(
@@ -98,7 +104,7 @@ class LoginActivity : AppCompatActivity() {
                 )
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Row(
+                Text(
                     modifier = Modifier
                         .clickable(
                             interactionSource = MutableInteractionSource(),
@@ -107,18 +113,22 @@ class LoginActivity : AppCompatActivity() {
                             navigateToCreateAccount()
                         }
                         .padding()
-                        .padding(bottom = 15.dp)
-                ) {
-                    Text(
-                        "Don't have an account? ",
-                        style = AppTypoGraph.roboto_regular()
-                            .copy(fontSize = 14.sp, color = DimGray)
-                    )
-                    Text(
-                        "Register", style = AppTypoGraph.roboto_bold()
-                            .copy(fontSize = 14.sp)
-                    )
-                }
+                        .padding(bottom = 15.dp),
+                    text = buildAnnotatedString {
+                        withStyle(
+                            AppTypoGraph.span_roboto_regular()
+                                .copy(fontSize = 14.sp, color = DimGray)
+                        ) {
+                            append("Don't have an account? ")
+                        }
+                        withStyle(
+                            AppTypoGraph.span_roboto_bold()
+                                .copy(fontSize = 14.sp)
+                        ) {
+                            append("Register now!")
+                        }
+                    }
+                )
                 Button(
                     onClick = { openBrowserSignIn() },
                     shape = RoundedCornerShape(8.dp),

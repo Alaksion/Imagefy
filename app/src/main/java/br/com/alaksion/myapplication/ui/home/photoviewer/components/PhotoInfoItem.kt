@@ -1,9 +1,9 @@
 package br.com.alaksion.myapplication.ui.home.photoviewer.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -20,14 +20,14 @@ fun PhotoInfoItem(
     onClick: (() -> Unit)? = null,
     icon: @Composable () -> Unit
 ) {
-    val itemModifier =
-        if (onClick != null) modifier else modifier.clickable { onClick?.invoke() }
 
     Row(
-        modifier = itemModifier.height(48.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        icon()
+        IconButton(onClick = { onClick?.let { it() } }, modifier = Modifier.height(48.dp)) {
+            icon()
+        }
         Text(
             text,
             style = AppTypoGraph.roboto_regular().copy(color = OffWhite, fontSize = 14.sp),

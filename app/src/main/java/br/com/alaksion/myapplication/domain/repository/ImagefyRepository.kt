@@ -21,6 +21,10 @@ interface ImagefyRepository {
 
     suspend fun getPhotoDetails(photoId: String): Source<PhotoDetailResponse>
 
+    suspend fun likePhoto(photoId: String): Source<Unit>
+
+    suspend fun unlikePhoto(photoId: String): Source<Unit>
+
     fun storeAuthorizationHeader(value: String)
 
     fun clearAuthorizationHeader()
