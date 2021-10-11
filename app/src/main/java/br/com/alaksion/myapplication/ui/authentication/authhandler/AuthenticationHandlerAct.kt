@@ -50,7 +50,7 @@ class AuthenticationHandlerAct : AppCompatActivity() {
             handleNavigationSuccess.observeEvent(this@AuthenticationHandlerAct) {
                 loginViewModel.setAuthResult()
                 HomeActivity.start(this@AuthenticationHandlerAct)
-                finishAffinity()
+                finish()
             }
         }
     }

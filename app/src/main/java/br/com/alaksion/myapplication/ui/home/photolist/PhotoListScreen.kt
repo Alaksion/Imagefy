@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
-import br.com.alaksion.myapplication.ui.components.InfiniteListHandler
 import br.com.alaksion.myapplication.ui.components.MorePhotosLoader
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
@@ -92,15 +91,17 @@ internal fun PhotoListScreen(
             }
             is ViewState.Ready -> {
                 LazyColumn(state = listState) {
-                    items(photos) { item ->
+                    itemsIndexed(photos) { index, item ->
                         PhotoCard(
                             photoContent = item,
                             navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) },
                             ratePhoto = ratePhoto
                         )
+                        if (index == photos.lastIndex - 2) {
+                            loadMorePhotos()
+                        }
                     }
                 }
-                InfiniteListHandler(listState = listState) { loadMorePhotos() }
                 if (isMorePhotosLoading) {
                     MorePhotosLoader(
                         modifier = Modifier

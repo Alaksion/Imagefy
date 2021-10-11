@@ -18,10 +18,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -71,15 +68,17 @@ fun PhotoCard(
     fun ratePhoto() {
         coroutineScope.launch {
 //            ratePhoto(photoContent.id, isLiked.value)
-            isLiked.value = isLiked.value.not()
+            photoContent.likedByUser = photoContent.likedByUser.not()
+            isLiked.value = photoContent.likedByUser
             if (isLiked.value) {
-                imageLikes.value++
+                photoContent.likes++
                 likeAnimationVisible.value = true
                 delay(400)
                 likeAnimationVisible.value = false
             } else {
-                imageLikes.value--
+                photoContent.likes--
             }
+            imageLikes.value = photoContent.likes
         }
     }
 
