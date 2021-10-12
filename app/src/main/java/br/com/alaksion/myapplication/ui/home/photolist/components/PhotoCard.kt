@@ -6,7 +6,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -18,7 +17,10 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +41,8 @@ import br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobotto
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
 import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
+import com.skydoves.landscapist.CircularReveal
+import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.delay
@@ -95,9 +99,7 @@ fun PhotoCard(
                 profileImageUrl = photoContent.authorProfileThumbUrl,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) {
+                    .clickable() {
                         navigateToAuthor(photoContent.authorUserName)
                     }
                     .padding(horizontal = 10.dp)
@@ -225,13 +227,14 @@ internal fun PhotoCardImage(
         modifier = modifier,
         contentDescription = contentDescription,
         contentScale = ContentScale.Crop,
-        loading = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .shimmer()
-            )
-        },
+        circularReveal = CircularReveal(duration = 500),
+        shimmerParams = ShimmerParams(
+            highlightColor = Color(0xFFc2c2c2),
+            baseColor = Color.White,
+            durationMillis = 1000,
+            dropOff = 1f,
+            tilt = 1f
+        ),
         failure = {
             Box(
                 modifier = Modifier.fillMaxSize(),
