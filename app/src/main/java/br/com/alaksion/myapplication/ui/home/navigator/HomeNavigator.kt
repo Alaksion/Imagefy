@@ -11,7 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import br.com.alaksion.myapplication.ui.home.authordetails.AUTHOR_USERNAME_ARG
-import br.com.alaksion.myapplication.ui.home.authordetails.AuthorDetailsScreen
+import br.com.alaksion.myapplication.ui.home.authordetails.AuthorDetailsScreenContent
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListScreen
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListViewModel
 import br.com.alaksion.myapplication.ui.home.photoviewer.PHOTO_ID_ARG
@@ -53,7 +53,7 @@ fun HomeNavigator(
             )
         ) {
             it.arguments?.getString(AUTHOR_USERNAME_ARG)?.let { authorUsername ->
-                AuthorDetailsScreen(
+                AuthorDetailsScreenContent(
                     viewModel = hiltViewModel(),
                     authorUsername = authorUsername,
                     popBackStack = { navHostController.popBackStack() },

@@ -2,7 +2,9 @@ package br.com.alaksion.myapplication.ui.home.authordetails
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
@@ -26,13 +28,17 @@ class AuthorDetailsViewModel @Inject constructor(
     val authorData: State<ViewState<AuthorResponse>>
         get() = _authorData
 
-    private val _authorPhotos: MutableState<ViewState<List<AuthorPhotosResponse>>> =
+    private val _authorPhotosState: MutableState<ViewState<Unit>> =
         mutableStateOf(ViewState.Loading())
-    val authorPhotos: State<ViewState<List<AuthorPhotosResponse>>>
+    val authorPhotosState: State<ViewState<Unit>>
+        get() = _authorPhotosState
+
+    private val _authorPhotos = mutableStateListOf<AuthorPhotosResponse>()
+    val authorPhotos: SnapshotStateList<AuthorPhotosResponse>
         get() = _authorPhotos
 
     private var authorUsername: String = ""
-    private var page = 0
+    private var page = 1
 
     fun getAuthorProfileData(authorUsername: String) {
         this.authorUsername = authorUsername
@@ -72,11 +78,14 @@ class AuthorDetailsViewModel @Inject constructor(
     }
 
     private fun onGetAuthorPhotosSuccess(data: List<AuthorPhotosResponse>?) {
-        data?.let { response -> _authorPhotos.value = ViewState.Ready(response) }
+        data?.let { response ->
+            _authorPhotos.addAll(response)
+            _authorPhotosState.value = ViewState.Ready(Unit)
+        }
     }
 
     private fun onGetAuthorPhotosError(error: NetworkError) {
-        _authorPhotos.value = ViewState.Error(error)
+        _authorPhotosState.value = ViewState.Error(error)
     }
 
     fun getMoreAuthorPhotos() {

@@ -27,7 +27,7 @@ const val AUTHOR_USERNAME_ARG = "author_username"
 
 @ExperimentalFoundationApi
 @Composable
-fun AuthorDetailsScreen(
+fun AuthorDetailsScreenContent(
     viewModel: AuthorDetailsViewModel,
     popBackStack: () -> Boolean,
     authorUsername: String,
@@ -38,23 +38,27 @@ fun AuthorDetailsScreen(
         viewModel.getAuthorProfileData(authorUsername)
     }
 
-    AuthorDetailsScreen(
+    AuthorDetailsScreenContent(
         authorData = viewModel.authorData.value,
         authorUsername = authorUsername,
+        authorPhotos = viewModel.authorPhotos.toList(),
+        authorPhotoState = viewModel.authorPhotosState.value,
         popBackStack = popBackStack,
-        authorPhotos = viewModel.authorPhotos.value,
         getMorePhotos = { viewModel.getMoreAuthorPhotos() },
-        navigateToPhotoViewer = navigateToPhotoViewer,
-        tryAgainGetAuthorData = { viewModel.getAuthorProfileData(authorUsername) }
+        tryAgainGetAuthorData = { viewModel.getAuthorProfileData(authorUsername) },
+        navigateToPhotoViewer = { photoUrl ->
+            navigateToPhotoViewer(photoUrl)
+        }
     )
 }
 
 @ExperimentalFoundationApi
 @Composable
-internal fun AuthorDetailsScreen(
+internal fun AuthorDetailsScreenContent(
     authorData: ViewState<AuthorResponse>,
     authorUsername: String,
-    authorPhotos: ViewState<List<AuthorPhotosResponse>>,
+    authorPhotos: List<AuthorPhotosResponse>,
+    authorPhotoState: ViewState<Unit>,
     popBackStack: () -> Boolean,
     getMorePhotos: () -> Unit,
     tryAgainGetAuthorData: () -> Unit,
@@ -88,7 +92,8 @@ internal fun AuthorDetailsScreen(
                 authorData = authorData.data,
                 authorPhotos = authorPhotos,
                 getMorePhotos = getMorePhotos,
-                navigateToPhotoViewer = navigateToPhotoViewer
+                navigateToPhotoViewer = navigateToPhotoViewer,
+                authorPhotoState = authorPhotoState
             )
             is ViewState.Error -> AuthorDetailsError { tryAgainGetAuthorData() }
         }
@@ -99,7 +104,8 @@ internal fun AuthorDetailsScreen(
 @Composable
 fun AuthorDetailsReady(
     authorData: AuthorResponse,
-    authorPhotos: ViewState<List<AuthorPhotosResponse>>,
+    authorPhotos: List<AuthorPhotosResponse>,
+    authorPhotoState: ViewState<Unit>,
     getMorePhotos: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
@@ -137,7 +143,8 @@ fun AuthorDetailsReady(
         AuthorPhotosList(
             photos = authorPhotos,
             onClickTryAgain = { },
-            navigateToPhotoViewer = navigateToPhotoViewer
+            navigateToPhotoViewer = navigateToPhotoViewer,
+            viewState = authorPhotoState
         ) { getMorePhotos() }
     }
 }
