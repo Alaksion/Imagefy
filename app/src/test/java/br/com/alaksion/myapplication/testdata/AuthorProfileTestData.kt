@@ -5,7 +5,7 @@ import br.com.alaksion.myapplication.data.model.author.UserResponseData
 
 object AuthorProfileTestData {
 
-    val AUTHOR_PROFILE_RESPONSE = UserResponseData(
+    val DATA_RESPONSE = UserResponseData(
         id = "",
         username = "",
         name = "",

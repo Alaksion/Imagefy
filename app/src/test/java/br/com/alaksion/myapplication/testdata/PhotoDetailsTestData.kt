@@ -8,7 +8,7 @@ import br.com.alaksion.myapplication.data.model.photodetails.PhotoLinksData
 
 object PhotoDetailsTestData {
 
-    val AUTHOR_PHOTOS_RESPONSE = PhotoDetailsData(
+    val DATA_RESPONSE = PhotoDetailsData(
         likedByUser = false,
         likes = 1,
         id = "",

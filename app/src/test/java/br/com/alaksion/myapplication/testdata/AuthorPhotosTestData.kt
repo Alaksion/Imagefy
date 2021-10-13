@@ -1,9 +1,12 @@
 package br.com.alaksion.myapplication.testdata
 
 import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
+import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoUrls
 
 object AuthorPhotosTestData {
 
-    val AUTHOR_PHOTOS_RESPONSE = listOf<AuthorPhotoData>()
+    val DATA_RESPONSE = listOf<AuthorPhotoData>(
+        AuthorPhotoData("", urls = AuthorPhotoUrls(""))
+    )
 
 }
