@@ -5,6 +5,10 @@ plugins {
     id 'kotlin-kapt'
 }
 
+def apiKeyPropertiesFile = rootProject.file("apikey.properties")
+def apiKeyProperties = new Properties()
+apiKeyProperties.load(new FileInputStream(apiKeyPropertiesFile))
+
 android {
     compileSdk 31
 
@@ -19,6 +23,10 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        buildConfigField("String", "PUBLIC_KEY", apiKeyProperties["PUBLIC_KEY"])
+        buildConfigField("String", "SECRET_KEY", apiKeyProperties["SECRET_KEY"])
+        buildConfigField("String", "REDIRECT_URI", apiKeyProperties["REDIRECT_URI"])
+        buildConfigField("String", "API_SCOPE", apiKeyProperties["API_SCOPE"])
     }
 
     buildTypes {
