@@ -37,12 +37,12 @@ import androidx.compose.ui.zIndex
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageError
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
+import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobottomsheet.PhotoInfoBottomSheet
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
 import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
 import com.skydoves.landscapist.CircularReveal
-import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.delay
@@ -228,13 +228,11 @@ internal fun PhotoCardImage(
         contentDescription = contentDescription,
         contentScale = ContentScale.Crop,
         circularReveal = CircularReveal(duration = 500),
-        shimmerParams = ShimmerParams(
-            highlightColor = Color(0xFFc2c2c2),
-            baseColor = Color.White,
-            durationMillis = 1000,
-            dropOff = 1f,
-            tilt = 1f
-        ),
+        loading = {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                ProgressIndicator()
+            }
+        },
         failure = {
             Box(
                 modifier = Modifier.fillMaxSize(),
