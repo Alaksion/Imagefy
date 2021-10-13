@@ -2,20 +2,26 @@ package br.com.alaksion.myapplication.ui.home.photolist
 
 import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.DrawerState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -26,17 +32,20 @@ import br.com.alaksion.myapplication.ui.components.MorePhotosLoader
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
+import com.skydoves.landscapist.rememberDrawablePainter
+import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @Composable
 fun PhotoListScreen(
     viewModel: PhotoListViewModel,
-    navigateToAuthorDetails: (authorId: String) -> Unit
+    navigateToAuthorDetails: (authorId: String) -> Unit,
+    drawerState: DrawerState
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-    PhotoListScreen(
+    PhotoListScreenContent(
         screenState = viewModel.screenState.value,
         photos = viewModel.photos.toList(),
         loadMorePhotos = { viewModel.loadMorePhotos() },
@@ -45,7 +54,8 @@ fun PhotoListScreen(
         isMorePhotosLoading = viewModel.isMorePhotosLoading.value,
         ratePhoto = { photoId, isLike ->
             viewModel.ratePhoto(photoId, isLike)
-        }
+        },
+        drawerState = drawerState
     )
 
     viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
@@ -56,59 +66,109 @@ fun PhotoListScreen(
 
 @ExperimentalAnimationApi
 @Composable
-internal fun PhotoListScreen(
+internal fun PhotoListScreenContent(
     screenState: ViewState<Unit>,
     photos: List<PhotoResponse>,
     modifier: Modifier = Modifier,
     onClickTryAgain: () -> Unit,
     loadMorePhotos: () -> Unit,
     isMorePhotosLoading: Boolean,
+    drawerState: DrawerState,
     navigateToAuthorDetails: (authorId: String) -> Unit,
     ratePhoto: (photoId: String, isLike: Boolean) -> Unit
 ) {
     val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
-    Box(modifier.fillMaxSize()) {
-
-        when (screenState) {
-            is ViewState.Loading, is ViewState.Idle -> ProgressIndicator(Modifier.align(Alignment.Center))
-            is ViewState.Error -> {
-                TryAgain(
-                    message = "An error occurred and images could not be loaded, please try again later",
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.Report,
-                            contentDescription = null,
-                            tint = MaterialTheme.colors.onBackground,
-                            modifier = Modifier.size(40.dp)
-                        )
-                    },
-                    onClick = { onClickTryAgain() },
+    Column(modifier.fillMaxSize()) {
+        TopAppBar(
+            elevation = 0.dp,
+            backgroundColor = MaterialTheme.colors.background,
+            contentPadding = PaddingValues(horizontal = 5.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                val appIcon = context.packageManager.getApplicationIcon(context.applicationInfo)
+                Box(
+                    Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(Color.Red)
+                        .clickable {
+                            scope.launch {
+                                if (drawerState.isOpen) drawerState.close()
+                                else drawerState.open()
+                            }
+                        }
+                )
+                Image(
+                    painter = rememberDrawablePainter(drawable = appIcon),
+                    contentDescription = null,
                     modifier = Modifier
-                        .align(Alignment.Center)
-                        .padding(horizontal = 40.dp)
+                        .padding()
+                        .padding(bottom = 10.dp)
+                )
+                Box(
+                    Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(Color.Red)
                 )
             }
+
+        }
+
+        when (screenState) {
+            is ViewState.Loading, is ViewState.Idle -> Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) { ProgressIndicator(Modifier.align(Alignment.Center)) }
+            is ViewState.Error -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    TryAgain(
+                        message = "An error occurred and images could not be loaded, please try again later",
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.Report,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.onBackground,
+                                modifier = Modifier.size(40.dp)
+                            )
+                        },
+                        onClick = { onClickTryAgain() },
+                        modifier = Modifier.padding(horizontal = 40.dp)
+                    )
+                }
+            }
             is ViewState.Ready -> {
-                LazyColumn(state = listState) {
-                    itemsIndexed(photos) { index, item ->
-                        PhotoCard(
-                            photoContent = item,
-                            navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) },
-                            ratePhoto = ratePhoto
-                        )
-                        if (index == photos.lastIndex - 2) {
-                            loadMorePhotos()
+                Box(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn(state = listState) {
+                        itemsIndexed(photos) { index, item ->
+                            PhotoCard(
+                                photoContent = item,
+                                navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) },
+                                ratePhoto = ratePhoto
+                            )
+                            if (index == photos.lastIndex - 2) {
+                                loadMorePhotos()
+                            }
                         }
                     }
-                }
-                if (isMorePhotosLoading) {
-                    MorePhotosLoader(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding()
-                            .padding(bottom = 20.dp)
-                    )
+                    if (isMorePhotosLoading) {
+                        MorePhotosLoader(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding()
+                                .padding(bottom = 20.dp)
+                        )
+                    }
                 }
             }
         }

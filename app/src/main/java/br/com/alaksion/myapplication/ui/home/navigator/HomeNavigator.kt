@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.ui.home.navigator
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,7 +23,8 @@ import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerScreen
 @Composable
 fun HomeNavigator(
     modifier: Modifier = Modifier,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    drawerState: DrawerState
 ) {
     NavHost(
         navController = navHostController,
@@ -40,7 +42,8 @@ fun HomeNavigator(
                         navHostController,
                         authorId
                     )
-                }
+                },
+                drawerState = drawerState
             )
         }
 

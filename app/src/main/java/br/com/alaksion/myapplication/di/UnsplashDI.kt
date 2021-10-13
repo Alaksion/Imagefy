@@ -13,6 +13,7 @@ import br.com.alaksion.myapplication.data.remote.services.UnsplashService
 import br.com.alaksion.myapplication.data.repository.ImagefyRepositoryImpl
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.domain.usecase.*
+import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -95,6 +96,12 @@ object UnsplashDI {
         localDataSource: ImagefyLocalDataSource
     ): ImagefyRepository {
         return ImagefyRepositoryImpl(remoteDataSource, localDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCurrentUserData(): CurrentUserData {
+        return CurrentUserData()
     }
 
     /* Use Cases */
