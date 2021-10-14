@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.components
+package br.com.alaksion.myapplication.ui.components.loaders
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

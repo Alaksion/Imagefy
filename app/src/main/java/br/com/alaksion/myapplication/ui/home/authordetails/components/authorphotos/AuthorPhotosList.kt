@@ -1,5 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -8,23 +9,30 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraRoll
 import androidx.compose.material.icons.filled.Report
+import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.ui.components.ImageError
-import br.com.alaksion.myapplication.ui.components.MorePhotosLoader
-import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
+import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
+import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
+import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import com.skydoves.landscapist.glide.GlideImage
 
 @ExperimentalFoundationApi
@@ -35,6 +43,7 @@ fun AuthorPhotosList(
     modifier: Modifier = Modifier,
     onClickTryAgain: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit,
+    isPreview: Boolean = false,
     loadMorePhotos: () -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -67,53 +76,93 @@ fun AuthorPhotosList(
             }
         }
         is ViewState.Ready -> {
-            Box() {
-                LazyVerticalGrid(
-                    state = listState,
-                    cells = GridCells.Fixed(3),
-                    modifier = Modifier.scale(1.01f)
-                ) {
-                    itemsIndexed(photos) { index, authorPhoto ->
-
-                        if (index == photos.lastIndex - 3) {
-                            loadMorePhotos()
-                        }
-
-                        GlideImage(
+            Box(Modifier.fillMaxSize()) {
+                if (photos.isEmpty()) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 20.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Camera,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.onBackground,
                             modifier = Modifier
-                                .aspectRatio(1f)
-                                .border(1.dp, Color.White)
-                                .clickable {
-                                    navigateToPhotoViewer(authorPhoto.photoId)
-                                },
-                            contentScale = ContentScale.Crop,
-                            imageModel = authorPhoto.photoUrl,
-                            loading = {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    ProgressIndicator()
-                                }
-                            },
-                            failure = {
-                                Box(
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    ImageError()
-                                }
-                            }
+                                .border(
+                                    BorderStroke(
+                                        1.dp,
+                                        color = MaterialTheme.colors.onBackground
+                                    ),
+                                    CircleShape
+                                )
+                        )
+                        Text(
+                            "This user has no photos uploaded",
+                            style = AppTypoGraph.roboto_regular()
+                                .copy(fontSize = 22.sp, textAlign = TextAlign.Center)
                         )
                     }
-                }
-                if (viewState is ViewState.Loading && photos.isNotEmpty()) {
-                    MorePhotosLoader(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding()
-                            .padding(bottom = 15.dp)
-                    )
+                } else {
+                    LazyVerticalGrid(
+                        state = listState,
+                        cells = GridCells.Fixed(3),
+                        modifier = Modifier.scale(1.01f)
+                    ) {
+                        itemsIndexed(photos) { index, authorPhoto ->
+
+                            if (index == photos.lastIndex - 3) {
+                                loadMorePhotos()
+                            }
+
+                            if (isPreview) {
+                                Icon(imageVector = Icons.Default.CameraRoll,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .aspectRatio(1f)
+                                        .border(1.dp, Color.White)
+                                        .clickable {
+                                            navigateToPhotoViewer(authorPhoto.photoId)
+                                        })
+
+                            } else {
+                                GlideImage(
+                                    modifier = Modifier
+                                        .aspectRatio(1f)
+                                        .border(1.dp, Color.White)
+                                        .clickable {
+                                            navigateToPhotoViewer(authorPhoto.photoId)
+                                        },
+                                    contentScale = ContentScale.Crop,
+                                    imageModel = authorPhoto.photoUrl,
+                                    loading = {
+                                        Box(
+                                            modifier = Modifier.fillMaxSize(),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            ProgressIndicator()
+                                        }
+                                    },
+                                    failure = {
+                                        Box(
+                                            modifier = Modifier.fillMaxSize(),
+                                            contentAlignment = Alignment.Center
+                                        ) {
+                                            ImageError()
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    if (viewState is ViewState.Loading && photos.isNotEmpty()) {
+                        MorePhotosLoader(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding()
+                                .padding(bottom = 15.dp)
+                        )
+                    }
                 }
             }
         }

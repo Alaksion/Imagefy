@@ -3,7 +3,6 @@ package br.com.alaksion.myapplication.ui.home.photoviewer
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.*
-import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,7 +34,7 @@ import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.downloadImage
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
-import br.com.alaksion.myapplication.ui.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph

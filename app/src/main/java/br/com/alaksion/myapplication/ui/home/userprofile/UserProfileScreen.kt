@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.home.authordetails
+package br.com.alaksion.myapplication.ui.home.userprofile
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
@@ -11,27 +11,27 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
-import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
-import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorMediaLinks
-import br.com.alaksion.myapplication.ui.home.authordetails.components.authorheader.AuthorDetailsHeader
+import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
+import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsHeader
+import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-
-const val AUTHOR_USERNAME_ARG = "author_username"
+import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
 
 @ExperimentalFoundationApi
 @Composable
-fun AuthorDetailsScreenContent(
-    viewModel: AuthorDetailsViewModel,
+fun UserProfileScreen(
+    viewModel: UserProfileViewModel,
     popBackStack: () -> Boolean,
     authorUsername: String,
-    navigateToPhotoViewer: (photoUrl: String) -> Unit
+    navigateToPhotoViewer: (photoUrl: String) -> Unit,
 ) {
 
     LaunchedEffect(null) {
@@ -48,7 +48,7 @@ fun AuthorDetailsScreenContent(
         tryAgainGetAuthorData = { viewModel.getAuthorProfileData(authorUsername) },
         navigateToPhotoViewer = { photoUrl ->
             navigateToPhotoViewer(photoUrl)
-        }
+        },
     )
 }
 
@@ -61,8 +61,9 @@ internal fun AuthorDetailsScreenContent(
     authorPhotoState: ViewState<Unit>,
     popBackStack: () -> Boolean,
     getMorePhotos: () -> Unit,
+    isPreview: Boolean = false,
     tryAgainGetAuthorData: () -> Unit,
-    navigateToPhotoViewer: (photoUrl: String) -> Unit
+    navigateToPhotoViewer: (photoUrl: String) -> Unit,
 ) {
     Column {
         TopAppBar(
@@ -93,7 +94,8 @@ internal fun AuthorDetailsScreenContent(
                 authorPhotos = authorPhotos,
                 getMorePhotos = getMorePhotos,
                 navigateToPhotoViewer = navigateToPhotoViewer,
-                authorPhotoState = authorPhotoState
+                authorPhotoState = authorPhotoState,
+                isPreview = isPreview
             )
             is ViewState.Error -> AuthorDetailsError { tryAgainGetAuthorData() }
         }
@@ -107,44 +109,54 @@ fun AuthorDetailsReady(
     authorPhotos: List<AuthorPhotosResponse>,
     authorPhotoState: ViewState<Unit>,
     getMorePhotos: () -> Unit,
+    isPreview: Boolean = false,
     navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
+    val horizontalPadding = 10.dp
+
     Column {
-        AuthorDetailsHeader(
+        UserDetailsHeader(
             profileImageUrl = authorData.profileImage,
             photoCount = authorData.totalPhotos,
             followersCount = authorData.followers,
             followingCount = authorData.following,
             modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .padding(bottom = 10.dp)
+                .padding(horizontal = horizontalPadding)
+                .padding(bottom = 10.dp),
+            isPreview = isPreview
         )
-        Text(
-            authorData.name,
-            style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
-            maxLines = 1,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp)
-        )
-        Text(
-            authorData.bio,
-            style = AppTypoGraph.roboto_regular().copy(fontSize = 14.sp),
-            modifier = Modifier.padding(horizontal = 10.dp)
-        )
-        AuthorMediaLinks(
+        UserDetailsInfo(
+            bio = authorData.bio,
+            name = authorData.name,
+            portfolioUrl = authorData.portfolioUrl,
             twitterUser = authorData.twitterUser,
             instagramUser = authorData.instagramUser,
-            portfolioUrl = authorData.portfolioUrl,
             modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .padding(top = 10.dp)
+                .padding()
+                .padding(horizontal = horizontalPadding)
         )
+        OutlinedButton(
+            onClick = { },
+            colors = ButtonDefaults.outlinedButtonColors(
+                backgroundColor = MaterialTheme.colors.onBackground,
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding()
+                .padding(vertical = 10.dp, horizontal = horizontalPadding)
+        ) {
+            Text(
+                "Edit profile",
+                style = AppTypoGraph.roboto_bold()
+                    .copy(fontSize = 14.sp, color = MaterialTheme.colors.background)
+            )
+        }
         AuthorPhotosList(
             photos = authorPhotos,
             onClickTryAgain = { },
             navigateToPhotoViewer = navigateToPhotoViewer,
-            viewState = authorPhotoState
+            viewState = authorPhotoState,
+            isPreview = isPreview
         ) { getMorePhotos() }
     }
 }
@@ -177,5 +189,41 @@ fun AuthorDetailsLoading() {
         modifier = Modifier.fillMaxSize()
     ) {
         ProgressIndicator()
+    }
+}
+
+@ExperimentalFoundationApi
+@Composable
+@Preview(showBackground = true)
+fun UserProfilePreview() {
+
+    MyApplicationTheme {
+        Scaffold() {
+            AuthorDetailsScreenContent(
+                authorData = ViewState.Ready(
+                    AuthorResponse(
+                        username = "SuperJohn",
+                        name = "John Doe",
+                        profileImage = "",
+                        bio = "I'm an amateur photographer",
+                        totalLikes = 100,
+                        totalPhotos = 20,
+                        instagramUser = "johndoe.insta",
+                        twitterUser = "johndoe.twitter",
+                        portfolioUrl = "portfolio.com.br",
+                        followers = 140,
+                        following = 200
+                    )
+                ),
+                getMorePhotos = {},
+                popBackStack = { true },
+                navigateToPhotoViewer = {},
+                tryAgainGetAuthorData = {},
+                isPreview = true,
+                authorUsername = "JohnDoe",
+                authorPhotoState = ViewState.Ready(Unit),
+                authorPhotos = listOf()
+            )
+        }
     }
 }

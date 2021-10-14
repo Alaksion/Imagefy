@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.ui.authentication.login.LoginActivity
-import br.com.alaksion.myapplication.ui.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.HomeActivity
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme

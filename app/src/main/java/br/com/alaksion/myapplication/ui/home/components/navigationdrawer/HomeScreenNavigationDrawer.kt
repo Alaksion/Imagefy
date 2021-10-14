@@ -34,7 +34,7 @@ fun HomeScreenNavigationDrawer(
     drawerState: DrawerState,
     userData: CurrentUserData,
     modifier: Modifier = Modifier,
-    navigateToAuthorProfile: (authorUsername: String) -> Unit,
+    navigateToAuthorProfile: () -> Unit,
     isPreviewMode: Boolean = false,
     content: @Composable () -> Unit,
 ) {
@@ -112,7 +112,7 @@ fun HomeScreenNavigationDrawer(
                         .padding(horizontal = 20.dp)
                         .fillMaxWidth()
                         .clickable {
-                            navigateToAuthorProfile(userData.userName)
+                            navigateToAuthorProfile()
                         }
                 ) {
                     Icon(

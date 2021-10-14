@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
-import br.com.alaksion.myapplication.ui.components.MorePhotosLoader
-import br.com.alaksion.myapplication.ui.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
+import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 import com.skydoves.landscapist.glide.GlideImage

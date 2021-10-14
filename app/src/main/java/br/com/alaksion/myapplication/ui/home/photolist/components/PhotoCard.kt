@@ -37,7 +37,7 @@ import androidx.compose.ui.zIndex
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageError
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
-import br.com.alaksion.myapplication.ui.components.ProgressIndicator
+import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobottomsheet.PhotoInfoBottomSheet
 import br.com.alaksion.myapplication.ui.theme.*
 import com.skydoves.landscapist.CircularReveal

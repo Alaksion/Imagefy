@@ -17,6 +17,8 @@ import br.com.alaksion.myapplication.ui.home.photolist.PhotoListScreen
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListViewModel
 import br.com.alaksion.myapplication.ui.home.photoviewer.PHOTO_ID_ARG
 import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerScreen
+import br.com.alaksion.myapplication.ui.home.userprofile.UserProfileScreen
+import br.com.alaksion.myapplication.ui.home.userprofile.UserProfileViewModel
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
 
 @ExperimentalAnimationApi
@@ -30,10 +32,10 @@ fun HomeNavigator(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = HomeScreens.PhotosList().route,
+        startDestination = HomeScreen.PhotosList().route,
         modifier = modifier
     ) {
-        composable(route = HomeScreens.PhotosList().route) {
+        composable(route = HomeScreen.PhotosList().route) {
             val viewModel = hiltViewModel<PhotoListViewModel>(
                 navHostController.getViewModelStoreOwner(navHostController.graph.id)
             )
@@ -51,7 +53,7 @@ fun HomeNavigator(
         }
 
         composable(
-            route = "${HomeScreens.AuthorDetails().route}/{$AUTHOR_USERNAME_ARG}",
+            route = "${HomeScreen.AuthorDetails().route}/{$AUTHOR_USERNAME_ARG}",
             arguments = listOf(
                 navArgument(AUTHOR_USERNAME_ARG) {
                     type = NavType.StringType
@@ -63,15 +65,15 @@ fun HomeNavigator(
                     viewModel = hiltViewModel(),
                     authorUsername = authorUsername,
                     popBackStack = { navHostController.popBackStack() },
-                    navigateToPhotoViewer = { photoUrl ->
-                        navigateToPhotoViewer(navHostController, photoUrl)
+                    navigateToPhotoViewer = { photoId ->
+                        navigateToPhotoViewer(navHostController, photoId)
                     }
                 )
             }
         }
 
         composable(
-            route = "${HomeScreens.PhotoViewer().route}/{$PHOTO_ID_ARG}",
+            route = "${HomeScreen.PhotoViewer().route}/{$PHOTO_ID_ARG}",
             arguments = listOf(
                 navArgument(PHOTO_ID_ARG) { type = NavType.StringType }
             )
@@ -85,14 +87,34 @@ fun HomeNavigator(
                     )
                 }
         }
+
+        composable(
+            route = HomeScreen.UserProfile().route
+        ) {
+            val viewModel = hiltViewModel<UserProfileViewModel>(
+                navHostController.getViewModelStoreOwner(navHostController.graph.id)
+            )
+            UserProfileScreen(
+                viewModel = viewModel,
+                popBackStack = { navHostController.popBackStack() },
+                authorUsername = userData.userName,
+                navigateToPhotoViewer = { photoId ->
+                    navigateToPhotoViewer(navHostController, photoId)
+                }
+            )
+        }
     }
 
 }
 
 fun navigateToAuthorDetails(navHostController: NavHostController, authorUsername: String) {
-    navHostController.navigate("${HomeScreens.AuthorDetails().route}/$authorUsername")
+    navHostController.navigate("${HomeScreen.AuthorDetails().route}/$authorUsername")
 }
 
 fun navigateToPhotoViewer(navHostController: NavHostController, photoUrl: String) {
-    navHostController.navigate("${HomeScreens.PhotoViewer().route}/$photoUrl")
+    navHostController.navigate("${HomeScreen.PhotoViewer().route}/$photoUrl")
+}
+
+fun navigateToUserProfile(navHostController: NavHostController) {
+    navHostController.navigate(HomeScreen.UserProfile().route)
 }
