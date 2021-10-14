@@ -6,10 +6,12 @@ import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.data.model.auth.AuthValidationResponseData
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
 import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
+import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
 import br.com.alaksion.myapplication.data.remote.services.UnsplashService
+import retrofit2.Response
 import javax.inject.Inject
 
 class ImagefyRemoteDataSourceImpl @Inject constructor(
@@ -53,6 +55,10 @@ class ImagefyRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun unlikePhoto(photoId: String): Source<Unit> {
         return service.unlikePhoto(photoId).handleApiResponse()
+    }
+
+    override suspend fun getCurrentUsername(): Source<CurrentUserResponseData> {
+        return service.getCurrentUsername().handleApiResponse()
     }
 
 }

@@ -15,6 +15,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -32,7 +34,9 @@ import br.com.alaksion.myapplication.ui.components.MorePhotosLoader
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
+import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.rememberDrawablePainter
+import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
@@ -40,7 +44,8 @@ import kotlinx.coroutines.launch
 fun PhotoListScreen(
     viewModel: PhotoListViewModel,
     navigateToAuthorDetails: (authorId: String) -> Unit,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    userProfileUrl: String
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -55,7 +60,8 @@ fun PhotoListScreen(
         ratePhoto = { photoId, isLike ->
             viewModel.ratePhoto(photoId, isLike)
         },
-        drawerState = drawerState
+        drawerState = drawerState,
+        userProfileUrl = userProfileUrl
     )
 
     viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
@@ -74,6 +80,7 @@ internal fun PhotoListScreenContent(
     loadMorePhotos: () -> Unit,
     isMorePhotosLoading: Boolean,
     drawerState: DrawerState,
+    userProfileUrl: String,
     navigateToAuthorDetails: (authorId: String) -> Unit,
     ratePhoto: (photoId: String, isLike: Boolean) -> Unit
 ) {
@@ -85,7 +92,7 @@ internal fun PhotoListScreenContent(
         TopAppBar(
             elevation = 0.dp,
             backgroundColor = MaterialTheme.colors.background,
-            contentPadding = PaddingValues(horizontal = 5.dp)
+            contentPadding = PaddingValues(horizontal = 5.dp, vertical = 5.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -93,8 +100,8 @@ internal fun PhotoListScreenContent(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 val appIcon = context.packageManager.getApplicationIcon(context.applicationInfo)
-                Box(
-                    Modifier
+                GlideImage(
+                    modifier = Modifier
                         .size(40.dp)
                         .clip(CircleShape)
                         .background(Color.Red)
@@ -103,7 +110,27 @@ internal fun PhotoListScreenContent(
                                 if (drawerState.isOpen) drawerState.close()
                                 else drawerState.open()
                             }
-                        }
+                        },
+                    imageModel = userProfileUrl,
+                    contentScale = ContentScale.Fit,
+                    loading = {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .shimmer()
+                        )
+                    },
+                    failure = {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            tint = MaterialTheme.colors.background,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(MaterialTheme.colors.onBackground)
+                                .padding(5.dp)
+                        )
+                    }
                 )
                 Image(
                     painter = rememberDrawablePainter(drawable = appIcon),
@@ -112,14 +139,7 @@ internal fun PhotoListScreenContent(
                         .padding()
                         .padding(bottom = 10.dp)
                 )
-                Box(
-                    Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Color.Red)
-                )
             }
-
         }
 
         when (screenState) {

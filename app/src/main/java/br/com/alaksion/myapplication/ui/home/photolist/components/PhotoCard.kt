@@ -39,9 +39,7 @@ import br.com.alaksion.myapplication.ui.components.ImageError
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import br.com.alaksion.myapplication.ui.components.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobottomsheet.PhotoInfoBottomSheet
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import br.com.alaksion.myapplication.ui.theme.DimGray
-import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
+import br.com.alaksion.myapplication.ui.theme.*
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
@@ -187,9 +185,9 @@ internal fun PhotoCardHeader(
                 failure = {
                     Icon(
                         imageVector = Icons.Default.Person,
-                        tint = Color.White,
+                        tint = MediumGray,
                         contentDescription = null,
-                        modifier = Modifier.background(DimGray)
+                        modifier = Modifier.background(LightGray)
                     )
                 }
             )

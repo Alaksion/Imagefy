@@ -4,8 +4,10 @@ import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.data.model.auth.AuthValidationResponseData
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
 import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
+import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
+import retrofit2.Response
 
 interface ImagefyRemoteDataSource {
 
@@ -28,4 +30,6 @@ interface ImagefyRemoteDataSource {
     suspend fun likePhoto(photoId: String): Source<Unit>
 
     suspend fun unlikePhoto(photoId: String): Source<Unit>
+
+    suspend fun getCurrentUsername(): Source<CurrentUserResponseData>
 }

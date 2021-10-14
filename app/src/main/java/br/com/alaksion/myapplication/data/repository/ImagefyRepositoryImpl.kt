@@ -7,6 +7,7 @@ import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.data.model.auth.mapToDomain
 import br.com.alaksion.myapplication.data.model.author.mapToDomain
 import br.com.alaksion.myapplication.data.model.authorphotos.mapToDomain
+import br.com.alaksion.myapplication.data.model.currentuser.mapToDomain
 import br.com.alaksion.myapplication.data.model.photo.mapToDomain
 import br.com.alaksion.myapplication.data.model.photodetails.mapToDomain
 import br.com.alaksion.myapplication.domain.model.*
@@ -62,6 +63,10 @@ class ImagefyRepositoryImpl @Inject constructor(
 
     override suspend fun unlikePhoto(photoId: String): Source<Unit> {
         return remoteDataSource.unlikePhoto(photoId)
+    }
+
+    override suspend fun getCurrentUsername(): Source<CurrentUserResponse> {
+        return remoteDataSource.getCurrentUsername().mapSource { it?.mapToDomain() }
     }
 
     override fun storeAuthorizationHeader(value: String) {

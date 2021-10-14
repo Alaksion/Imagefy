@@ -38,12 +38,14 @@ class HomeActivity : AppCompatActivity() {
                     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                     HomeScreenNavigationDrawer(
                         drawerState = drawerState,
-                        userData = currentUserData
+                        userData = currentUserData,
+                        navigateToAuthorProfile = {}
                     ) {
                         HomeNavigator(
                             navHostController = navController,
                             modifier = Modifier.fillMaxSize(),
-                            drawerState = drawerState
+                            drawerState = drawerState,
+                            userData = currentUserData
                         )
                     }
                 }

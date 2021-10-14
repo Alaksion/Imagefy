@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.data.remote.services
 
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
 import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
+import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 import br.com.alaksion.myapplication.data.remote.UnsplashServiceCompanion
@@ -31,6 +32,9 @@ interface UnsplashService {
 
     @DELETE("photos/{id}/like")
     suspend fun unlikePhoto(@Path("id") photoId: String): Response<Unit>
+
+    @GET("/me")
+    suspend fun getCurrentUsername(): Response<CurrentUserResponseData>
 
     companion object : UnsplashServiceCompanion<UnsplashService>()
 

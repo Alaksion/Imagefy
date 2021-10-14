@@ -17,6 +17,7 @@ import br.com.alaksion.myapplication.ui.home.photolist.PhotoListScreen
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListViewModel
 import br.com.alaksion.myapplication.ui.home.photoviewer.PHOTO_ID_ARG
 import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerScreen
+import br.com.alaksion.myapplication.ui.model.CurrentUserData
 
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
@@ -24,7 +25,8 @@ import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerScreen
 fun HomeNavigator(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    userData: CurrentUserData
 ) {
     NavHost(
         navController = navHostController,
@@ -43,7 +45,8 @@ fun HomeNavigator(
                         authorId
                     )
                 },
-                drawerState = drawerState
+                drawerState = drawerState,
+                userProfileUrl = userData.profileImageUrl
             )
         }
 

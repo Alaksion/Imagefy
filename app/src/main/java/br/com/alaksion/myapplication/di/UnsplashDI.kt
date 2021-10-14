@@ -145,4 +145,10 @@ object UnsplashDI {
         return RatePhotoUseCase(repository)
     }
 
+    @Provides
+    @Singleton
+    fun provideGetCurrentUsernameUseCasse(repository: ImagefyRepository): GetCurrentUsernameUseCase {
+        return GetCurrentUsernameUseCase(repository)
+    }
+
 }
