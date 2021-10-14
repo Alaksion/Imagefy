@@ -24,6 +24,7 @@ import br.com.alaksion.myapplication.common.extensions.handleOptional
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
+import br.com.alaksion.myapplication.ui.theme.LightGray
 import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
@@ -103,7 +104,7 @@ fun HomeScreenNavigationDrawer(
                     followingCount = userData.followingCount.handleOptional(),
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp)
                 )
-                Divider(color = DimGray, modifier = Modifier.fillMaxWidth())
+                Divider(color = LightGray, modifier = Modifier.fillMaxWidth())
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier

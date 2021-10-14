@@ -90,55 +90,55 @@ internal fun PhotoListScreenContent(
 
     Column(modifier.fillMaxSize()) {
         TopAppBar(
-            elevation = 0.dp,
+            elevation = 1.dp,
             backgroundColor = MaterialTheme.colors.background,
-            contentPadding = PaddingValues(horizontal = 5.dp, vertical = 5.dp)
+            contentPadding = PaddingValues(start = 5.dp, end = 5.dp, top = 5.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                val appIcon = context.packageManager.getApplicationIcon(context.applicationInfo)
-                GlideImage(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(Color.Red)
-                        .clickable {
-                            scope.launch {
-                                if (drawerState.isOpen) drawerState.close()
-                                else drawerState.open()
-                            }
+            Column() {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    val appIcon = context.packageManager.getApplicationIcon(context.applicationInfo)
+                    GlideImage(
+                        modifier = Modifier
+                            .size(35.dp)
+                            .clip(CircleShape)
+                            .background(Color.Red)
+                            .clickable {
+                                scope.launch {
+                                    if (drawerState.isOpen) drawerState.close()
+                                    else drawerState.open()
+                                }
+                            },
+                        imageModel = userProfileUrl,
+                        contentScale = ContentScale.Fit,
+                        loading = {
+                            Box(
+                                Modifier
+                                    .fillMaxSize()
+                                    .shimmer()
+                            )
                         },
-                    imageModel = userProfileUrl,
-                    contentScale = ContentScale.Fit,
-                    loading = {
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .shimmer()
-                        )
-                    },
-                    failure = {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            tint = MaterialTheme.colors.background,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(MaterialTheme.colors.onBackground)
-                                .padding(5.dp)
-                        )
-                    }
-                )
-                Image(
-                    painter = rememberDrawablePainter(drawable = appIcon),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding()
-                        .padding(bottom = 10.dp)
-                )
+                        failure = {
+                            Icon(
+                                imageVector = Icons.Default.Person,
+                                tint = MaterialTheme.colors.background,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(MaterialTheme.colors.onBackground)
+                                    .padding(5.dp)
+                            )
+                        }
+                    )
+                    Image(
+                        painter = rememberDrawablePainter(drawable = appIcon),
+                        contentDescription = null,
+                        modifier = Modifier.size(35.dp)
+                    )
+                }
             }
         }
 
