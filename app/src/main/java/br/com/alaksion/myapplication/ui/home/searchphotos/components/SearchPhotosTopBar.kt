@@ -99,7 +99,10 @@ fun SearchPhotosToolbarPreview() {
         Scaffold(
             topBar = {
                 SearchPhotosTopbar(
-                    toggleDrawer = {}, userProfileUrl = ""
+                    toggleDrawer = {},
+                    userProfileUrl = "",
+                    searchQuery = "",
+                    onSearchQueryChange = {}
                 )
             }
         ) {}
