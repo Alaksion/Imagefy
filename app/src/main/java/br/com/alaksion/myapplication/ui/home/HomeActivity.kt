@@ -8,15 +8,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alaksion.myapplication.ui.home.components.navigationdrawer.HomeScreenNavigationDrawer
+import br.com.alaksion.myapplication.ui.home.navigator.HomeBottomNavigation
 import br.com.alaksion.myapplication.ui.home.navigator.HomeNavigator
+import br.com.alaksion.myapplication.ui.home.navigator.HomeScreen
 import br.com.alaksion.myapplication.ui.home.navigator.navigateToUserProfile
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
@@ -36,23 +39,32 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme {
-                Scaffold {
-                    val navController = rememberNavController()
-                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                    val scope = rememberCoroutineScope()
+                val navController = rememberNavController()
+                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                val scope = rememberCoroutineScope()
+                Scaffold(
+                    bottomBar = {
+                        if (shouldShowBottomBar(
+                                navController.currentBackStackEntryAsState().value?.destination?.route
+                            )
+                        ) {
+                            HomeBottomNavigation(navController = navController)
+                        }
+                    }
+                ) { screenPadding ->
                     HomeScreenNavigationDrawer(
                         drawerState = drawerState,
                         userData = currentUserData,
                         navigateToAuthorProfile = {
                             scope.launch {
-                                drawerState.close()
                                 navigateToUserProfile(navController)
+                                drawerState.close()
                             }
                         }
                     ) {
                         HomeNavigator(
                             navHostController = navController,
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier.padding(screenPadding),
                             drawerState = drawerState,
                             userData = currentUserData
                         )
@@ -66,5 +78,14 @@ class HomeActivity : AppCompatActivity() {
         fun start(context: Context) {
             context.startActivity(Intent(context, HomeActivity::class.java))
         }
+    }
+
+    private fun shouldShowBottomBar(currentRoute: String?): Boolean {
+        val screensWithoutBottomBar = listOf(
+            HomeScreen.UserProfile().route,
+            HomeScreen.AuthorDetails().route
+        )
+
+        return screensWithoutBottomBar.contains(currentRoute).not()
     }
 }

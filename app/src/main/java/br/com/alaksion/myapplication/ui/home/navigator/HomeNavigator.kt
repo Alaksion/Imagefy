@@ -17,6 +17,8 @@ import br.com.alaksion.myapplication.ui.home.photolist.PhotoListScreen
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListViewModel
 import br.com.alaksion.myapplication.ui.home.photoviewer.PHOTO_ID_ARG
 import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerScreen
+import br.com.alaksion.myapplication.ui.home.searchphotos.SearchPhotosScreen
+import br.com.alaksion.myapplication.ui.home.searchphotos.SearchPhotosViewModel
 import br.com.alaksion.myapplication.ui.home.userprofile.UserProfileScreen
 import br.com.alaksion.myapplication.ui.home.userprofile.UserProfileViewModel
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
@@ -101,6 +103,19 @@ fun HomeNavigator(
                 navigateToPhotoViewer = { photoId ->
                     navigateToPhotoViewer(navHostController, photoId)
                 }
+            )
+        }
+
+        composable(
+            route = HomeScreen.SearchPhotos().route
+        ) {
+            val viewModel = hiltViewModel<SearchPhotosViewModel>(
+                navHostController.getViewModelStoreOwner(navHostController.graph.id)
+            )
+            SearchPhotosScreen(
+                viewModel = viewModel,
+                drawerState = drawerState,
+                userProfileUrl = userData.profileImageUrl
             )
         }
     }
