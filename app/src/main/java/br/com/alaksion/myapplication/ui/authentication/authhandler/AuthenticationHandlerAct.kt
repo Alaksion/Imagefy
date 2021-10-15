@@ -24,7 +24,7 @@ import br.com.alaksion.myapplication.ui.authentication.login.LoginViewModel
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.HomeActivity
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
+import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,7 +65,7 @@ class AuthenticationHandlerAct : AppCompatActivity() {
     fun AuthHandlerContent(
         screenState: ViewState<Unit>
     ) {
-        MyApplicationTheme {
+        ImagefyTheme {
             Scaffold {
                 when (screenState) {
                     is ViewState.Loading, is ViewState.Ready, is ViewState.Idle ->

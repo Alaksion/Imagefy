@@ -29,7 +29,7 @@ import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.ui.PresentationConstants.REGISTER_URL
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
-import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
+import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setUpObservers()
         setContent {
-            MyApplicationTheme {
+            ImagefyTheme {
                 LoginActivityContent()
             }
         }

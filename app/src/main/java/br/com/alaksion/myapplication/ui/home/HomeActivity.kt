@@ -22,7 +22,7 @@ import br.com.alaksion.myapplication.ui.home.navigator.HomeNavigator
 import br.com.alaksion.myapplication.ui.home.navigator.HomeScreen
 import br.com.alaksion.myapplication.ui.home.navigator.navigateToUserProfile
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
-import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
+import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -38,10 +38,18 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationTheme {
+            ImagefyTheme {
                 val navController = rememberNavController()
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
+
+                fun toggleDrawer() {
+                    scope.launch {
+                        if (drawerState.isOpen) drawerState.close()
+                        else drawerState.open()
+                    }
+                }
+
                 Scaffold(
                     bottomBar = {
                         if (shouldShowBottomBar(
@@ -65,7 +73,7 @@ class HomeActivity : AppCompatActivity() {
                         HomeNavigator(
                             navHostController = navController,
                             modifier = Modifier.padding(screenPadding),
-                            drawerState = drawerState,
+                            toggleDrawer = { toggleDrawer() },
                             userData = currentUserData
                         )
                     }

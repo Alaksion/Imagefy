@@ -2,7 +2,6 @@ package br.com.alaksion.myapplication.ui.home.navigator
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,7 +28,7 @@ import br.com.alaksion.myapplication.ui.model.CurrentUserData
 fun HomeNavigator(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
-    drawerState: DrawerState,
+    toggleDrawer: () -> Unit,
     userData: CurrentUserData
 ) {
     NavHost(
@@ -49,7 +48,7 @@ fun HomeNavigator(
                         authorId
                     )
                 },
-                drawerState = drawerState,
+                toggleDrawer = toggleDrawer,
                 userProfileUrl = userData.profileImageUrl
             )
         }
@@ -114,7 +113,7 @@ fun HomeNavigator(
             )
             SearchPhotosScreen(
                 viewModel = viewModel,
-                drawerState = drawerState,
+                toggleDrawer = toggleDrawer,
                 userProfileUrl = userData.profileImageUrl
             )
         }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.DrawerState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar
@@ -23,16 +22,14 @@ import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.rememberDrawablePainter
 import com.valentinilk.shimmer.shimmer
-import kotlinx.coroutines.launch
 
 @Composable
 fun PhotoListTopBar(
-    drawerState: DrawerState,
+    toggleDrawer: () -> Unit,
     userProfileUrl: String,
     isPreview: Boolean = false
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     TopAppBar(
         elevation = 1.dp,
@@ -51,12 +48,7 @@ fun PhotoListTopBar(
                         .size(35.dp)
                         .clip(CircleShape)
                         .background(Color.Red)
-                        .clickable {
-                            scope.launch {
-                                if (drawerState.isOpen) drawerState.close()
-                                else drawerState.open()
-                            }
-                        },
+                        .clickable { toggleDrawer() },
                     imageModel = userProfileUrl,
                     contentScale = ContentScale.Fit,
                     loading = {

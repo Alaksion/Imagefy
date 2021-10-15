@@ -31,7 +31,7 @@ import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoListTopBa
 fun PhotoListScreen(
     viewModel: PhotoListViewModel,
     navigateToAuthorDetails: (authorId: String) -> Unit,
-    drawerState: DrawerState,
+    toggleDrawer: () -> Unit,
     userProfileUrl: String
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
@@ -47,7 +47,7 @@ fun PhotoListScreen(
         ratePhoto = { photoId, isLike ->
             viewModel.ratePhoto(photoId, isLike)
         },
-        drawerState = drawerState,
+        toggleDrawer = toggleDrawer,
         userProfileUrl = userProfileUrl
     )
 
@@ -66,7 +66,7 @@ internal fun PhotoListScreenContent(
     onClickTryAgain: () -> Unit,
     loadMorePhotos: () -> Unit,
     isMorePhotosLoading: Boolean,
-    drawerState: DrawerState,
+    toggleDrawer: () -> Unit,
     userProfileUrl: String,
     navigateToAuthorDetails: (authorId: String) -> Unit,
     ratePhoto: (photoId: String, isLike: Boolean) -> Unit
@@ -74,7 +74,7 @@ internal fun PhotoListScreenContent(
     val listState = rememberLazyListState()
 
     Column(modifier.fillMaxSize()) {
-        PhotoListTopBar(userProfileUrl = userProfileUrl, drawerState = drawerState)
+        PhotoListTopBar(userProfileUrl = userProfileUrl, toggleDrawer = toggleDrawer)
 
         when (screenState) {
             is ViewState.Loading, is ViewState.Idle -> Box(

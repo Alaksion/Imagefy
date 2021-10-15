@@ -12,7 +12,7 @@ private val ColorPallet = lightColors(
 )
 
 @Composable
-fun MyApplicationTheme(
+fun ImagefyTheme(
     content: @Composable () -> Unit
 ) {
 

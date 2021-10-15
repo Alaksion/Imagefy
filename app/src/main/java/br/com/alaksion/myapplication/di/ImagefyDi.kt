@@ -23,7 +23,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object UnsplashDI {
+object ImagefyDi {
 
     /* General DI */
 

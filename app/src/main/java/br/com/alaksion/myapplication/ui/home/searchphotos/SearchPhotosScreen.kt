@@ -2,29 +2,50 @@ package br.com.alaksion.myapplication.ui.home.searchphotos
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.DrawerState
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import br.com.alaksion.myapplication.ui.home.searchphotos.components.SearchPhotosTopbar
+import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @Composable
 fun SearchPhotosScreen(
     viewModel: SearchPhotosViewModel,
-    drawerState: DrawerState,
+    toggleDrawer: () -> Unit,
     userProfileUrl: String
 ) {
-    SearchPhotosContent(drawerState, userProfileUrl)
+    SearchPhotosContent(toggleDrawer, userProfileUrl)
 }
 
 @Composable
 fun SearchPhotosContent(
-    drawerState: DrawerState,
-    userProfileUrl: String
+    toggleDrawer: () -> Unit,
+    userProfileUrl: String,
+    isPreview: Boolean = false
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        SearchPhotosTopbar(drawerState = drawerState, userProfileUrl = userProfileUrl)
+        SearchPhotosTopbar(
+            toggleDrawer = toggleDrawer,
+            userProfileUrl = userProfileUrl,
+            isPreview = isPreview
+        )
     }
 
+}
+
+@Composable
+@Preview(showBackground = true)
+fun SearchPhotosScreenPreview() {
+    ImagefyTheme {
+        Scaffold() {
+            SearchPhotosContent(
+                toggleDrawer = {},
+                userProfileUrl = "",
+                isPreview = true
+            )
+        }
+    }
 }

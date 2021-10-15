@@ -23,7 +23,7 @@ import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
+import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @ExperimentalFoundationApi
 @Composable
@@ -197,7 +197,7 @@ fun AuthorDetailsLoading() {
 @Preview(showBackground = true)
 fun UserProfilePreview() {
 
-    MyApplicationTheme {
+    ImagefyTheme {
         Scaffold() {
             AuthorDetailsScreenContent(
                 authorData = ViewState.Ready(

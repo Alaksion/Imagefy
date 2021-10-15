@@ -26,7 +26,7 @@ import br.com.alaksion.myapplication.ui.authentication.login.LoginActivity
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.HomeActivity
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
+import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.skydoves.landscapist.rememberDrawablePainter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -63,7 +63,7 @@ class SplashActivity : AppCompatActivity() {
 
     @Composable
     fun SplashScreenContent() {
-        MyApplicationTheme {
+        ImagefyTheme {
             Scaffold() {
                 val icon = packageManager.getApplicationIcon(applicationInfo)
                 Column(

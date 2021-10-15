@@ -25,7 +25,7 @@ import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
 import br.com.alaksion.myapplication.ui.theme.LightGray
-import br.com.alaksion.myapplication.ui.theme.MyApplicationTheme
+import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 
@@ -171,7 +171,7 @@ fun FollowingData(followersCount: Int, followingCount: Int, modifier: Modifier =
 @Preview(showBackground = true)
 @Composable
 fun DrawerPreview() {
-    MyApplicationTheme {
+    ImagefyTheme {
         HomeScreenNavigationDrawer(
             isPreviewMode = true,
             drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
