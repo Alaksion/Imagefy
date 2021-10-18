@@ -1,7 +1,6 @@
 package br.com.alaksion.myapplication.domain.repository
 
 import br.com.alaksion.myapplication.common.network.Source
-import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.domain.model.*
 
 interface ImagefyRepository {
@@ -31,5 +30,7 @@ interface ImagefyRepository {
     fun storeAuthorizationHeader(value: String)
 
     fun clearAuthorizationHeader()
+
+    suspend fun searchPhotos(request: SearchPhotosRequest): Source<List<PhotoResponse>>
 
 }

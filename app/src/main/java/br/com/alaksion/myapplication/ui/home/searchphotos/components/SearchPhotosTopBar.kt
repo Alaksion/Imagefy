@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -18,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
@@ -31,8 +35,11 @@ fun SearchPhotosTopbar(
     userProfileUrl: String,
     isPreview: Boolean = false,
     searchQuery: String,
-    onSearchQueryChange: (String) -> Unit
+    onSearchQueryChange: (String) -> Unit,
+    onSubmitQuery: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     TopAppBar(
         elevation = 1.dp,
         backgroundColor = MaterialTheme.colors.background,
@@ -86,7 +93,17 @@ fun SearchPhotosTopbar(
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
-                    .background(LightGray)
+                    .background(LightGray),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        onSubmitQuery()
+                        focusManager.clearFocus()
+                    }
+                ),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Search
+                )
+
             )
         }
     }
@@ -102,7 +119,8 @@ fun SearchPhotosToolbarPreview() {
                     toggleDrawer = {},
                     userProfileUrl = "",
                     searchQuery = "",
-                    onSearchQueryChange = {}
+                    onSearchQueryChange = {},
+                    onSubmitQuery = {}
                 )
             }
         ) {}

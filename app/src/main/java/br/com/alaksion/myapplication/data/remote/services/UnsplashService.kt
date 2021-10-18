@@ -5,6 +5,7 @@ import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
 import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
+import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
 import br.com.alaksion.myapplication.data.remote.UnsplashServiceCompanion
 import retrofit2.Response
 import retrofit2.http.*
@@ -35,6 +36,12 @@ interface UnsplashService {
 
     @GET("/me")
     suspend fun getCurrentUsername(): Response<CurrentUserResponseData>
+
+    @GET("search/photos")
+    suspend fun searchPhotos(
+        @Query("query") searchQuery: String,
+        @Query("page") page: Int
+    ): Response<SearchPhotosResponseData>
 
     companion object : UnsplashServiceCompanion<UnsplashService>()
 

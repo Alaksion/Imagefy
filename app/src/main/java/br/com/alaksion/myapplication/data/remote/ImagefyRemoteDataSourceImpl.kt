@@ -9,9 +9,10 @@ import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
 import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
+import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosRequestData
+import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
 import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
 import br.com.alaksion.myapplication.data.remote.services.UnsplashService
-import retrofit2.Response
 import javax.inject.Inject
 
 class ImagefyRemoteDataSourceImpl @Inject constructor(
@@ -59,6 +60,13 @@ class ImagefyRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getCurrentUsername(): Source<CurrentUserResponseData> {
         return service.getCurrentUsername().handleApiResponse()
+    }
+
+    override suspend fun searchPhotos(request: SearchPhotosRequestData): Source<SearchPhotosResponseData> {
+        return service.searchPhotos(
+            searchQuery = request.query,
+            page = request.page
+        ).handleApiResponse()
     }
 
 }

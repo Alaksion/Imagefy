@@ -7,7 +7,8 @@ import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
 import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
-import retrofit2.Response
+import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosRequestData
+import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
 
 interface ImagefyRemoteDataSource {
 
@@ -32,4 +33,6 @@ interface ImagefyRemoteDataSource {
     suspend fun unlikePhoto(photoId: String): Source<Unit>
 
     suspend fun getCurrentUsername(): Source<CurrentUserResponseData>
+
+    suspend fun searchPhotos(request: SearchPhotosRequestData): Source<SearchPhotosResponseData>
 }

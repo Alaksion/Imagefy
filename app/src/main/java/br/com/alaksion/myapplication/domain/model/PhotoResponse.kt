@@ -2,7 +2,6 @@ package br.com.alaksion.myapplication.domain.model
 
 data class PhotoResponse(
     val id: String,
-    val createdAt: String,
     var likes: Int,
     val description: String,
     val authorName: String,

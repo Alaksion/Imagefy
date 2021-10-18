@@ -6,13 +6,6 @@ import com.google.gson.annotations.SerializedName
 
 data class PhotoData(
     val id: String?,
-    @SerializedName("created_at")
-    val createdAt: String?,
-    val width: Int?,
-    val height: Int?,
-    val color: String?,
-    @SerializedName("blur_hash")
-    val blurHash: String?,
     val likes: Int?,
     val description: String?,
     val user: PhotoOwnerData?,
@@ -23,7 +16,6 @@ data class PhotoData(
 
 fun PhotoData.mapToDomain() = PhotoResponse(
     id = this.id.handleOptional(),
-    createdAt = this.createdAt.handleOptional(),
     authorName = this.user?.name.handleOptional(),
     authorUserName = this.user?.username.handleOptional(),
     authorProfileThumbUrl = this.user?.profileImage?.large.handleOptional(),

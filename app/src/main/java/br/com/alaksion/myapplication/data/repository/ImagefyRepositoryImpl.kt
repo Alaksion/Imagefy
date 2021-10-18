@@ -10,6 +10,7 @@ import br.com.alaksion.myapplication.data.model.authorphotos.mapToDomain
 import br.com.alaksion.myapplication.data.model.currentuser.mapToDomain
 import br.com.alaksion.myapplication.data.model.photo.mapToDomain
 import br.com.alaksion.myapplication.data.model.photodetails.mapToDomain
+import br.com.alaksion.myapplication.data.model.searchphotos.mapToData
 import br.com.alaksion.myapplication.domain.model.*
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import javax.inject.Inject
@@ -75,6 +76,11 @@ class ImagefyRepositoryImpl @Inject constructor(
 
     override fun clearAuthorizationHeader() {
         localDataSource.clearAuthorizationHeader()
+    }
+
+    override suspend fun searchPhotos(request: SearchPhotosRequest): Source<List<PhotoResponse>> {
+        return remoteDataSource.searchPhotos(request.mapToData())
+            .mapSource { photos -> photos?.results?.map { item -> item.mapToDomain() } }
     }
 
 }
