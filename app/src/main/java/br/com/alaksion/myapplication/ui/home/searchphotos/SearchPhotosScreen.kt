@@ -1,7 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.searchphotos
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,10 +13,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraRoll
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
@@ -49,8 +50,8 @@ fun SearchPhotosScreen(
         onChangeQuery = { value -> viewModel.onChangeSearchQuery(value) },
         screenState = viewModel.screenState.value,
         isMorePhotosLoading = viewModel.isMorePhotosLoading.value,
-        photos = viewModel.photoList,
-        loadMorePhotos = {viewModel.loadMorePhotos()}
+        photos = viewModel.photoList.value,
+        loadMorePhotos = { viewModel.loadMorePhotos() }
     )
 }
 
@@ -129,6 +130,34 @@ fun SearchPhotosIdle() {
     }
 }
 
+@Composable
+fun SearchPhotosEmpty(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .padding(vertical = 50.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            imageVector = Icons.Default.ImageSearch,
+            contentDescription = null,
+            modifier = Modifier
+                .size(60.dp)
+                .padding()
+                .padding(bottom = 10.dp),
+            tint = MaterialTheme.colors.onBackground
+        )
+        Text(
+            text = "Whoops, no results were found.",
+            style = AppTypoGraph.roboto_bold().copy(
+                fontSize = 18.sp,
+                textAlign = TextAlign.Center
+            )
+        )
+    }
+}
+
 @ExperimentalFoundationApi
 @Composable
 fun SearchPhotosReady(
@@ -137,52 +166,67 @@ fun SearchPhotosReady(
     isPreview: Boolean = false,
     loadMorePhotos: () -> Unit
 ) {
-
     val listState = rememberLazyListState()
 
     Box(Modifier.fillMaxSize()) {
-        LazyVerticalGrid(cells = GridCells.Fixed(3), state = listState) {
-            itemsIndexed(photos) { index, item ->
-                if (index == photos.lastIndex - 6) loadMorePhotos()
+        if (photos.isEmpty()) {
+            SearchPhotosEmpty(Modifier.align(Alignment.Center))
+        } else {
+            LazyVerticalGrid(
+                cells = GridCells.Fixed(3),
+                state = listState,
+                modifier = Modifier.scale(1.01f)
+            ) {
+                itemsIndexed(photos) { index, item ->
+                    if (index == photos.lastIndex - 3) loadMorePhotos()
 
-                if (isPreview) {
-                    Box(Modifier.background(Color.Red))
-                } else {
-                    GlideImage(
-                        modifier = Modifier
-                            .aspectRatio(1f)
-                            .border(1.dp, Color.White)
-                            .clickable {
+                    if (isPreview) {
+                        Icon(
+                            imageVector = Icons.Default.CameraRoll,
+                            tint = MaterialTheme.colors.onBackground,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(100.dp)
+                                .padding(20.dp)
+                        )
+                    } else {
+                        GlideImage(
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .border(1.dp, Color.White)
+                                .clickable {
+                                },
+                            contentScale = ContentScale.Crop,
+                            imageModel = item.photoUrl,
+                            loading = {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    ProgressIndicator()
+                                }
                             },
-                        contentScale = ContentScale.Crop,
-                        imageModel = item.photoUrl,
-                        loading = {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                ProgressIndicator()
+                            failure = {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    ImageError()
+                                }
                             }
-                        },
-                        failure = {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                ImageError()
-                            }
-                        }
-                    )
-                }
+                        )
+                    }
 
+                }
             }
+            if (isMorePhotosLoading) MorePhotosLoader(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding()
+                    .padding(20.dp)
+            )
         }
-        if (isMorePhotosLoading) MorePhotosLoader(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding()
-                .padding(20.dp)
-        )
+
     }
 
 }
@@ -202,7 +246,7 @@ fun SearchPhotosScreenPreview() {
                 searchPhotos = {},
                 screenState = ViewState.Ready(Unit),
                 isMorePhotosLoading = false,
-                photos = (1..6).toList().map { _ ->
+                photos = (1..6).toList().map {
                     PhotoResponse(
                         "", 0, "", "", "", "", "", false
                     )

@@ -9,6 +9,7 @@ import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
+import br.com.alaksion.myapplication.domain.model.SearchPhotosResponse
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -35,15 +36,16 @@ class SearchPhotosViewModel @Inject constructor(
     val isMorePhotosLoading: State<Boolean>
         get() = _isMorePhotosLoading
 
-    private var page = 1
+    private var currentPage = 1
+    private var maxPages = 1
 
     private fun getPhotos(
-        onSuccess: (data: List<PhotoResponse>?) -> Unit,
+        onSuccess: (data: SearchPhotosResponse?) -> Unit,
         onError: (NetworkError) -> Unit
     ) {
         viewModelScope.launch {
             handleApiResponse(
-                source = searchPhotosUseCase(page = page, searchQuery = searchQuery.value),
+                source = searchPhotosUseCase(page = currentPage, searchQuery = searchQuery.value),
                 onError = { error -> onError(error) },
                 onSuccess = { data -> onSuccess(data) }
             )
@@ -56,7 +58,7 @@ class SearchPhotosViewModel @Inject constructor(
 
     fun searchPhotos() {
         _screenState.value = ViewState.Loading()
-        page = 1
+        currentPage = 1
         _photoList.clear()
         getPhotos(
             onSuccess = { data -> onSearchPhotosSuccess(data) },
@@ -64,12 +66,12 @@ class SearchPhotosViewModel @Inject constructor(
         )
     }
 
-    private fun onSearchPhotosSuccess(data: List<PhotoResponse>?) {
+    private fun onSearchPhotosSuccess(data: SearchPhotosResponse?) {
         data?.let { response ->
             _screenState.value = ViewState.Ready(Unit)
-            _photoList.addAll(response)
+            _photoList.addAll(response.photos)
+            maxPages = response.totalPages
         }
-
     }
 
     private fun onErrorSearchPhotos() {
@@ -77,18 +79,20 @@ class SearchPhotosViewModel @Inject constructor(
     }
 
     fun loadMorePhotos() {
-        _isMorePhotosLoading.value = true
-        page++
-        getPhotos(
-            onSuccess = { data -> onLoadMorePhotosSuccess(data) },
-            onError = { onErrorLoadMorePhotos() }
-        )
+        if (currentPage < maxPages) {
+            _isMorePhotosLoading.value = true
+            currentPage++
+            getPhotos(
+                onSuccess = { data -> onLoadMorePhotosSuccess(data) },
+                onError = { onErrorLoadMorePhotos() }
+            )
+        }
     }
 
-    private fun onLoadMorePhotosSuccess(data: List<PhotoResponse>?) {
+    private fun onLoadMorePhotosSuccess(data: SearchPhotosResponse?) {
         data?.let { response ->
             _isMorePhotosLoading.value = false
-            _photoList.addAll(response)
+            _photoList.addAll(response.photos)
         }
 
     }

@@ -31,6 +31,6 @@ interface ImagefyRepository {
 
     fun clearAuthorizationHeader()
 
-    suspend fun searchPhotos(request: SearchPhotosRequest): Source<List<PhotoResponse>>
+    suspend fun searchPhotos(request: SearchPhotosRequest): Source<SearchPhotosResponse>
 
 }

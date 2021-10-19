@@ -1,10 +1,10 @@
 package br.com.alaksion.myapplication.ui.home.searchphotos.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -24,8 +24,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
-import br.com.alaksion.myapplication.ui.theme.LightGray
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 
@@ -50,11 +50,12 @@ fun SearchPhotosTopbar(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (isPreview) {
-                Box(
+                Icon(
+                    imageVector = Icons.Default.Person,
+                    tint = MaterialTheme.colors.onBackground,
+                    contentDescription = null,
                     modifier = Modifier
                         .size(35.dp)
-                        .clip(CircleShape)
-                        .background(Color.Red)
                 )
             } else {
                 GlideImage(
@@ -89,11 +90,12 @@ fun SearchPhotosTopbar(
             BasicTextField(
                 value = searchQuery,
                 onValueChange = { value -> onSearchQueryChange(value) },
+                textStyle = AppTypoGraph.roboto_regular().copy(),
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(LightGray),
+                    .border(1.dp, MaterialTheme.colors.onBackground)
+                    .padding(vertical = 10.dp, horizontal = 10.dp)
+                    .fillMaxWidth(),
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         onSubmitQuery()
@@ -102,14 +104,13 @@ fun SearchPhotosTopbar(
                 ),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Search
-                )
-
+                ),
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview()
 @Composable
 fun SearchPhotosToolbarPreview() {
     ImagefyTheme {
@@ -118,9 +119,10 @@ fun SearchPhotosToolbarPreview() {
                 SearchPhotosTopbar(
                     toggleDrawer = {},
                     userProfileUrl = "",
-                    searchQuery = "",
+                    searchQuery = "Search here",
                     onSearchQueryChange = {},
-                    onSubmitQuery = {}
+                    onSubmitQuery = {},
+                    isPreview = true
                 )
             }
         ) {}
