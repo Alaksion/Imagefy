@@ -42,5 +42,11 @@ fun HomeBottomNavigation(
 }
 
 private fun handleBottomNavClick(navController: NavHostController, route: String) {
-    navController.navigate(route)
+    navController.navigate(route) {
+        popUpTo(navController.graph.id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
 }
