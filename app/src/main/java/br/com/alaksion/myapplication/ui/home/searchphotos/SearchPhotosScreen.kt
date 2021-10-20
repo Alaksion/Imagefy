@@ -48,7 +48,7 @@ fun SearchPhotosScreen(
         onChangeQuery = { value -> viewModel.onChangeSearchQuery(value) },
         screenState = viewModel.screenState.value,
         isMorePhotosLoading = viewModel.isMorePhotosLoading.value,
-        photos = viewModel._photoList,
+        photos = viewModel.photoList,
         loadMorePhotos = { viewModel.loadMorePhotos() }
     )
 }
