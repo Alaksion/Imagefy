@@ -3,7 +3,6 @@ package br.com.alaksion.myapplication.ui.home.searchphotos
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
@@ -28,9 +27,9 @@ class SearchPhotosViewModel @Inject constructor(
     val searchQuery: State<String>
         get() = _searchQuery
 
-    private val _photoList = mutableStateListOf<PhotoResponse>()
-    val photoList: SnapshotStateList<PhotoResponse>
-        get() = _photoList
+    val _photoList = mutableStateListOf<PhotoResponse>()
+//    val photoList: SnapshotStateList<PhotoResponse>
+//        get() = _photoList
 
     private val _isMorePhotosLoading = mutableStateOf(false)
     val isMorePhotosLoading: State<Boolean>
@@ -57,9 +56,9 @@ class SearchPhotosViewModel @Inject constructor(
     }
 
     fun searchPhotos() {
+        _photoList.clear()
         _screenState.value = ViewState.Loading()
         currentPage = 1
-        _photoList.clear()
         getPhotos(
             onSuccess = { data -> onSearchPhotosSuccess(data) },
             onError = { onErrorSearchPhotos() }
