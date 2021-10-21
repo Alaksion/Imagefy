@@ -83,71 +83,9 @@ fun SplashScreenContent(
     ImagefyTheme {
         Scaffold() {
             when (screenState) {
-                is ViewState.Loading, is ViewState.Idle, is ViewState.Ready -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        AppLogo(isPreview)
-                        Text(
-                            "Imagefy",
-                            style = AppTypoGraph.roboto_bold()
-                                .copy(fontSize = 24.sp, textAlign = TextAlign.Center),
-                            modifier = Modifier
-                                .padding()
-                                .padding(bottom = 10.dp)
-                        )
-                        ProgressIndicator(
-                            modifier = Modifier
-                                .padding()
-                                .padding(bottom = 10.dp)
-                        )
-                        Text(
-                            "Loading content...",
-                            style = AppTypoGraph.roboto_bold()
-                                .copy(fontSize = 14.sp, textAlign = TextAlign.Center)
-                        )
-                    }
-                }
-                is ViewState.Error -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        TryAgain(
-                            message = "An error occurred and your login could not be authenticated, please try again.",
-                            icon = {
-                                Icon(
-                                    imageVector = Icons.Default.Report,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colors.onBackground,
-                                    modifier = Modifier.size(40.dp)
-                                )
-                            },
-                            onClick = { onClickTryAgain() },
-                            modifier = Modifier.padding(horizontal = 40.dp)
-                        )
-                        OutlinedButton(
-                            onClick = { goToLoginScreen() },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 40.dp)
-                                .padding(top = 25.dp)
-                                .height(48.dp)
-                        ) {
-                            Text(
-                                "Go to login screen", style = AppTypoGraph.roboto_bold()
-                                    .copy(
-                                        color = MaterialTheme.colors.onBackground,
-                                        fontSize = 14.sp
-                                    )
-                            )
-                        }
-                    }
-                }
+                is ViewState.Loading, is ViewState.Idle, is ViewState.Ready ->
+                    SplashContentLoading(isPreview)
+                is ViewState.Error -> SplashContentError(onClickTryAgain, goToLoginScreen)
             }
         }
     }
@@ -172,6 +110,80 @@ fun AppLogo(
             modifier = Modifier
                 .padding()
                 .padding(bottom = 10.dp)
+        )
+    }
+}
+
+@Composable
+fun SplashContentError(
+    onClickTryAgain: () -> Unit,
+    goToLoginScreen: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        TryAgain(
+            message = "An error occurred and your login could not be authenticated, please try again.",
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Report,
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.size(40.dp)
+                )
+            },
+            onClick = { onClickTryAgain() },
+            modifier = Modifier.padding(horizontal = 40.dp)
+        )
+        OutlinedButton(
+            onClick = { goToLoginScreen() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 40.dp)
+                .padding(top = 25.dp)
+                .height(48.dp)
+        ) {
+            Text(
+                "Go to login screen", style = AppTypoGraph.roboto_bold()
+                    .copy(
+                        color = MaterialTheme.colors.onBackground,
+                        fontSize = 14.sp
+                    )
+            )
+        }
+    }
+}
+
+@Composable
+fun SplashContentLoading(
+    isPreview: Boolean = false
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        AppLogo(isPreview)
+        Text(
+            "Imagefy",
+            style = AppTypoGraph.roboto_bold()
+                .copy(fontSize = 24.sp, textAlign = TextAlign.Center),
+            modifier = Modifier
+                .padding()
+                .padding(bottom = 10.dp)
+        )
+        ProgressIndicator(
+            modifier = Modifier
+                .padding()
+                .padding(bottom = 10.dp)
+        )
+        Text(
+            "Loading content...",
+            style = AppTypoGraph.roboto_bold()
+                .copy(fontSize = 14.sp, textAlign = TextAlign.Center)
         )
     }
 }
