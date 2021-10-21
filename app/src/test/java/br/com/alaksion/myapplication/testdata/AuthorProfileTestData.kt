@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.testdata
 
 import br.com.alaksion.myapplication.data.model.author.AuthorImageResponseData
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
+import br.com.alaksion.myapplication.data.model.author.mapToDomain
 
 object AuthorProfileTestData {
 
@@ -25,5 +26,7 @@ object AuthorProfileTestData {
         location = "",
         updatedAt = ""
     )
+
+    val DOMAIN_RESPONSE = DATA_RESPONSE.mapToDomain()
 
 }

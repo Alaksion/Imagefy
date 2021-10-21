@@ -1,9 +1,6 @@
 package br.com.alaksion.myapplication.testdata
 
-import br.com.alaksion.myapplication.data.model.photo.PhotoData
-import br.com.alaksion.myapplication.data.model.photo.PhotoOwnerData
-import br.com.alaksion.myapplication.data.model.photo.PhotoOwnerProfileImageData
-import br.com.alaksion.myapplication.data.model.photo.PhotoUrlsData
+import br.com.alaksion.myapplication.data.model.photo.*
 
 object GetImagesTestData {
 
@@ -14,13 +11,10 @@ object GetImagesTestData {
             id = "",
             likes = 1,
             likedByUser = false,
-            color = "",
-            width = 1,
-            description = "",
-            createdAt = "",
-            blurHash = "",
-            height = 1
+            description = ""
         )
     )
+
+    val DOMAIN_RESPONSE = DATA_RESPONSE.map { item -> item.mapToDomain() }
 
 }

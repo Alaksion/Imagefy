@@ -5,6 +5,7 @@ import br.com.alaksion.myapplication.data.model.photo.PhotoOwnerProfileImageData
 import br.com.alaksion.myapplication.data.model.photo.PhotoUrlsData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 import br.com.alaksion.myapplication.data.model.photodetails.PhotoLinksData
+import br.com.alaksion.myapplication.data.model.photodetails.mapToDomain
 
 object PhotoDetailsTestData {
 
@@ -21,5 +22,7 @@ object PhotoDetailsTestData {
         downloads = 1,
         links = PhotoLinksData("")
     )
+
+    val DOMAIN_RESPONSE = DATA_RESPONSE.mapToDomain()
 
 }
