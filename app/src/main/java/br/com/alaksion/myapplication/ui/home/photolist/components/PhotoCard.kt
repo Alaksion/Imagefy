@@ -69,7 +69,7 @@ fun PhotoCard(
 
     fun ratePhoto() {
         coroutineScope.launch {
-//            ratePhoto(photoContent.id, isLiked.value)
+            ratePhoto(photoContent.id, isLiked.value)
             photoContent.likedByUser = photoContent.likedByUser.not()
             isLiked.value = photoContent.likedByUser
             if (isLiked.value) {
