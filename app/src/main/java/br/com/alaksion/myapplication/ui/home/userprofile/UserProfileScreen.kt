@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,10 +33,12 @@ fun UserProfileScreen(
     popBackStack: () -> Boolean,
     authorUsername: String,
     navigateToPhotoViewer: (photoUrl: String) -> Unit,
+    shouldShowBottomBar: MutableState<Boolean>
 ) {
 
     LaunchedEffect(null) {
         viewModel.getAuthorProfileData(authorUsername)
+        shouldShowBottomBar.value = false
     }
 
     AuthorDetailsScreenContent(

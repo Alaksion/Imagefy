@@ -35,8 +35,8 @@ class AuthHandlerViewModel @Inject constructor(
     val authenticationResult: State<ViewState<Unit>>
         get() = _authenticationResult
 
-    private val _handleNavigationSuccess = MutableLiveData<Event<Unit>>()
-    val handleNavigationSuccess: LiveData<Event<Unit>>
+    private val _handleNavigationSuccess = MutableLiveData<Event<Boolean>>()
+    val handleNavigationSuccess: LiveData<Event<Boolean>>
         get() = _handleNavigationSuccess
 
 
@@ -100,7 +100,7 @@ class AuthHandlerViewModel @Inject constructor(
                 followingCount = response.following
                 profileImageUrl = response.profileImage
             }
-            _handleNavigationSuccess.postValue(Event(Unit))
+            _handleNavigationSuccess.postValue(Event(true))
             return
         }
         _authenticationResult.value = ViewState.Error()

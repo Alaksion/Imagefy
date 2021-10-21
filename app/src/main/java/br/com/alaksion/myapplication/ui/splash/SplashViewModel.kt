@@ -1,9 +1,13 @@
 package br.com.alaksion.myapplication.ui.splash
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
+import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.domain.model.CurrentUserResponse
@@ -22,6 +26,11 @@ class SplashViewModel @Inject constructor(
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase,
     private val userData: CurrentUserData
 ) : BaseViewModel() {
+
+    private val _authenticationState: MutableState<ViewState<Unit>> =
+        mutableStateOf(ViewState.Loading())
+    val authenticationState: State<ViewState<Unit>>
+        get() = _authenticationState
 
     private var _isUserLogged = MutableLiveData<Event<Boolean>>()
     val isUserLogged: LiveData<Event<Boolean>>
@@ -79,7 +88,7 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun onApiError() {
-        _isUserLogged.postValue(Event(false))
+        _authenticationState.value = ViewState.Error()
     }
 
 }

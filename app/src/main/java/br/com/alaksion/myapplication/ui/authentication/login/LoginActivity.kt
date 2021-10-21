@@ -13,7 +13,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -134,9 +133,6 @@ class LoginActivity : AppCompatActivity() {
                 Button(
                     onClick = { openBrowserSignIn() },
                     shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.surface
-                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(48.dp)
@@ -144,7 +140,7 @@ class LoginActivity : AppCompatActivity() {
                     Text(
                         "Sign in",
                         style = AppTypoGraph.roboto_bold()
-                            .copy(fontSize = 14.sp, color = MaterialTheme.colors.onSurface)
+                            .copy(fontSize = 14.sp, color = MaterialTheme.colors.onPrimary)
                     )
                 }
             }

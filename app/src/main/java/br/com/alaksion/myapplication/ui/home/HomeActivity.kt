@@ -12,14 +12,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberDrawerState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alaksion.myapplication.ui.home.components.navigationdrawer.HomeScreenNavigationDrawer
 import br.com.alaksion.myapplication.ui.home.navigator.HomeBottomNavigation
 import br.com.alaksion.myapplication.ui.home.navigator.HomeNavigator
-import br.com.alaksion.myapplication.ui.home.navigator.HomeScreen
 import br.com.alaksion.myapplication.ui.home.navigator.navigateToUserProfile
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
@@ -42,6 +42,7 @@ class HomeActivity : AppCompatActivity() {
                 val navController = rememberNavController()
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
                 val scope = rememberCoroutineScope()
+                val shouldShowBottomBar = remember { mutableStateOf(true) }
 
                 fun toggleDrawer() {
                     scope.launch {
@@ -52,12 +53,8 @@ class HomeActivity : AppCompatActivity() {
 
                 Scaffold(
                     bottomBar = {
-                        if (shouldShowBottomBar(
-                                navController.currentBackStackEntryAsState().value?.destination?.route
-                            )
-                        ) {
+                        if (shouldShowBottomBar.value)
                             HomeBottomNavigation(navController = navController)
-                        }
                     }
                 ) { screenPadding ->
                     HomeScreenNavigationDrawer(
@@ -74,7 +71,8 @@ class HomeActivity : AppCompatActivity() {
                             navHostController = navController,
                             modifier = Modifier.padding(screenPadding),
                             toggleDrawer = { toggleDrawer() },
-                            userData = currentUserData
+                            userData = currentUserData,
+                            shouldShowBottomBar = shouldShowBottomBar
                         )
                     }
                 }
@@ -86,14 +84,5 @@ class HomeActivity : AppCompatActivity() {
         fun start(context: Context) {
             context.startActivity(Intent(context, HomeActivity::class.java))
         }
-    }
-
-    private fun shouldShowBottomBar(currentRoute: String?): Boolean {
-        val screensWithoutBottomBar = listOf(
-            HomeScreen.UserProfile().route,
-            HomeScreen.AuthorDetails().route
-        )
-
-        return screensWithoutBottomBar.contains(currentRoute).not()
     }
 }

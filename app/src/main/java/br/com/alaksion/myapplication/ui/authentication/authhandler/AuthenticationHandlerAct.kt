@@ -6,12 +6,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,7 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.observeEvent
+import br.com.alaksion.myapplication.ui.authentication.login.LoginActivity
 import br.com.alaksion.myapplication.ui.authentication.login.LoginViewModel
+import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.HomeActivity
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
@@ -34,43 +34,51 @@ class AuthenticationHandlerAct : AppCompatActivity() {
 
     private val viewModel by viewModels<AuthHandlerViewModel>()
     private val loginViewModel by viewModels<LoginViewModel>()
+    private val authCode = intent.data?.encodedQuery?.substring(5)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpObservers()
 
         setContent {
-            AuthHandlerContent(viewModel.authenticationResult.value)
+            AuthHandlerContent(
+                screenState = viewModel.authenticationResult.value,
+                goToLoginScreen = { LoginActivity.start(this) },
+                onClickTryAgain = { viewModel.authenticateUser(authCode) }
+            )
         }
 
     }
 
     private fun setUpObservers() {
         with(viewModel) {
-            handleNavigationSuccess.observeEvent(this@AuthenticationHandlerAct) {
-                loginViewModel.setAuthResult()
-                HomeActivity.start(this@AuthenticationHandlerAct)
-                finish()
+            handleNavigationSuccess.observeEvent(this@AuthenticationHandlerAct) { authSucceeded ->
+                if (authSucceeded) {
+                    loginViewModel.setAuthResult()
+                    HomeActivity.start(this@AuthenticationHandlerAct)
+                    finish()
+                }
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        val authCode = intent.data?.encodedQuery?.substring(5)
         viewModel.authenticateUser(authCode)
     }
 
     @Composable
     fun AuthHandlerContent(
-        screenState: ViewState<Unit>
+        screenState: ViewState<Unit>,
+        onClickTryAgain: () -> Unit,
+        goToLoginScreen: () -> Unit
     ) {
         ImagefyTheme {
             Scaffold {
                 when (screenState) {
                     is ViewState.Loading, is ViewState.Ready, is ViewState.Idle ->
                         AuthHandlerContentLoading()
-                    is ViewState.Error -> AuthHandlerContentError()
+                    is ViewState.Error -> AuthHandlerContentError(onClickTryAgain, goToLoginScreen)
                 }
             }
         }
@@ -99,8 +107,46 @@ class AuthenticationHandlerAct : AppCompatActivity() {
     }
 
     @Composable
-    fun AuthHandlerContentError() {
-        Text("deu erro")
+    fun AuthHandlerContentError(
+        onClickTryAgain: () -> Unit,
+        goToLoginScreen: () -> Unit
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            TryAgain(
+                message = "An error occurred and your login could not be authenticated, please try again.",
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Report,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.onBackground,
+                        modifier = Modifier.size(40.dp)
+                    )
+                },
+                onClick = { onClickTryAgain() },
+                modifier = Modifier.padding(horizontal = 40.dp)
+            )
+            OutlinedButton(
+                onClick = { goToLoginScreen() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 40.dp)
+                    .padding(top = 25.dp)
+                    .height(48.dp)
+            ) {
+                Text(
+                    "Go to login screen", style = AppTypoGraph.roboto_bold()
+                        .copy(
+                            color = MaterialTheme.colors.onBackground,
+                            fontSize = 14.sp
+                        )
+                )
+            }
+        }
     }
 
 }

@@ -34,8 +34,8 @@ import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.downloadImage
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
-import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.TryAgain
+import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
@@ -52,9 +52,11 @@ fun PhotoViewerScreen(
     photoId: String,
     viewModel: PhotoViewerViewModel,
     popBackStack: () -> Boolean,
+    shouldShowBottomBar: MutableState<Boolean>
 ) {
     LaunchedEffect(null) {
         viewModel.getPhotoDetails(photoId)
+        shouldShowBottomBar.value = false
     }
 
     PhotoViewerScreen(
@@ -62,7 +64,8 @@ fun PhotoViewerScreen(
         popBackStack = popBackStack,
         onRateImage = { isLike ->
             viewModel.ratePhoto(photoId, isLike)
-        }
+        },
+        onClickTryAgain = { viewModel.getPhotoDetails(photoId) }
     )
 }
 
@@ -71,7 +74,8 @@ fun PhotoViewerScreen(
 internal fun PhotoViewerScreen(
     photoData: ViewState<PhotoDetailResponse>,
     popBackStack: () -> Boolean,
-    onRateImage: (isLike: Boolean) -> Unit
+    onRateImage: (isLike: Boolean) -> Unit,
+    onClickTryAgain: () -> Unit
 ) {
     val showDropdown = remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -160,7 +164,7 @@ internal fun PhotoViewerScreen(
                                 contentDescription = null
                             )
                         },
-                        onClick = { /*TODO*/ })
+                        onClick = { onClickTryAgain() })
                 }
             }
         }
@@ -203,7 +207,7 @@ internal fun PhotoViewerReady(
     }
 
     fun rateImage() {
-//        onRateImage(isImageLiked.value)
+        onRateImage(isImageLiked.value)
         if (isImageLiked.value) imageLikes.value--
         else imageLikes.value++
 

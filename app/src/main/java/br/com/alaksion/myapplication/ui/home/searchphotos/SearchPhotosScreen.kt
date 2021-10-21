@@ -1,5 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.searchphotos
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,17 +14,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraRoll
 import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageError
 import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
@@ -38,8 +44,17 @@ import com.skydoves.landscapist.glide.GlideImage
 fun SearchPhotosScreen(
     viewModel: SearchPhotosViewModel,
     toggleDrawer: () -> Unit,
-    userProfileUrl: String
+    userProfileUrl: String,
+    shouldShowBottomBar: MutableState<Boolean>
 ) {
+    LaunchedEffect(null) {
+        shouldShowBottomBar.value = true
+    }
+
+    val lifeCycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+
+
     SearchPhotosContent(
         toggleDrawer,
         userProfileUrl,
@@ -51,6 +66,11 @@ fun SearchPhotosScreen(
         photos = viewModel.photoList,
         loadMorePhotos = { viewModel.loadMorePhotos() }
     )
+
+    viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
+        Toast.makeText(context, "Could not load more images, try again later", Toast.LENGTH_SHORT)
+            .show()
+    }
 }
 
 @ExperimentalFoundationApi

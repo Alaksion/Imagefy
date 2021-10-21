@@ -18,7 +18,7 @@ data class PhotoDetailsData(
 )
 
 fun PhotoDetailsData.mapToDomain() = PhotoDetailResponse(
-    imageUrl = this.urls?.raw.handleOptional(),
+    imageUrl = this.urls?.full.handleOptional(),
     downloadLink = this.links?.download.handleOptional(),
     id = this.id.handleOptional(),
     authorName = this.user?.username.handleOptional(),

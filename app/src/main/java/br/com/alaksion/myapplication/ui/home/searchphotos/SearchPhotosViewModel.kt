@@ -4,10 +4,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.model.SearchPhotosResponse
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
@@ -35,6 +38,11 @@ class SearchPhotosViewModel @Inject constructor(
     private val _isMorePhotosLoading = mutableStateOf(false)
     val isMorePhotosLoading: State<Boolean>
         get() = _isMorePhotosLoading
+
+    private val _showLoadMorePhotosError = MutableLiveData<Event<Unit>>()
+    val showMorePhotosError: LiveData<Event<Unit>>
+        get() = _showLoadMorePhotosError
+
 
     private var currentPage = 1
     private var maxPages = 1
@@ -99,6 +107,7 @@ class SearchPhotosViewModel @Inject constructor(
 
     private fun onErrorLoadMorePhotos() {
         _isMorePhotosLoading.value = false
+        _showLoadMorePhotosError.postValue(Event(Unit))
     }
 
 }

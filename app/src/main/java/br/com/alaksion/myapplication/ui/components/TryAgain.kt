@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -42,11 +43,11 @@ fun TryAgain(
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.onBackground
             ),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().height(48.dp)
         ) {
             Text(
                 "Try Again",
-                style = AppTypoGraph.roboto_regular()
+                style = AppTypoGraph.roboto_bold()
                     .copy(color = MaterialTheme.colors.background, fontSize = 14.sp)
             )
         }
