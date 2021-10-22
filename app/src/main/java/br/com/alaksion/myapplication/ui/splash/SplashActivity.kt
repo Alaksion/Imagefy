@@ -66,8 +66,10 @@ class SplashActivity : AppCompatActivity() {
         viewModel.isUserLogged.observeEvent(this) { isLogged ->
             if (isLogged) {
                 HomeActivity.start(this)
-                this.finish()
+            } else {
+                LoginActivity.start(this)
             }
+            this.finish()
         }
     }
 
