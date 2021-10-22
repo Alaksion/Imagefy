@@ -125,4 +125,33 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
         confirmVerified(unsplashService)
     }
 
+    @Test
+    fun `Should get current username from unsplash service`() = runBlocking {
+        coEvery { unsplashService.getCurrentUsername() } returns Response.success(UserNameTestData.DATA_RESPONSE)
+
+        val result = dataSource.getCurrentUsername()
+
+        assertNotNull(result)
+        coVerify(exactly = 1) { unsplashService.getCurrentUsername() }
+        confirmVerified(unsplashService)
+    }
+
+    @Test
+    fun `Should search photos in unsplash service`() = runBlocking {
+        coEvery { unsplashService.searchPhotos(any(), any()) } returns Response.success(
+            SearchPhotosTestData.DATA_RESPONSE
+        )
+
+        val result = dataSource.searchPhotos(SearchPhotosTestData.DATA_REQUEST)
+
+        assertNotNull(result)
+        coVerify(exactly = 1) {
+            unsplashService.searchPhotos(
+                SearchPhotosTestData.DATA_REQUEST.query,
+                SearchPhotosTestData.DATA_REQUEST.page
+            )
+        }
+        confirmVerified(unsplashService)
+    }
+
 }
