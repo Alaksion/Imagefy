@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
@@ -24,8 +25,8 @@ import br.com.alaksion.myapplication.common.extensions.handleOptional
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
-import br.com.alaksion.myapplication.ui.theme.LightGray
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
+import br.com.alaksion.myapplication.ui.theme.LightGray
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 
@@ -36,96 +37,134 @@ fun HomeScreenNavigationDrawer(
     modifier: Modifier = Modifier,
     navigateToAuthorProfile: () -> Unit,
     isPreviewMode: Boolean = false,
-    content: @Composable () -> Unit,
+    onLogoutClick: () -> Unit,
+    content: @Composable () -> Unit
 ) {
+    val horizontalPadding = 20.dp
+
     ModalDrawer(
         drawerState = drawerState,
         drawerBackgroundColor = MaterialTheme.colors.background,
         gesturesEnabled = drawerState.isOpen,
         drawerContent = {
-            Column(modifier = modifier.padding(vertical = 10.dp)) {
-                if (isPreviewMode) {
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 20.dp)
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .background(Color.Red)
-                    )
-                } else {
-                    Box(
-                        Modifier
-                            .padding()
-                            .padding(horizontal = 20.dp)
-                    ) {
-                        GlideImage(
+            Column(
+                modifier = modifier
+                    .padding(vertical = 10.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column() {
+                    if (isPreviewMode) {
+                        Box(
                             modifier = Modifier
-                                .size(50.dp)
+                                .padding(horizontal = horizontalPadding)
+                                .size(40.dp)
                                 .clip(CircleShape)
-                                .background(Color.Red),
-                            imageModel = userData.profileImageUrl,
-                            contentScale = ContentScale.Fit,
-                            loading = {
-                                Box(
-                                    Modifier
-                                        .fillMaxSize()
-                                        .shimmer()
-                                )
-                            },
-                            failure = {
-                                Icon(
-                                    imageVector = Icons.Default.Person,
-                                    tint = MaterialTheme.colors.background,
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(MaterialTheme.colors.onBackground)
-                                        .padding(5.dp)
-                                )
+                                .background(Color.Red)
+                        )
+                    } else {
+                        Box(
+                            Modifier
+                                .padding()
+                                .padding(horizontal = horizontalPadding)
+                        ) {
+                            GlideImage(
+                                modifier = Modifier
+                                    .size(50.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.Red),
+                                imageModel = userData.profileImageUrl,
+                                contentScale = ContentScale.Fit,
+                                loading = {
+                                    Box(
+                                        Modifier
+                                            .fillMaxSize()
+                                            .shimmer()
+                                    )
+                                },
+                                failure = {
+                                    Icon(
+                                        imageVector = Icons.Default.Person,
+                                        tint = MaterialTheme.colors.background,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(MaterialTheme.colors.onBackground)
+                                            .padding(5.dp)
+                                    )
+                                }
+                            )
+                        }
+                    }
+
+                    Text(
+                        userData.name,
+                        style = AppTypoGraph.roboto_bold().copy(fontSize = 16.sp),
+                        modifier = Modifier.padding(
+                            start = horizontalPadding,
+                            end = horizontalPadding,
+                            top = 5.dp
+                        )
+                    )
+                    Text(
+                        userData.userName,
+                        style = AppTypoGraph.roboto_regular()
+                            .copy(fontSize = 16.sp, color = DimGray),
+                        modifier = Modifier
+                            .padding()
+                            .padding(horizontal = horizontalPadding)
+                    )
+                    FollowingData(
+                        followersCount = userData.followersCount.handleOptional(),
+                        followingCount = userData.followingCount.handleOptional(),
+                        modifier = Modifier.padding(
+                            horizontal = horizontalPadding,
+                            vertical = 15.dp
+                        )
+                    )
+                    Divider(color = LightGray, modifier = Modifier.fillMaxWidth())
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .height(48.dp)
+                            .padding(horizontal = horizontalPadding)
+                            .fillMaxWidth()
+                            .clickable {
+                                navigateToAuthorProfile()
                             }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Person,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.onBackground,
+                            modifier = Modifier
+                                .padding()
+                                .padding(end = 10.dp)
+                        )
+                        Text(
+                            "Profile",
+                            style = AppTypoGraph.roboto_regular().copy(fontSize = 16.sp)
                         )
                     }
                 }
-
-                Text(
-                    userData.name,
-                    style = AppTypoGraph.roboto_bold().copy(fontSize = 16.sp),
-                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 5.dp)
-                )
-                Text(
-                    userData.userName,
-                    style = AppTypoGraph.roboto_regular().copy(fontSize = 16.sp, color = DimGray),
-                    modifier = Modifier
-                        .padding()
-                        .padding(horizontal = 20.dp)
-                )
-                FollowingData(
-                    followersCount = userData.followersCount.handleOptional(),
-                    followingCount = userData.followingCount.handleOptional(),
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 15.dp)
-                )
-                Divider(color = LightGray, modifier = Modifier.fillMaxWidth())
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .height(48.dp)
-                        .padding(horizontal = 20.dp)
                         .fillMaxWidth()
+                        .padding(horizontal = horizontalPadding)
                         .clickable {
-                            navigateToAuthorProfile()
-                        }
+                            onLogoutClick()
+                        },
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Person,
+                        imageVector = Icons.Default.Logout,
                         contentDescription = null,
-                        tint = MaterialTheme.colors.onBackground,
                         modifier = Modifier
                             .padding()
-                            .padding(end = 10.dp)
+                            .padding(end = 5.dp)
                     )
-                    Text("Profile", style = AppTypoGraph.roboto_regular().copy(fontSize = 16.sp))
+                    Text("Logout", style = AppTypoGraph.roboto_bold())
                 }
-
             }
         }
     ) {
@@ -183,9 +222,8 @@ fun DrawerPreview() {
                 profileImageUrl = ""
             ),
             navigateToAuthorProfile = {},
-        ) {
-
-        }
+            onLogoutClick = {},
+            content = {}
+        )
     }
-
 }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import br.com.alaksion.myapplication.ui.authentication.login.LoginActivity
 import br.com.alaksion.myapplication.ui.home.components.navigationdrawer.HomeScreenNavigationDrawer
 import br.com.alaksion.myapplication.ui.home.navigator.HomeBottomNavigation
 import br.com.alaksion.myapplication.ui.home.navigator.HomeNavigator
@@ -51,22 +52,28 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
 
-                Scaffold(
-                    bottomBar = {
-                        if (shouldShowBottomBar.value)
-                            HomeBottomNavigation(navController = navController)
-                    }
-                ) { screenPadding ->
-                    HomeScreenNavigationDrawer(
-                        drawerState = drawerState,
-                        userData = currentUserData,
-                        navigateToAuthorProfile = {
-                            scope.launch {
-                                navigateToUserProfile(navController)
-                                drawerState.close()
-                            }
+                HomeScreenNavigationDrawer(
+                    drawerState = drawerState,
+                    userData = currentUserData,
+                    navigateToAuthorProfile = {
+                        scope.launch {
+                            navigateToUserProfile(navController)
+                            drawerState.close()
                         }
-                    ) {
+                    },
+                    onLogoutClick = {
+                        toggleDrawer()
+                        viewModel.clearAuthToken()
+                        LoginActivity.start(this)
+                        this.finish()
+                    }
+                ) {
+                    Scaffold(
+                        bottomBar = {
+                            if (shouldShowBottomBar.value)
+                                HomeBottomNavigation(navController = navController)
+                        }
+                    ) { screenPadding ->
                         HomeNavigator(
                             navHostController = navController,
                             modifier = Modifier.padding(screenPadding),
