@@ -34,7 +34,7 @@ class AuthenticationHandlerAct : AppCompatActivity() {
 
     private val viewModel by viewModels<AuthHandlerViewModel>()
     private val loginViewModel by viewModels<LoginViewModel>()
-    private val authCode = intent.data?.encodedQuery?.substring(5)
+    private var authCode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +64,7 @@ class AuthenticationHandlerAct : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        authCode = intent.data?.encodedQuery?.substring(5)
         viewModel.authenticateUser(authCode)
     }
 
