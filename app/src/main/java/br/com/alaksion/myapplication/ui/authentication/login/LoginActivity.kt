@@ -7,8 +7,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,12 +17,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.ui.PresentationConstants.REGISTER_URL
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
@@ -41,7 +42,10 @@ class LoginActivity : AppCompatActivity() {
         setUpObservers()
         setContent {
             ImagefyTheme {
-                LoginActivityContent()
+                LoginActivityContent(
+                    navigateToCreateAccount = { navigateToCreateAccount() },
+                    openBrowserSignIn = { openBrowserSignIn() }
+                )
             }
         }
     }
@@ -62,94 +66,100 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    @Composable
-    fun LoginActivityContent() {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background)
-                .padding(all = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(350.dp)
-                        .background(Color.Red),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Put an image here")
-                }
-                Text(
-                    text = "Share your best moments with the internet",
-                    style = AppTypoGraph.roboto_bold().copy(
-                        fontSize = 24.sp,
-                        textAlign = TextAlign.Center
-                    ),
-                    modifier = Modifier
-                        .padding()
-                        .padding(top = 10.dp, bottom = 5.dp)
-                )
-                Text(
-                    text = "Bring together pictures of your backyard, pets, hobbies, morning coffee and everything that makes your day brighter.",
-                    style = AppTypoGraph.roboto_regular().copy(
-                        fontSize = 14.sp,
-                        textAlign = TextAlign.Center,
-                        color = DimGray
-                    )
-                )
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    modifier = Modifier
-                        .clickable(
-                            interactionSource = MutableInteractionSource(),
-                            indication = null
-                        ) {
-                            navigateToCreateAccount()
-                        }
-                        .padding()
-                        .padding(bottom = 15.dp),
-                    text = buildAnnotatedString {
-                        withStyle(
-                            AppTypoGraph.span_roboto_regular()
-                                .copy(fontSize = 14.sp, color = DimGray)
-                        ) {
-                            append("Don't have an account? ")
-                        }
-                        withStyle(
-                            AppTypoGraph.span_roboto_bold()
-                                .copy(fontSize = 14.sp)
-                        ) {
-                            append("Register now!")
-                        }
-                    }
-                )
-                Button(
-                    onClick = { openBrowserSignIn() },
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp)
-                ) {
-                    Text(
-                        "Sign in",
-                        style = AppTypoGraph.roboto_bold()
-                            .copy(fontSize = 14.sp, color = MaterialTheme.colors.onPrimary)
-                    )
-                }
-            }
-        }
-    }
-
     companion object {
         fun start(context: Context) {
             context.startActivity(Intent(context, LoginActivity::class.java))
         }
+    }
+}
+
+@Composable
+fun LoginActivityContent(
+    navigateToCreateAccount: () -> Unit,
+    openBrowserSignIn: () -> Unit
+) {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colors.background)
+            .padding(all = 20.dp)
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Image(painter = painterResource(id = R.drawable.img_login), null)
+            Text(
+                text = "Share your best moments with the internet",
+                style = AppTypoGraph.roboto_bold().copy(
+                    fontSize = 24.sp,
+                    textAlign = TextAlign.Center
+                ),
+                modifier = Modifier
+                    .padding()
+                    .padding(top = 10.dp, bottom = 5.dp)
+            )
+            Text(
+                text = "Bring together pictures of your backyard, pets, hobbies, morning coffee and everything that makes your day brighter.",
+                style = AppTypoGraph.roboto_regular().copy(
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    color = DimGray
+                )
+            )
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                modifier = Modifier
+                    .clickable(
+                        interactionSource = MutableInteractionSource(),
+                        indication = null
+                    ) {
+                        navigateToCreateAccount()
+                    }
+                    .padding()
+                    .padding(bottom = 15.dp),
+                text = buildAnnotatedString {
+                    withStyle(
+                        AppTypoGraph.span_roboto_regular()
+                            .copy(fontSize = 14.sp, color = DimGray)
+                    ) {
+                        append("Don't have an account? ")
+                    }
+                    withStyle(
+                        AppTypoGraph.span_roboto_bold()
+                            .copy(fontSize = 14.sp)
+                    ) {
+                        append("Register now!")
+                    }
+                }
+            )
+            Button(
+                onClick = { openBrowserSignIn() },
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+            ) {
+                Text(
+                    "Sign in",
+                    style = AppTypoGraph.roboto_bold()
+                        .copy(fontSize = 14.sp, color = MaterialTheme.colors.onPrimary)
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginPreview() {
+    ImagefyTheme {
+        LoginActivityContent({}, {})
     }
 }
