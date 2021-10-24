@@ -4,14 +4,14 @@ import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.common.network.mapSource
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
 import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
-import br.com.alaksion.myapplication.data.model.auth.mapToDomain
-import br.com.alaksion.myapplication.data.model.author.mapToDomain
-import br.com.alaksion.myapplication.data.model.authorphotos.mapToDomain
-import br.com.alaksion.myapplication.data.model.currentuser.mapToDomain
-import br.com.alaksion.myapplication.data.model.photo.mapToDomain
-import br.com.alaksion.myapplication.data.model.photodetails.mapToDomain
+import br.com.alaksion.myapplication.data.model.auth.mapToAuthResponse
+import br.com.alaksion.myapplication.data.model.author.mapToAuthorResponse
+import br.com.alaksion.myapplication.data.model.currentuser.mapToCurrentUserResponse
+import br.com.alaksion.myapplication.data.model.photo.mapToAuthorPhotoResponse
+import br.com.alaksion.myapplication.data.model.photo.mapToPhotoDetailResponse
+import br.com.alaksion.myapplication.data.model.photo.mapToPhotoResponse
 import br.com.alaksion.myapplication.data.model.searchphotos.mapToData
-import br.com.alaksion.myapplication.data.model.searchphotos.mapToDomain
+import br.com.alaksion.myapplication.data.model.searchphotos.mapToSearchPhotosResponse
 import br.com.alaksion.myapplication.domain.model.*
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import javax.inject.Inject
@@ -34,17 +34,17 @@ class ImagefyRepositoryImpl @Inject constructor(
             redirectUri,
             authCode,
             grantType
-        ).mapSource { it?.mapToDomain() }
+        ).mapSource { it?.mapToAuthResponse() }
     }
 
     override suspend fun getPhotos(page: Int): Source<List<PhotoResponse>> {
         return remoteDataSource.getPhotos(page)
-            .mapSource { photos -> photos?.map { photo -> photo.mapToDomain() } }
+            .mapSource { photos -> photos?.map { photo -> photo.mapToPhotoResponse() } }
     }
 
     override suspend fun getAuthorProfile(username: String): Source<AuthorResponse> {
         return remoteDataSource.getAuthorProfile(username)
-            .mapSource { userData -> userData?.mapToDomain() }
+            .mapSource { userData -> userData?.mapToAuthorResponse() }
     }
 
     override suspend fun getAuthorPhotos(
@@ -52,11 +52,12 @@ class ImagefyRepositoryImpl @Inject constructor(
         page: Int
     ): Source<List<AuthorPhotosResponse>> {
         return remoteDataSource.getAuthorPhotos(userName = username, page = page)
-            .mapSource { photos -> photos?.map { item -> item.mapToDomain() } }
+            .mapSource { photos -> photos?.map { item -> item.mapToAuthorPhotoResponse() } }
     }
 
     override suspend fun getPhotoDetails(photoId: String): Source<PhotoDetailResponse> {
-        return remoteDataSource.getPhotoDetails(photoId).mapSource { it?.mapToDomain() }
+        return remoteDataSource.getPhotoDetails(photoId)
+            .mapSource { it?.mapToPhotoDetailResponse() }
     }
 
     override suspend fun likePhoto(photoId: String): Source<Unit> {
@@ -68,7 +69,7 @@ class ImagefyRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCurrentUsername(): Source<CurrentUserResponse> {
-        return remoteDataSource.getCurrentUsername().mapSource { it?.mapToDomain() }
+        return remoteDataSource.getCurrentUsername().mapSource { it?.mapToCurrentUserResponse() }
     }
 
     override fun storeAuthorizationHeader(value: String) {
@@ -81,7 +82,7 @@ class ImagefyRepositoryImpl @Inject constructor(
 
     override suspend fun searchPhotos(request: SearchPhotosRequest): Source<SearchPhotosResponse> {
         return remoteDataSource.searchPhotos(request.mapToData())
-            .mapSource { it?.mapToDomain() }
+            .mapSource { it?.mapToSearchPhotosResponse() }
     }
 
 }

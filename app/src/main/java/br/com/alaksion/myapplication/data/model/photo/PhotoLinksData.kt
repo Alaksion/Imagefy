@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.data.model.photodetails
+package br.com.alaksion.myapplication.data.model.photo
 
 import com.google.gson.annotations.SerializedName
 

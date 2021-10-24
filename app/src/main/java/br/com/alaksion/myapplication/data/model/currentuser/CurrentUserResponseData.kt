@@ -7,6 +7,6 @@ data class CurrentUserResponseData(
     val username: String?
 )
 
-fun CurrentUserResponseData.mapToDomain() = CurrentUserResponse(
+fun CurrentUserResponseData.mapToCurrentUserResponse() = CurrentUserResponse(
     username = this.username.handleOptional()
 )

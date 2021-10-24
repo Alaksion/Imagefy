@@ -1,15 +1,22 @@
 package br.com.alaksion.myapplication.testdata
 
-import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
-import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoUrls
-import br.com.alaksion.myapplication.data.model.authorphotos.mapToDomain
+import br.com.alaksion.myapplication.data.model.photo.*
 
 object AuthorPhotosTestData {
 
-    val DATA_RESPONSE = listOf<AuthorPhotoData>(
-        AuthorPhotoData("", urls = AuthorPhotoUrls(""))
+    val DATA_RESPONSE = listOf(
+        PhotoData(
+            urls = PhotoUrlsData("", "", ""),
+            user = PhotoOwnerData("", "", PhotoOwnerProfileImageData("")),
+            id = "",
+            likes = 1,
+            likedByUser = false,
+            description = "",
+            downloads = 100,
+            links = PhotoLinksData("")
+        )
     )
 
-    val DOMAIN_RESPONSE = DATA_RESPONSE.map { item -> item.mapToDomain() }
+    val DOMAIN_RESPONSE = DATA_RESPONSE.map { item -> item.mapToAuthorPhotoResponse() }
 
 }

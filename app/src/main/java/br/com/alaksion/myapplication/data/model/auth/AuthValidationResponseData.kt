@@ -8,6 +8,6 @@ data class AuthValidationResponseData(
     val accessToken: String
 )
 
-fun AuthValidationResponseData.mapToDomain() = AuthResponse(
+fun AuthValidationResponseData.mapToAuthResponse() = AuthResponse(
     accessToken = this.accessToken
 )

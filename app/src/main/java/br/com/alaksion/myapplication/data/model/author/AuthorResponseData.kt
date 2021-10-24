@@ -30,7 +30,7 @@ data class UserResponseData(
     val profileImage: AuthorImageResponseData?
 )
 
-fun UserResponseData.mapToDomain() = AuthorResponse(
+fun UserResponseData.mapToAuthorResponse() = AuthorResponse(
     username = this.username.handleOptional(),
     name = this.name.handleOptional(),
     instagramUser = this.instagramUser.handleOptional(),

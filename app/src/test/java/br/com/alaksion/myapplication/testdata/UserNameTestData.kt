@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.testdata
 
 import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
-import br.com.alaksion.myapplication.data.model.currentuser.mapToDomain
+import br.com.alaksion.myapplication.data.model.currentuser.mapToCurrentUserResponse
 
 object UserNameTestData {
 
@@ -9,6 +9,6 @@ object UserNameTestData {
         username = ""
     )
 
-    val DOMAIN_RESPONSE = DATA_RESPONSE.mapToDomain()
+    val DOMAIN_RESPONSE = DATA_RESPONSE.mapToCurrentUserResponse()
 
 }

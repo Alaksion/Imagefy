@@ -1,10 +1,8 @@
 package br.com.alaksion.myapplication.data.remote.services
 
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
-import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
 import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
-import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
 import br.com.alaksion.myapplication.data.remote.UnsplashServiceCompanion
 import retrofit2.Response
@@ -23,10 +21,10 @@ interface UnsplashService {
         @Path("username") username: String,
         @Query("per_page") resultsPerPage: Int = 12,
         @Query("page") page: Int
-    ): Response<List<AuthorPhotoData>>
+    ): Response<List<PhotoData>>
 
     @GET("photos/{id}")
-    suspend fun getPhotoDetails(@Path("id") photoId: String): Response<PhotoDetailsData>
+    suspend fun getPhotoDetails(@Path("id") photoId: String): Response<PhotoData>
 
     @POST("photos/{id}/like")
     suspend fun likePhoto(@Path("id") photoId: String): Response<Unit>

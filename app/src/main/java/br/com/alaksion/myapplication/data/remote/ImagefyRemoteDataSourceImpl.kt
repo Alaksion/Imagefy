@@ -5,10 +5,8 @@ import br.com.alaksion.myapplication.common.network.handleApiResponse
 import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.data.model.auth.AuthValidationResponseData
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
-import br.com.alaksion.myapplication.data.model.authorphotos.AuthorPhotoData
 import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
-import br.com.alaksion.myapplication.data.model.photodetails.PhotoDetailsData
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosRequestData
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
 import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
@@ -42,11 +40,11 @@ class ImagefyRemoteDataSourceImpl @Inject constructor(
     override suspend fun getAuthorPhotos(
         userName: String,
         page: Int
-    ): Source<List<AuthorPhotoData>> {
+    ): Source<List<PhotoData>> {
         return service.getAuthorPhotos(username = userName, page = page).handleApiResponse()
     }
 
-    override suspend fun getPhotoDetails(photoId: String): Source<PhotoDetailsData> {
+    override suspend fun getPhotoDetails(photoId: String): Source<PhotoData> {
         return service.getPhotoDetails(photoId).handleApiResponse()
     }
 
