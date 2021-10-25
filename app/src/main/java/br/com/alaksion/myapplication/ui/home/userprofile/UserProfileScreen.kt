@@ -21,8 +21,8 @@ import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
-import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
+import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
@@ -37,18 +37,18 @@ fun UserProfileScreen(
 ) {
 
     LaunchedEffect(null) {
-        viewModel.getAuthorProfileData(authorUsername)
+        viewModel.getUserProfileData(authorUsername)
         shouldShowBottomBar.value = false
     }
 
-    AuthorDetailsScreenContent(
-        authorData = viewModel.authorData.value,
-        authorUsername = authorUsername,
-        authorPhotos = viewModel.authorPhotos.toList(),
-        authorPhotoState = viewModel.authorPhotosState.value,
+    UserProfileContent(
+        userData = viewModel.userData.value,
+        username = authorUsername,
+        userPhotos = viewModel.userPhotos.toList(),
+        userPhotosState = viewModel.userPhotosState.value,
         popBackStack = popBackStack,
-        getMorePhotos = { viewModel.getMoreAuthorPhotos() },
-        tryAgainGetAuthorData = { viewModel.getAuthorProfileData(authorUsername) },
+        getMorePhotos = { viewModel.getMoreUserPhotos() },
+        tryAgainGetUserData = { viewModel.getUserProfileData(authorUsername) },
         navigateToPhotoViewer = { photoUrl ->
             navigateToPhotoViewer(photoUrl)
         },
@@ -57,15 +57,15 @@ fun UserProfileScreen(
 
 @ExperimentalFoundationApi
 @Composable
-internal fun AuthorDetailsScreenContent(
-    authorData: ViewState<AuthorResponse>,
-    authorUsername: String,
-    authorPhotos: List<AuthorPhotosResponse>,
-    authorPhotoState: ViewState<Unit>,
+internal fun UserProfileContent(
+    userData: ViewState<AuthorResponse>,
+    username: String,
+    userPhotos: List<AuthorPhotosResponse>,
+    userPhotosState: ViewState<Unit>,
     popBackStack: () -> Boolean,
     getMorePhotos: () -> Unit,
     isPreview: Boolean = false,
-    tryAgainGetAuthorData: () -> Unit,
+    tryAgainGetUserData: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit,
 ) {
     Column {
@@ -88,31 +88,31 @@ internal fun AuthorDetailsScreenContent(
                     )
                 }
                 Text(
-                    authorUsername, style = MaterialTheme.typography.body1.copy(
+                    username, style = MaterialTheme.typography.body1.copy(
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.Black
                     )
                 )
             }
         }
-        when (authorData) {
-            is ViewState.Loading, is ViewState.Idle -> AuthorDetailsLoading()
-            is ViewState.Ready -> AuthorDetailsReady(
-                authorData = authorData.data,
-                authorPhotos = authorPhotos,
+        when (userData) {
+            is ViewState.Loading, is ViewState.Idle -> UserProfileLoading()
+            is ViewState.Ready -> UserProfileReady(
+                authorData = userData.data,
+                authorPhotos = userPhotos,
                 getMorePhotos = getMorePhotos,
                 navigateToPhotoViewer = navigateToPhotoViewer,
-                authorPhotoState = authorPhotoState,
+                authorPhotoState = userPhotosState,
                 isPreview = isPreview
             )
-            is ViewState.Error -> AuthorDetailsError { tryAgainGetAuthorData() }
+            is ViewState.Error -> UserProfileError { tryAgainGetUserData() }
         }
     }
 }
 
 @ExperimentalFoundationApi
 @Composable
-fun AuthorDetailsReady(
+fun UserProfileReady(
     authorData: AuthorResponse,
     authorPhotos: List<AuthorPhotosResponse>,
     authorPhotoState: ViewState<Unit>,
@@ -131,7 +131,8 @@ fun AuthorDetailsReady(
             modifier = Modifier
                 .padding(horizontal = horizontalPadding)
                 .padding(bottom = 10.dp),
-            isPreview = isPreview
+            isPreview = isPreview,
+            onFollowClick = {}
         )
         UserDetailsInfo(
             bio = authorData.bio,
@@ -170,7 +171,7 @@ fun AuthorDetailsReady(
 }
 
 @Composable
-fun AuthorDetailsError(
+fun UserProfileError(
     onTryAgain: () -> Unit
 ) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
@@ -191,12 +192,12 @@ fun AuthorDetailsError(
 }
 
 @Composable
-fun AuthorDetailsLoading() = Box(
+fun UserProfileLoading() = Box(
     contentAlignment = Alignment.Center,
     modifier = Modifier.fillMaxSize()
 ) {
-        ProgressIndicator()
-    }
+    ProgressIndicator()
+}
 
 @ExperimentalFoundationApi
 @Composable
@@ -205,8 +206,8 @@ fun UserProfilePreview() {
 
     ImagefyTheme {
         Scaffold() {
-            AuthorDetailsScreenContent(
-                authorData = ViewState.Ready(
+            UserProfileContent(
+                userData = ViewState.Ready(
                     AuthorResponse(
                         username = "SuperJohn",
                         name = "John Doe",
@@ -224,11 +225,11 @@ fun UserProfilePreview() {
                 getMorePhotos = {},
                 popBackStack = { true },
                 navigateToPhotoViewer = {},
-                tryAgainGetAuthorData = {},
+                tryAgainGetUserData = {},
                 isPreview = true,
-                authorUsername = "JohnDoe",
-                authorPhotoState = ViewState.Ready(Unit),
-                authorPhotos = listOf()
+                username = "JohnDoe",
+                userPhotosState = ViewState.Ready(Unit),
+                userPhotos = listOf()
             )
         }
     }

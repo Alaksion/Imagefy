@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.extensions.formatNumber
+import br.com.alaksion.myapplication.common.extensions.invert
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.downloadImage
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
@@ -209,7 +210,7 @@ internal fun PhotoViewerReady(
         if (isImageLiked.value) imageLikes.value--
         else imageLikes.value++
 
-        isImageLiked.value = isImageLiked.value.not()
+        isImageLiked.invert()
     }
 
     Box(modifier = Modifier.fillMaxSize()) {

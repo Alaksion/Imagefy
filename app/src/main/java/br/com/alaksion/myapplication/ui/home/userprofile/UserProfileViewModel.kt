@@ -23,72 +23,72 @@ class UserProfileViewModel @Inject constructor(
     private val getAuthorPhotosUseCase: GetAuthorPhotosUseCase
 ) : BaseViewModel() {
 
-    private val _authorData: MutableState<ViewState<AuthorResponse>> =
+    private val _userData: MutableState<ViewState<AuthorResponse>> =
         mutableStateOf(ViewState.Loading())
-    val authorData: State<ViewState<AuthorResponse>>
-        get() = _authorData
+    val userData: State<ViewState<AuthorResponse>>
+        get() = _userData
 
-    private val _authorPhotosState: MutableState<ViewState<Unit>> =
+    private val _userPhotosState: MutableState<ViewState<Unit>> =
         mutableStateOf(ViewState.Loading())
-    val authorPhotosState: State<ViewState<Unit>>
-        get() = _authorPhotosState
+    val userPhotosState: State<ViewState<Unit>>
+        get() = _userPhotosState
 
-    private val _authorPhotos = mutableStateListOf<AuthorPhotosResponse>()
-    val authorPhotos: SnapshotStateList<AuthorPhotosResponse>
-        get() = _authorPhotos
+    private val _userPhotos = mutableStateListOf<AuthorPhotosResponse>()
+    val userPhotos: SnapshotStateList<AuthorPhotosResponse>
+        get() = _userPhotos
 
     private var authorUsername: String = ""
     private var page = 1
 
-    fun getAuthorProfileData(authorUsername: String) {
+    fun getUserProfileData(authorUsername: String) {
         this.authorUsername = authorUsername
 
         viewModelScope.launch {
-            _authorData.value = ViewState.Loading()
+            _userData.value = ViewState.Loading()
             handleApiResponse(
                 source = getAuthorProfileUseCase(authorUsername),
-                onError = { error -> onGetAuthorDataError(error) },
-                onSuccess = { data -> onGetAuthorDataSuccess(data) }
+                onError = { error -> onGetUserDataError(error) },
+                onSuccess = { data -> onGetUserDataSuccess(data) }
             )
         }
     }
 
-    private fun onGetAuthorDataSuccess(data: AuthorResponse?) {
+    private fun onGetUserDataSuccess(data: AuthorResponse?) {
         data?.let { response ->
-            _authorData.value = ViewState.Ready(response)
-            getAuthorPhotos()
+            _userData.value = ViewState.Ready(response)
+            getUserPhotos()
         }
     }
 
-    private fun onGetAuthorDataError(error: NetworkError) {
-        _authorData.value = ViewState.Error(error)
+    private fun onGetUserDataError(error: NetworkError) {
+        _userData.value = ViewState.Error(error)
     }
 
-    private fun getAuthorPhotos() {
+    private fun getUserPhotos() {
         viewModelScope.launch {
             handleApiResponse(
                 source = getAuthorPhotosUseCase(
                     username = authorUsername,
                     page = page
                 ),
-                onSuccess = { data -> onGetAuthorPhotosSuccess(data) },
-                onError = { error -> onGetAuthorPhotosError(error) }
+                onSuccess = { data -> onGetUserPhotosSuccess(data) },
+                onError = { error -> onGetUserPhotosError(error) }
             )
         }
     }
 
-    private fun onGetAuthorPhotosSuccess(data: List<AuthorPhotosResponse>?) {
+    private fun onGetUserPhotosSuccess(data: List<AuthorPhotosResponse>?) {
         data?.let { response ->
-            _authorPhotos.addAll(response)
-            _authorPhotosState.value = ViewState.Ready(Unit)
+            _userPhotos.addAll(response)
+            _userPhotosState.value = ViewState.Ready(Unit)
         }
     }
 
-    private fun onGetAuthorPhotosError(error: NetworkError) {
-        _authorPhotosState.value = ViewState.Error(error)
+    private fun onGetUserPhotosError(error: NetworkError) {
+        _userPhotosState.value = ViewState.Error(error)
     }
 
-    fun getMoreAuthorPhotos() {
+    fun getMoreUserPhotos() {
         page++
         viewModelScope.launch {
             handleApiResponse(
@@ -96,8 +96,8 @@ class UserProfileViewModel @Inject constructor(
                     username = authorUsername,
                     page = page
                 ),
-                onSuccess = { data -> onGetAuthorPhotosSuccess(data) },
-                onError = { error -> onGetAuthorPhotosError(error) }
+                onSuccess = { data -> onGetUserPhotosSuccess(data) },
+                onError = { error -> onGetUserPhotosError(error) }
             )
         }
     }
