@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -96,8 +97,7 @@ fun LoginActivityContent(
             Image(painter = painterResource(id = R.drawable.img_login), null)
             Text(
                 text = "Share your best moments with the internet",
-                style = AppTypoGraph.roboto_bold().copy(
-                    fontSize = 24.sp,
+                style = MaterialTheme.typography.h5.copy(
                     textAlign = TextAlign.Center
                 ),
                 modifier = Modifier
@@ -106,8 +106,7 @@ fun LoginActivityContent(
             )
             Text(
                 text = "Bring together pictures of your backyard, pets, hobbies, morning coffee and everything that makes your day brighter.",
-                style = AppTypoGraph.roboto_regular().copy(
-                    fontSize = 14.sp,
+                style = MaterialTheme.typography.body2.copy(
                     textAlign = TextAlign.Center,
                     color = DimGray
                 )
@@ -148,8 +147,8 @@ fun LoginActivityContent(
             ) {
                 Text(
                     "Sign in",
-                    style = AppTypoGraph.roboto_bold()
-                        .copy(fontSize = 14.sp, color = MaterialTheme.colors.onPrimary)
+                    style = MaterialTheme.typography.body2
+                        .copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colors.onPrimary)
                 )
             }
         }

@@ -12,8 +12,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
@@ -22,7 +22,6 @@ import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
 const val AUTHOR_USERNAME_ARG = "author_username"
 
@@ -86,7 +85,10 @@ internal fun AuthorDetailsScreenContent(
                         tint = MaterialTheme.colors.onBackground,
                     )
                 }
-                Text(authorUsername, style = AppTypoGraph.roboto_black().copy(fontSize = 16.sp))
+                Text(
+                    authorUsername,
+                    style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Black)
+                )
             }
         }
         when (authorData) {

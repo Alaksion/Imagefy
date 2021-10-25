@@ -25,14 +25,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.ui.components.ImageError
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import com.skydoves.landscapist.glide.GlideImage
 
 @ExperimentalFoundationApi
@@ -81,6 +79,7 @@ fun AuthorPhotosList(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
+                            .fillMaxWidth()
                             .padding(horizontal = 20.dp)
                             .padding(top = 20.dp)
                     ) {
@@ -99,8 +98,7 @@ fun AuthorPhotosList(
                         )
                         Text(
                             "This user has no photos uploaded",
-                            style = AppTypoGraph.roboto_regular()
-                                .copy(fontSize = 22.sp, textAlign = TextAlign.Center)
+                            style = MaterialTheme.typography.h6.copy(textAlign = TextAlign.Center)
                         )
                     }
                 } else {

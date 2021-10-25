@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.R
@@ -60,7 +61,7 @@ fun AuthorMediaLinks(
                 )
                 Text(
                     text = "@$twitterUser",
-                    style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
+                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier
                         .padding()
                         .padding(start = 10.dp)
@@ -90,7 +91,7 @@ fun AuthorMediaLinks(
                 )
                 Text(
                     text = "@$instagramUser",
-                    style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
+                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier
                         .padding()
                         .padding(start = 10.dp)
@@ -123,7 +124,7 @@ fun AuthorMediaLinks(
                 )
                 Text(
                     text = "Personal Portfolio",
-                    style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
+                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
                 )
 
             }

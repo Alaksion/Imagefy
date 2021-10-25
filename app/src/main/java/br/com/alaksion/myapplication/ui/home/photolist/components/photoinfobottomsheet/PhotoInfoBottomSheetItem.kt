@@ -2,13 +2,13 @@ package br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobott
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ErrorRed
 import br.com.alaksion.myapplication.ui.theme.OffWhite
 
@@ -24,7 +24,9 @@ fun PhotoInfoBottomSheetItem(
         icon()
         Text(
             label,
-            style = AppTypoGraph.roboto_bold().copy(color = textColor, fontSize = 12.sp),
+            style = MaterialTheme.typography.caption.copy(
+                color = textColor, fontWeight = FontWeight.Bold,
+            ),
             modifier = Modifier
                 .padding()
                 .padding(top = 5.dp)

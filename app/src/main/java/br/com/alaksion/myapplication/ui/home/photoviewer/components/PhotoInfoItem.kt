@@ -4,14 +4,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import br.com.alaksion.myapplication.ui.theme.OffWhite
 
 @Composable
 fun PhotoInfoItem(
@@ -30,7 +28,9 @@ fun PhotoInfoItem(
         }
         Text(
             text,
-            style = AppTypoGraph.roboto_regular().copy(color = OffWhite, fontSize = 14.sp),
+            style = MaterialTheme.typography.body2.copy(
+                color = MaterialTheme.colors.background,
+            ),
             modifier = Modifier
                 .padding()
                 .padding(start = 5.dp)

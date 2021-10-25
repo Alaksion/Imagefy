@@ -90,7 +90,7 @@ fun SearchPhotosTopbar(
             BasicTextField(
                 value = searchQuery,
                 onValueChange = { value -> onSearchQueryChange(value) },
-                textStyle = AppTypoGraph.roboto_regular().copy(),
+                textStyle =  MaterialTheme.typography.body2,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .border(1.dp, MaterialTheme.colors.onBackground)

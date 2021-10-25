@@ -16,6 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.extensions.formatNumber
+import br.com.alaksion.myapplication.ui.components.userdetails.header.AuthorHeaderItem
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer

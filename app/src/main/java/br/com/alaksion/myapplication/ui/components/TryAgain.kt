@@ -11,10 +11,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
 @Composable
 fun TryAgain(
@@ -30,10 +29,7 @@ fun TryAgain(
         icon()
         Text(
             message,
-            style = AppTypoGraph.roboto_regular()
-                .copy(
-                    textAlign = TextAlign.Center, fontSize = 14.sp
-                ),
+            style = MaterialTheme.typography.body2.copy(textAlign = TextAlign.Center),
             modifier = Modifier
                 .padding()
                 .padding(vertical = 10.dp)
@@ -43,12 +39,14 @@ fun TryAgain(
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = MaterialTheme.colors.onBackground
             ),
-            modifier = Modifier.fillMaxWidth().height(48.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(48.dp)
         ) {
             Text(
                 "Try Again",
-                style = AppTypoGraph.roboto_bold()
-                    .copy(color = MaterialTheme.colors.background, fontSize = 14.sp)
+                style = MaterialTheme.typography.body2
+                    .copy(fontWeight = FontWeight.Bold)
             )
         }
     }

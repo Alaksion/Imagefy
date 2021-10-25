@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -196,8 +197,11 @@ internal fun PhotoCardHeader(
                     .padding()
                     .padding(start = 10.dp)
             ) {
-                Text(userName, style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp))
-                Text(name, style = AppTypoGraph.roboto_regular().copy(fontSize = 12.sp))
+                Text(
+                    userName,
+                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
+                )
+                Text(name, style = MaterialTheme.typography.caption)
             }
         }
 
@@ -271,7 +275,7 @@ internal fun PhotoCardInfo(
             NumberScrollerAnimation(value = likes) { currentValue ->
                 Text(
                     "$currentValue likes",
-                    style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp),
+                    style =  MaterialTheme.typography.body2,
                 )
             }
         }

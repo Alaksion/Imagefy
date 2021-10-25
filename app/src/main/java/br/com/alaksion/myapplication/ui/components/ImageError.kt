@@ -11,9 +11,8 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
 @Composable
 fun ImageError() {
@@ -31,7 +30,7 @@ fun ImageError() {
         )
         Text(
             "Whoops, an error occurred and this image could not be loaded",
-            style = AppTypoGraph.roboto_bold().copy(fontSize = 14.sp)
+            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
         )
     }
 }

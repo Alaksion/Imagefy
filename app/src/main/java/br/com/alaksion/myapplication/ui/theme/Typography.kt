@@ -1,6 +1,7 @@
 package br.com.alaksion.myapplication.ui.theme
 
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -20,24 +21,21 @@ object AppTypoGraph {
     )
 
     @Composable
-    fun roboto_black() = TextStyle(
-        color = MaterialTheme.colors.onBackground,
-        fontFamily = robotoFontFamily,
-        fontWeight = FontWeight.Black
-    )
-
-    @Composable
-    fun roboto_bold() = TextStyle(
-        color = MaterialTheme.colors.onBackground,
-        fontFamily = robotoFontFamily,
-        fontWeight = FontWeight.Bold
-    )
-
-    @Composable
-    fun roboto_regular() = TextStyle(
-        color = MaterialTheme.colors.onBackground,
-        fontFamily = robotoFontFamily,
-        fontWeight = FontWeight.Normal
+    fun AppTypography() = Typography(
+        defaultFontFamily = robotoFontFamily,
+        h1 = MaterialTheme.typography.h1.copy(color = MaterialTheme.colors.onBackground),
+        h2 = MaterialTheme.typography.h2.copy(color = MaterialTheme.colors.onBackground),
+        h3 = MaterialTheme.typography.h3.copy(color = MaterialTheme.colors.onBackground),
+        h4 = MaterialTheme.typography.h4.copy(color = MaterialTheme.colors.onBackground),
+        h5 = MaterialTheme.typography.h5.copy(color = MaterialTheme.colors.onBackground),
+        h6 = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onBackground),
+        subtitle1 = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.onBackground),
+        subtitle2 = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.onBackground),
+        body1 = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground),
+        body2 = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.onBackground),
+        button = MaterialTheme.typography.button.copy(color = MaterialTheme.colors.onBackground),
+        caption = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground),
+        overline = MaterialTheme.typography.overline.copy(color = MaterialTheme.colors.onBackground)
     )
 
     @Composable

@@ -3,6 +3,7 @@ package br.com.alaksion.myapplication.ui.theme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import br.com.alaksion.myapplication.ui.theme.AppTypoGraph.AppTypography
 
 private val ColorPallet = lightColors(
     onPrimary = OffWhite,
@@ -10,7 +11,9 @@ private val ColorPallet = lightColors(
     background = OffWhite,
     onBackground = BlackRussian,
     surface = OffWhite,
-    onSurface = BlackRussian
+    onSurface = BlackRussian,
+    secondary = LightGreen,
+    onSecondary = OffWhite
 )
 
 @Composable
@@ -21,6 +24,7 @@ fun ImagefyTheme(
     MaterialTheme(
         colors = ColorPallet,
         shapes = Shapes,
-        content = content
+        content = content,
+        typography = AppTypography()
     )
 }

@@ -16,12 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.extensions.formatNumber
-import br.com.alaksion.myapplication.common.extensions.handleOptional
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
@@ -99,7 +99,7 @@ fun HomeScreenNavigationDrawer(
 
                     Text(
                         userData.name,
-                        style = AppTypoGraph.roboto_bold().copy(fontSize = 16.sp),
+                        style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Bold),
                         modifier = Modifier.padding(
                             start = horizontalPadding,
                             end = horizontalPadding,
@@ -108,15 +108,14 @@ fun HomeScreenNavigationDrawer(
                     )
                     Text(
                         userData.userName,
-                        style = AppTypoGraph.roboto_regular()
-                            .copy(fontSize = 16.sp, color = DimGray),
+                        style = MaterialTheme.typography.body1.copy(color = DimGray),
                         modifier = Modifier
                             .padding()
                             .padding(horizontal = horizontalPadding)
                     )
                     FollowingData(
-                        followersCount = userData.followersCount.handleOptional(),
-                        followingCount = userData.followingCount.handleOptional(),
+                        followersCount = userData.followersCount,
+                        followingCount = userData.followingCount,
                         modifier = Modifier.padding(
                             horizontal = horizontalPadding,
                             vertical = 15.dp
@@ -143,7 +142,7 @@ fun HomeScreenNavigationDrawer(
                         )
                         Text(
                             "Profile",
-                            style = AppTypoGraph.roboto_regular().copy(fontSize = 16.sp)
+                            style = MaterialTheme.typography.body1
                         )
                     }
                 }
@@ -163,7 +162,10 @@ fun HomeScreenNavigationDrawer(
                             .padding()
                             .padding(end = 5.dp)
                     )
-                    Text("Logout", style = AppTypoGraph.roboto_bold())
+                    Text(
+                        "Logout",
+                        style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
+                    )
                 }
             }
         }

@@ -12,9 +12,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
@@ -23,7 +24,6 @@ import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @ExperimentalFoundationApi
@@ -87,7 +87,12 @@ internal fun AuthorDetailsScreenContent(
                         tint = MaterialTheme.colors.onBackground,
                     )
                 }
-                Text(authorUsername, style = AppTypoGraph.roboto_black().copy(fontSize = 16.sp))
+                Text(
+                    authorUsername, style = MaterialTheme.typography.body1.copy(
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Black
+                    )
+                )
             }
         }
         when (authorData) {
@@ -150,8 +155,8 @@ fun AuthorDetailsReady(
         ) {
             Text(
                 "Edit profile",
-                style = AppTypoGraph.roboto_bold()
-                    .copy(fontSize = 14.sp, color = MaterialTheme.colors.background)
+                style = MaterialTheme.typography.body2
+                    .copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colors.background)
             )
         }
         AuthorPhotosList(
@@ -186,14 +191,12 @@ fun AuthorDetailsError(
 }
 
 @Composable
-fun AuthorDetailsLoading() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
+fun AuthorDetailsLoading() = Box(
+    contentAlignment = Alignment.Center,
+    modifier = Modifier.fillMaxSize()
+) {
         ProgressIndicator()
     }
-}
 
 @ExperimentalFoundationApi
 @Composable
