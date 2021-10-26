@@ -1,5 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.authordetails
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -14,11 +15,14 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.ui.components.TryAgain
@@ -40,6 +44,8 @@ fun AuthorDetailsScreen(
     navigateToPhotoViewer: (photoUrl: String) -> Unit,
     shouldShowBottomBar: MutableState<Boolean>
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
 
     LaunchedEffect(null) {
         viewModel.getAuthorProfileData(authorUsername)
@@ -58,6 +64,11 @@ fun AuthorDetailsScreen(
             navigateToPhotoViewer(photoUrl)
         }
     )
+
+    viewModel.showErrorToast.observeEvent(lifecycleOwner) {
+        Toast.makeText(context, "Could not load user photos, try again later", Toast.LENGTH_SHORT)
+            .show()
+    }
 }
 
 @ExperimentalFoundationApi

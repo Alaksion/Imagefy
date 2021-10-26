@@ -5,10 +5,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
@@ -37,6 +40,10 @@ class AuthorDetailsViewModel @Inject constructor(
     val authorPhotos: SnapshotStateList<AuthorPhotosResponse>
         get() = _authorPhotos
 
+    private val _showErrorToast = MutableLiveData<Event<Unit>>()
+    val showErrorToast: LiveData<Event<Unit>>
+        get() = _showErrorToast
+
     private var authorUsername: String = ""
     private var page = 1
 
@@ -57,7 +64,9 @@ class AuthorDetailsViewModel @Inject constructor(
         data?.let { response ->
             _authorData.value = ViewState.Ready(response)
             getAuthorPhotos()
+            return
         }
+        _authorData.value = ViewState.Error()
     }
 
     private fun onGetAuthorDataError(error: NetworkError) {
@@ -81,7 +90,9 @@ class AuthorDetailsViewModel @Inject constructor(
         data?.let { response ->
             _authorPhotos.addAll(response)
             _authorPhotosState.value = ViewState.Ready(Unit)
+            return
         }
+        _authorPhotosState.value = ViewState.Error()
     }
 
     private fun onGetAuthorPhotosError(error: NetworkError) {
@@ -96,10 +107,22 @@ class AuthorDetailsViewModel @Inject constructor(
                     username = authorUsername,
                     page = page
                 ),
-                onSuccess = { data -> onGetAuthorPhotosSuccess(data) },
-                onError = { error -> onGetAuthorPhotosError(error) }
+                onSuccess = { data -> onGetMorePhotosSuccess(data) },
+                onError = { onGetMorePhotosError() }
             )
         }
+    }
+
+    private fun onGetMorePhotosSuccess(data: List<AuthorPhotosResponse>?) {
+        data?.let { response ->
+            _authorPhotos.addAll(response)
+            return
+        }
+        _showErrorToast.postValue(Event(Unit))
+    }
+
+    private fun onGetMorePhotosError() {
+        _showErrorToast.postValue(Event(Unit))
     }
 
 }
