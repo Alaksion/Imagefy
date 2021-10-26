@@ -11,5 +11,6 @@ data class AuthorResponse(
     val followers: Int,
     val following: Int,
     val totalPhotos: Int,
-    val profileImage: String
+    val profileImage: String,
+    val followedByUser: Boolean
 )

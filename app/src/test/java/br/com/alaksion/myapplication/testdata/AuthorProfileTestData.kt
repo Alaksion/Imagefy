@@ -24,7 +24,8 @@ object AuthorProfileTestData {
         followingCount = 1,
         followersCount = 1,
         location = "",
-        updatedAt = ""
+        updatedAt = "",
+        followedByUser = true
     )
 
     val DOMAIN_RESPONSE = DATA_RESPONSE.mapToAuthorResponse()

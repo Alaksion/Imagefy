@@ -132,7 +132,6 @@ fun UserProfileReady(
                 .padding(horizontal = horizontalPadding)
                 .padding(bottom = 10.dp),
             isPreview = isPreview,
-            onFollowClick = {}
         )
         UserDetailsInfo(
             bio = authorData.bio,

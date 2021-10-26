@@ -3,6 +3,7 @@ package br.com.alaksion.myapplication.ui.theme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph.AppTypography
 
 private val ColorPallet = lightColors(
@@ -13,7 +14,7 @@ private val ColorPallet = lightColors(
     surface = OffWhite,
     onSurface = BlackRussian,
     secondary = LightGreen,
-    onSecondary = OffWhite
+    onSecondary = Color.White
 )
 
 @Composable

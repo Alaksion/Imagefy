@@ -1,19 +1,23 @@
 package br.com.alaksion.myapplication.ui.home.authordetails
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Report
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.myapplication.common.extensions.invert
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
@@ -22,6 +26,7 @@ import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
+import br.com.alaksion.myapplication.ui.theme.DimGray
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 const val AUTHOR_USERNAME_ARG = "author_username"
@@ -102,7 +107,6 @@ internal fun AuthorDetailsScreenContent(
                 navigateToPhotoViewer = navigateToPhotoViewer,
                 authorPhotoState = authorPhotoState,
                 isPreview = isPreview,
-                onFollowClick = {}
             )
             is ViewState.Error -> AuthorDetailsError { tryAgainGetAuthorData() }
         }
@@ -116,12 +120,9 @@ fun AuthorDetailsReady(
     authorData: AuthorResponse,
     authorPhotos: List<AuthorPhotosResponse>,
     authorPhotoState: ViewState<Unit>,
-    onFollowClick: (isFollowing: Boolean) -> Unit,
     getMorePhotos: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
-    val isFollowedByUser = remember { mutableStateOf(true) }
-
     Column {
         UserDetailsHeader(
             profileImageUrl = authorData.profileImage,
@@ -131,13 +132,7 @@ fun AuthorDetailsReady(
             modifier = Modifier
                 .padding(horizontal = 10.dp)
                 .padding(bottom = 10.dp),
-            isPreview = isPreview,
-            showFollowButton = true,
-            isFollowedByUser = isFollowedByUser.value,
-            onFollowClick = {
-                onFollowClick(isFollowedByUser.value)
-                isFollowedByUser.invert()
-            }
+            isPreview = isPreview
         )
         UserDetailsInfo(
             bio = authorData.bio,
@@ -149,6 +144,15 @@ fun AuthorDetailsReady(
                 .padding()
                 .padding(horizontal = 10.dp)
         )
+        if (authorData.followedByUser) {
+            FollowButton(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .padding(bottom = 10.dp)
+                    .width(150.dp)
+            )
+        }
+
         AuthorPhotosList(
             photos = authorPhotos,
             onClickTryAgain = { },
@@ -190,6 +194,26 @@ fun AuthorDetailsLoading() {
     }
 }
 
+@Composable
+fun FollowButton(
+    modifier: Modifier = Modifier,
+) {
+    Text(
+        text = "Following", style = MaterialTheme.typography.caption.copy(
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colors.onBackground,
+            textAlign = TextAlign.Center
+        ),
+        modifier = modifier
+            .border(
+                1.dp,
+                DimGray,
+                RoundedCornerShape(8.dp)
+            )
+            .padding(vertical = 10.dp)
+    )
+}
+
 @ExperimentalFoundationApi
 @Composable
 @Preview(showBackground = true)
@@ -208,7 +232,8 @@ fun AuthorDetailsPreview() {
                     totalPhotos = 150,
                     totalLikes = 1,
                     bio = "This is my bio",
-                    profileImage = ""
+                    profileImage = "",
+                    followedByUser = true
                 )
             ),
             authorUsername = "JohnDoe",

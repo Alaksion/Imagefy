@@ -27,7 +27,9 @@ data class UserResponseData(
     @SerializedName("following_count")
     val followingCount: Int?,
     @SerializedName("profile_image")
-    val profileImage: AuthorImageResponseData?
+    val profileImage: AuthorImageResponseData?,
+    @SerializedName("followed_by_user")
+    val followedByUser: Boolean?
 )
 
 fun UserResponseData.mapToAuthorResponse() = AuthorResponse(
@@ -41,5 +43,6 @@ fun UserResponseData.mapToAuthorResponse() = AuthorResponse(
     totalPhotos = this.totalPhotos.handleOptional(),
     totalLikes = this.totalLikes.handleOptional(),
     profileImage = this.profileImage?.large.handleOptional(),
-    portfolioUrl = this.portfolioUrl.handleOptional()
+    portfolioUrl = this.portfolioUrl.handleOptional(),
+    followedByUser = this.followedByUser.handleOptional()
 )

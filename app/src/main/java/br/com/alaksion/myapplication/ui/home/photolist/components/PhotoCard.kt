@@ -40,7 +40,10 @@ import br.com.alaksion.myapplication.ui.components.ImageError
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobottomsheet.PhotoInfoBottomSheet
-import br.com.alaksion.myapplication.ui.theme.*
+import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
+import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
+import br.com.alaksion.myapplication.ui.theme.LightGray
+import br.com.alaksion.myapplication.ui.theme.MediumGray
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
@@ -275,7 +278,7 @@ internal fun PhotoCardInfo(
             NumberScrollerAnimation(value = likes) { currentValue ->
                 Text(
                     "$currentValue likes",
-                    style =  MaterialTheme.typography.body2,
+                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
                 )
             }
         }
