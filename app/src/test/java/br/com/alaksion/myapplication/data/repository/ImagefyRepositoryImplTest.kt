@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.data.repository
 
-import br.com.alaksion.myapplication.ImagefyBaseTest
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
 import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource

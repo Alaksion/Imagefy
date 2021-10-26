@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.domain.usecase
 
 import br.com.alaksion.myapplication.BuildConfig
-import br.com.alaksion.myapplication.ImagefyBaseTest
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test

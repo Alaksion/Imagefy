@@ -218,7 +218,8 @@ fun UserProfilePreview() {
                         twitterUser = "johndoe.twitter",
                         portfolioUrl = "portfolio.com.br",
                         followers = 140,
-                        following = 200
+                        following = 200,
+                        followedByUser = false
                     )
                 ),
                 getMorePhotos = {},

@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.data.remote
 
-import br.com.alaksion.myapplication.ImagefyBaseTest
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
 import br.com.alaksion.myapplication.data.remote.services.UnsplashService

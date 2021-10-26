@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.data.local
 
 import android.content.SharedPreferences
-import br.com.alaksion.myapplication.ImagefyBaseTest
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
 import io.mockk.confirmVerified
 import io.mockk.mockk

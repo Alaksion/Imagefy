@@ -1,6 +1,7 @@
-package br.com.alaksion.myapplication
+package br.com.alaksion.myapplication.utils
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

@@ -1,10 +1,9 @@
 package br.com.alaksion.myapplication.domain.usecase
 
-import br.com.alaksion.myapplication.ImagefyBaseTest
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.AuthorPhotosTestData
-import br.com.alaksion.myapplication.testdata.UserNameTestData
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified

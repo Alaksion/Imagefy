@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.domain.usecase
 
-import br.com.alaksion.myapplication.ImagefyBaseTest
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import io.mockk.verify
