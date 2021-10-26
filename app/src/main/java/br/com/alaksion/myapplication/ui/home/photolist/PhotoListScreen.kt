@@ -38,6 +38,7 @@ fun PhotoListScreen(
 ) {
     LaunchedEffect(key1 = null) {
         shouldShowBottomBar.value = true
+        viewModel.getImages()
     }
 
     val lifeCycleOwner = LocalLifecycleOwner.current

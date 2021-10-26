@@ -42,10 +42,6 @@ class PhotoListViewModel @Inject constructor(
 
     private var currentPage = 1
 
-    init {
-        getImages()
-    }
-
     fun getImages() {
         _screenState.value = ViewState.Loading()
         viewModelScope.launch {
@@ -59,12 +55,11 @@ class PhotoListViewModel @Inject constructor(
 
     private fun handleGetPhotosSuccess(data: List<PhotoResponse>?) {
         data?.let { response ->
-            if (_photos.size > 0) {
-                _isMorePhotosLoading.value = false
-            }
             _photos.addAll(response)
             _screenState.value = ViewState.Ready(Unit)
+            return
         }
+        _screenState.value = ViewState.Error()
     }
 
     private fun handleGetPhotosError(error: NetworkError) {
@@ -77,10 +72,24 @@ class PhotoListViewModel @Inject constructor(
             currentPage++
             handleApiResponse(
                 source = getPhotosUseCase(currentPage),
-                onSuccess = { data -> handleGetPhotosSuccess(data) },
+                onSuccess = { data -> handleLoadMorePhotosSuccess(data) },
                 onError = { onLoadMorePhotosError() }
             )
         }
+    }
+
+    private fun onLoadMorePhotosError() {
+        _showLoadMorePhotosError.postValue(Event(Unit))
+        _isMorePhotosLoading.value = false
+    }
+
+    private fun handleLoadMorePhotosSuccess(data: List<PhotoResponse>?) {
+        data?.let { response ->
+            _isMorePhotosLoading.value = false
+            _photos.addAll(response)
+            return
+        }
+        _showLoadMorePhotosError.postValue(Event(Unit))
     }
 
     fun ratePhoto(photoId: String, isLike: Boolean) {
@@ -91,11 +100,6 @@ class PhotoListViewModel @Inject constructor(
                 onError = {}
             )
         }
-    }
-
-    private fun onLoadMorePhotosError() {
-        _showLoadMorePhotosError.postValue(Event(Unit))
-        _isMorePhotosLoading.value = false
     }
 
 }
