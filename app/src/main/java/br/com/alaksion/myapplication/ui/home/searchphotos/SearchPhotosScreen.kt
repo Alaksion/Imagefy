@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraRoll
 import androidx.compose.material.icons.filled.ImageSearch
+import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -27,16 +28,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageError
+import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
-import br.com.alaksion.myapplication.ui.home.searchphotos.components.SearchPhotosTopbar
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
+import br.com.alaksion.myapplication.ui.home.searchphotos.components.SearchPhotosTopBar
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -55,11 +55,11 @@ fun SearchPhotosScreen(
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-
     SearchPhotosContent(
         toggleDrawer,
         userProfileUrl,
         searchPhotos = { viewModel.searchPhotos() },
+        onClickTryAgain = { viewModel.searchPhotos() },
         query = viewModel.searchQuery.value,
         onChangeQuery = { value -> viewModel.onChangeSearchQuery(value) },
         screenState = viewModel.screenState.value,
@@ -86,14 +86,15 @@ fun SearchPhotosContent(
     onChangeQuery: (value: String) -> Unit,
     screenState: ViewState<Unit>,
     isMorePhotosLoading: Boolean,
-    loadMorePhotos: () -> Unit
+    loadMorePhotos: () -> Unit,
+    onClickTryAgain: () -> Unit
 ) {
     val listState = rememberLazyListState()
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        SearchPhotosTopbar(
+        SearchPhotosTopBar(
             toggleDrawer = toggleDrawer,
             userProfileUrl = userProfileUrl,
             isPreview = isPreview,
@@ -155,7 +156,24 @@ fun SearchPhotosContent(
                 }
 
             }
-            is ViewState.Error -> Unit
+            is ViewState.Error -> Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                TryAgain(
+                    message = "An error occurred and your login could not be authenticated, please try again.",
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Report,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.onBackground,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    },
+                    onClick = { onClickTryAgain() },
+                    modifier = Modifier.padding(horizontal = 40.dp)
+                )
+            }
         }
     }
 }
@@ -268,7 +286,8 @@ fun SearchPhotosScreenPreview() {
                         "", 0, "", "", "", "", "", false
                     )
                 },
-                loadMorePhotos = {}
+                loadMorePhotos = {},
+                onClickTryAgain = {}
             )
         }
     }

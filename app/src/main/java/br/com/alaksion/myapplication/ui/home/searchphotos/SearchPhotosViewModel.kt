@@ -79,7 +79,9 @@ class SearchPhotosViewModel @Inject constructor(
             _photoList.addAll(response.photos)
             _screenState.value = ViewState.Ready(Unit)
             maxPages = response.totalPages
+            return
         }
+        _screenState.value = ViewState.Error()
     }
 
     private fun onErrorSearchPhotos() {
@@ -101,7 +103,9 @@ class SearchPhotosViewModel @Inject constructor(
         data?.let { response ->
             _isMorePhotosLoading.value = false
             _photoList.addAll(response.photos)
+            return
         }
+        _showLoadMorePhotosError.postValue(Event(Unit))
 
     }
 

@@ -40,7 +40,9 @@ class PhotoViewerViewModel @Inject constructor(
     private fun onGetPhotoDetailsSuccess(data: PhotoDetailResponse?) {
         data?.let { response ->
             _photoData.value = ViewState.Ready(response)
+            return
         }
+        _photoData.value = ViewState.Error()
     }
 
     fun ratePhoto(photoId: String, isLike: Boolean) {

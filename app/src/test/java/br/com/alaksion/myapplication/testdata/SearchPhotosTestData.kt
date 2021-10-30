@@ -9,7 +9,7 @@ import br.com.alaksion.myapplication.domain.model.SearchPhotosRequest
 object SearchPhotosTestData {
 
     val DATA_RESPONSE = SearchPhotosResponseData(
-        totalPages = 1,
+        totalPages = 4,
         results = listOf(
             PhotoData(
                 urls = PhotoUrlsData("", "", ""),

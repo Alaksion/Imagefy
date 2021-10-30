@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -24,13 +25,12 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun SearchPhotosTopbar(
+fun SearchPhotosTopBar(
     toggleDrawer: () -> Unit,
     userProfileUrl: String,
     isPreview: Boolean = false,
@@ -90,10 +90,11 @@ fun SearchPhotosTopbar(
             BasicTextField(
                 value = searchQuery,
                 onValueChange = { value -> onSearchQueryChange(value) },
-                textStyle =  MaterialTheme.typography.body2,
+                textStyle = MaterialTheme.typography.body2,
+                singleLine = true,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
-                    .border(1.dp, MaterialTheme.colors.onBackground)
+                    .border(1.dp, MaterialTheme.colors.onBackground, RoundedCornerShape(15.dp))
                     .padding(vertical = 10.dp, horizontal = 10.dp)
                     .fillMaxWidth(),
                 keyboardActions = KeyboardActions(
@@ -110,13 +111,13 @@ fun SearchPhotosTopbar(
     }
 }
 
-@Preview()
+@Preview(showBackground = true)
 @Composable
 fun SearchPhotosToolbarPreview() {
     ImagefyTheme {
         Scaffold(
             topBar = {
-                SearchPhotosTopbar(
+                SearchPhotosTopBar(
                     toggleDrawer = {},
                     userProfileUrl = "",
                     searchQuery = "Search here",
