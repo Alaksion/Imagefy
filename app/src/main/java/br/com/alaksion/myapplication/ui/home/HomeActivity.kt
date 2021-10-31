@@ -12,11 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberDrawerState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomNavProvider
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.ui.authentication.login.LoginActivity
 import br.com.alaksion.myapplication.ui.home.components.navigationdrawer.HomeScreenNavigationDrawer
 import br.com.alaksion.myapplication.ui.home.navigator.HomeBottomNavigation
@@ -39,48 +39,48 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ImagefyTheme {
-                val navController = rememberNavController()
-                val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                val scope = rememberCoroutineScope()
-                val shouldShowBottomBar = remember { mutableStateOf(true) }
+            LocalBottomNavProvider {
+                ImagefyTheme {
+                    val navController = rememberNavController()
+                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                    val scope = rememberCoroutineScope()
 
-                fun toggleDrawer() {
-                    scope.launch {
-                        if (drawerState.isOpen) drawerState.close()
-                        else drawerState.open()
-                    }
-                }
-
-                HomeScreenNavigationDrawer(
-                    drawerState = drawerState,
-                    userData = currentUserData,
-                    navigateToAuthorProfile = {
+                    fun toggleDrawer() {
                         scope.launch {
-                            navigateToUserProfile(navController)
-                            drawerState.close()
+                            if (drawerState.isOpen) drawerState.close()
+                            else drawerState.open()
                         }
-                    },
-                    onLogoutClick = {
-                        toggleDrawer()
-                        viewModel.clearAuthToken()
-                        LoginActivity.start(this)
-                        this.finish()
                     }
-                ) {
-                    Scaffold(
-                        bottomBar = {
-                            if (shouldShowBottomBar.value)
-                                HomeBottomNavigation(navController = navController)
+
+                    HomeScreenNavigationDrawer(
+                        drawerState = drawerState,
+                        userData = currentUserData,
+                        navigateToAuthorProfile = {
+                            scope.launch {
+                                navigateToUserProfile(navController)
+                                drawerState.close()
+                            }
+                        },
+                        onLogoutClick = {
+                            toggleDrawer()
+                            viewModel.clearAuthToken()
+                            LoginActivity.start(this)
+                            this.finish()
                         }
-                    ) { screenPadding ->
-                        HomeNavigator(
-                            navHostController = navController,
-                            modifier = Modifier.padding(screenPadding),
-                            toggleDrawer = { toggleDrawer() },
-                            userData = currentUserData,
-                            shouldShowBottomBar = shouldShowBottomBar
-                        )
+                    ) {
+                        Scaffold(
+                            bottomBar = {
+                                if (LocalBottomSheetVisibility.current.value)
+                                    HomeBottomNavigation(navController = navController)
+                            }
+                        ) { screenPadding ->
+                            HomeNavigator(
+                                navHostController = navController,
+                                modifier = Modifier.padding(screenPadding),
+                                toggleDrawer = { toggleDrawer() },
+                                userData = currentUserData,
+                            )
+                        }
                     }
                 }
             }

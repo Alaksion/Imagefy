@@ -8,7 +8,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
@@ -33,12 +33,12 @@ fun UserProfileScreen(
     popBackStack: () -> Boolean,
     authorUsername: String,
     navigateToPhotoViewer: (photoUrl: String) -> Unit,
-    shouldShowBottomBar: MutableState<Boolean>
 ) {
+    val bottomSheetState = LocalBottomSheetVisibility.current
 
     LaunchedEffect(null) {
         viewModel.getUserProfileData(authorUsername)
-        shouldShowBottomBar.value = false
+        bottomSheetState.value = false
     }
 
     UserProfileContent(

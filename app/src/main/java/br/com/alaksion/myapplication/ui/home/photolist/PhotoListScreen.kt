@@ -12,12 +12,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
@@ -34,10 +34,11 @@ fun PhotoListScreen(
     navigateToAuthorDetails: (authorId: String) -> Unit,
     toggleDrawer: () -> Unit,
     userProfileUrl: String,
-    shouldShowBottomBar: MutableState<Boolean>
 ) {
+    val bottomSheetState = LocalBottomSheetVisibility.current
+
     LaunchedEffect(key1 = null) {
-        shouldShowBottomBar.value = true
+        bottomSheetState.value = true
         viewModel.getImages()
     }
 

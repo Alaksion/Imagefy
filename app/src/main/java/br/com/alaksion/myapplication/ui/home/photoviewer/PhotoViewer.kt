@@ -30,6 +30,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.common.extensions.invert
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.downloadImage
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
@@ -51,14 +52,15 @@ fun PhotoViewerScreen(
     photoId: String,
     viewModel: PhotoViewerViewModel,
     popBackStack: () -> Boolean,
-    shouldShowBottomBar: MutableState<Boolean>
 ) {
+    val bottomSheetState = LocalBottomSheetVisibility.current
+
     LaunchedEffect(null) {
         viewModel.getPhotoDetails(photoId)
-        shouldShowBottomBar.value = false
+        bottomSheetState.value = false
     }
 
-    PhotoViewerScreen(
+    PhotoViewerScreenContent(
         photoData = viewModel.photoData.value,
         popBackStack = popBackStack,
         onRateImage = { isLike ->
@@ -70,7 +72,7 @@ fun PhotoViewerScreen(
 
 @ExperimentalAnimationApi
 @Composable
-internal fun PhotoViewerScreen(
+internal fun PhotoViewerScreenContent(
     photoData: ViewState<PhotoDetailResponse>,
     popBackStack: () -> Boolean,
     onRateImage: (isLike: Boolean) -> Unit,

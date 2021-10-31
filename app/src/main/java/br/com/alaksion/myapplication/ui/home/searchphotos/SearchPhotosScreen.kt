@@ -16,7 +16,6 @@ import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -29,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
@@ -46,14 +46,14 @@ fun SearchPhotosScreen(
     viewModel: SearchPhotosViewModel,
     toggleDrawer: () -> Unit,
     userProfileUrl: String,
-    shouldShowBottomBar: MutableState<Boolean>
 ) {
-    LaunchedEffect(null) {
-        shouldShowBottomBar.value = true
-    }
-
+    val bottomSheetState = LocalBottomSheetVisibility.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+
+    LaunchedEffect(null) {
+        bottomSheetState.value = true
+    }
 
     SearchPhotosContent(
         toggleDrawer,

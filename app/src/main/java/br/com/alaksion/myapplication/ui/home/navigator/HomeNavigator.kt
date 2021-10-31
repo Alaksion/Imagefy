@@ -3,7 +3,6 @@ package br.com.alaksion.myapplication.ui.home.navigator
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -31,7 +30,6 @@ fun HomeNavigator(
     navHostController: NavHostController,
     toggleDrawer: () -> Unit,
     userData: CurrentUserData,
-    shouldShowBottomBar: MutableState<Boolean>
 ) {
     NavHost(
         navController = navHostController,
@@ -52,8 +50,8 @@ fun HomeNavigator(
                 },
                 toggleDrawer = toggleDrawer,
                 userProfileUrl = userData.profileImageUrl,
-                shouldShowBottomBar
-            )
+
+                )
         }
 
         composable(
@@ -72,7 +70,6 @@ fun HomeNavigator(
                     navigateToPhotoViewer = { photoId ->
                         navigateToPhotoViewer(navHostController, photoId)
                     },
-                    shouldShowBottomBar = shouldShowBottomBar
                 )
             }
         }
@@ -89,8 +86,8 @@ fun HomeNavigator(
                         viewModel = hiltViewModel(),
                         photoId = photoId,
                         popBackStack = { navHostController.popBackStack() },
-                        shouldShowBottomBar = shouldShowBottomBar
-                    )
+
+                        )
                 }
         }
 
@@ -107,7 +104,6 @@ fun HomeNavigator(
                 navigateToPhotoViewer = { photoId ->
                     navigateToPhotoViewer(navHostController, photoId)
                 },
-                shouldShowBottomBar = shouldShowBottomBar
             )
         }
 
@@ -121,7 +117,6 @@ fun HomeNavigator(
                 viewModel = viewModel,
                 toggleDrawer = toggleDrawer,
                 userProfileUrl = userData.profileImageUrl,
-                shouldShowBottomBar = shouldShowBottomBar
             )
         }
     }
