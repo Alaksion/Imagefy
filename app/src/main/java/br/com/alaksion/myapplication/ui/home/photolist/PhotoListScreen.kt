@@ -37,7 +37,7 @@ fun PhotoListScreen(
 ) {
     val bottomSheetState = LocalBottomSheetVisibility.current
 
-    LaunchedEffect(key1 = null) {
+    LaunchedEffect(key1 = bottomSheetState.value) {
         bottomSheetState.value = true
         viewModel.getImages()
     }

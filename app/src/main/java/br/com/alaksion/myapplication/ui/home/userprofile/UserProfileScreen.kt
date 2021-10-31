@@ -36,7 +36,7 @@ fun UserProfileScreen(
 ) {
     val bottomSheetState = LocalBottomSheetVisibility.current
 
-    LaunchedEffect(null) {
+    LaunchedEffect(bottomSheetState.value) {
         viewModel.getUserProfileData(authorUsername)
         bottomSheetState.value = false
     }

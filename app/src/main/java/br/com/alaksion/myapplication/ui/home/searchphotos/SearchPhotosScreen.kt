@@ -49,7 +49,7 @@ fun SearchPhotosScreen(
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-    LaunchedEffect(null) {
+    LaunchedEffect(bottomSheetState.value) {
         bottomSheetState.value = true
     }
 

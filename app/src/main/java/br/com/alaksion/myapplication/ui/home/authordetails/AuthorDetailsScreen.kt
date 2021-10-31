@@ -47,7 +47,7 @@ fun AuthorDetailsScreen(
     val context = LocalContext.current
     val bottomSheetState = LocalBottomSheetVisibility.current
 
-    LaunchedEffect(LocalBottomSheetVisibility.current.value) {
+    LaunchedEffect(bottomSheetState.value) {
         viewModel.getAuthorProfileData(authorUsername)
         bottomSheetState.value = false
     }
