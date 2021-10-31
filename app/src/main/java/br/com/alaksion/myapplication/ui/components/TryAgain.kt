@@ -46,7 +46,7 @@ fun TryAgain(
             Text(
                 "Try Again",
                 style = MaterialTheme.typography.body2
-                    .copy(fontWeight = FontWeight.Bold)
+                    .copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colors.background)
             )
         }
     }

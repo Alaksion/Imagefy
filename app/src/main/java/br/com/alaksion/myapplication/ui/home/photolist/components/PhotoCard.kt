@@ -36,9 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
-import br.com.alaksion.myapplication.ui.components.ImageError
+import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
-import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobottomsheet.PhotoInfoBottomSheet
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
@@ -227,23 +226,11 @@ internal fun PhotoCardImage(
     contentDescription: String?,
     modifier: Modifier = Modifier
 ) {
-    GlideImage(
-        imageModel = imageUrl,
-        modifier = modifier,
+    ImageLoader(
+        imageUrl = imageUrl,
         contentDescription = contentDescription,
-        contentScale = ContentScale.Crop,
-        circularReveal = CircularReveal(duration = 500),
-        loading = {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                ProgressIndicator()
-            }
-        },
-        failure = {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) { ImageError() }
-        }
+        modifier = modifier,
+        circularReveal = CircularReveal(duration = 500)
     )
 }
 

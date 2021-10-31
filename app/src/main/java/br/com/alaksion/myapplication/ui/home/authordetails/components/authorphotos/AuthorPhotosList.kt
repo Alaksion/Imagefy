@@ -22,16 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
-import br.com.alaksion.myapplication.ui.components.ImageError
+import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
-import com.skydoves.landscapist.glide.GlideImage
 
 @ExperimentalFoundationApi
 @Composable
@@ -124,31 +122,14 @@ fun AuthorPhotosList(
                                         })
 
                             } else {
-                                GlideImage(
+                                ImageLoader(
+                                    imageUrl = authorPhoto.photoUrl,
                                     modifier = Modifier
                                         .aspectRatio(1f)
                                         .border(1.dp, Color.White)
                                         .clickable {
                                             navigateToPhotoViewer(authorPhoto.photoId)
-                                        },
-                                    contentScale = ContentScale.Crop,
-                                    imageModel = authorPhoto.photoUrl,
-                                    loading = {
-                                        Box(
-                                            modifier = Modifier.fillMaxSize(),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            ProgressIndicator()
                                         }
-                                    },
-                                    failure = {
-                                        Box(
-                                            modifier = Modifier.fillMaxSize(),
-                                            contentAlignment = Alignment.Center
-                                        ) {
-                                            ImageError()
-                                        }
-                                    }
                                 )
                             }
                         }
