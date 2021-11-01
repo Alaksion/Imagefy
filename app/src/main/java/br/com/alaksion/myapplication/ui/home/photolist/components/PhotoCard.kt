@@ -106,8 +106,9 @@ fun PhotoCard(
                     .padding(horizontal = 10.dp)
             )
             PhotoCardImage(
-                photoContent.photoUrl,
-                photoContent.description,
+                imageUrl = photoContent.photoUrl,
+                imageColor = photoContent.color,
+                contentDescription = photoContent.description,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(400.dp)
@@ -223,14 +224,17 @@ internal fun PhotoCardHeader(
 @Composable
 internal fun PhotoCardImage(
     imageUrl: String,
+    imageColor: String,
     contentDescription: String?,
     modifier: Modifier = Modifier
 ) {
+
     ImageLoader(
         imageUrl = imageUrl,
         contentDescription = contentDescription,
         modifier = modifier,
-        circularReveal = CircularReveal(duration = 500)
+        circularReveal = CircularReveal(duration = 500),
+        backgroundColor = imageColor
     )
 }
 

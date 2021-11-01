@@ -232,11 +232,13 @@ fun SearchPhotosList(
                         .padding(20.dp)
                 )
             } else {
-                ImageLoader(imageUrl = item.photoUrl, modifier = Modifier
-                    .aspectRatio(1f)
-                    .border(1.dp, Color.White)
-                    .clickable {
-                    }
+                ImageLoader(backgroundColor = item.color,
+                    imageUrl = item.photoUrl,
+                    modifier = Modifier
+                        .aspectRatio(1f)
+                        .border(1.dp, Color.White)
+                        .clickable {
+                        }
                 )
             }
         }
@@ -261,7 +263,7 @@ fun SearchPhotosScreenPreview() {
                 isMorePhotosLoading = true,
                 photos = (1..40).toList().map {
                     PhotoResponse(
-                        "", 0, "", "", "", "", "", false
+                        "", 0, "", "", "", "", "", false, ""
                     )
                 },
                 loadMorePhotos = {},

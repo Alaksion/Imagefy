@@ -8,5 +8,6 @@ data class PhotoResponse(
     val authorUserName: String,
     val authorProfileThumbUrl: String,
     val photoUrl: String,
-    var likedByUser: Boolean
+    var likedByUser: Boolean,
+    val color: String
 )

@@ -15,7 +15,8 @@ data class PhotoData(
     val likedByUser: Boolean?,
     val user: PhotoOwnerData?,
     val urls: PhotoUrlsData?,
-    val links: PhotoLinksData?
+    val links: PhotoLinksData?,
+    val color: String?,
 )
 
 fun PhotoData.mapToPhotoResponse() = PhotoResponse(
@@ -26,7 +27,8 @@ fun PhotoData.mapToPhotoResponse() = PhotoResponse(
     description = this.description.handleOptional(),
     likes = this.likes.handleOptional(),
     photoUrl = this.urls?.regular.handleOptional(),
-    likedByUser = this.likedByUser.handleOptional()
+    likedByUser = this.likedByUser.handleOptional(),
+    color = this.color ?: "#FFFFFF"
 )
 
 fun PhotoData.mapToPhotoDetailResponse() = PhotoDetailResponse(
@@ -37,10 +39,12 @@ fun PhotoData.mapToPhotoDetailResponse() = PhotoDetailResponse(
     likedByUser = this.likedByUser.handleOptional(),
     likes = this.likes.handleOptional(),
     id = this.id.handleOptional(),
-    authorProfileImage = this.user?.profileImage?.large.handleOptional()
+    authorProfileImage = this.user?.profileImage?.large.handleOptional(),
+    color = this.color ?: "#FFFFFF"
 )
 
 fun PhotoData.mapToAuthorPhotoResponse() = AuthorPhotosResponse(
     photoId = this.id.handleOptional(),
-    photoUrl = this.urls?.regular.handleOptional()
+    photoUrl = this.urls?.regular.handleOptional(),
+    color = this.color ?: "#FFFFFF"
 )

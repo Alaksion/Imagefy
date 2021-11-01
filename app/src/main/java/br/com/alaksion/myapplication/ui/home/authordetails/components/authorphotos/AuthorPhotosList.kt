@@ -123,6 +123,7 @@ fun AuthorPhotosList(
 
                             } else {
                                 ImageLoader(
+                                    backgroundColor = authorPhoto.color,
                                     imageUrl = authorPhoto.photoUrl,
                                     modifier = Modifier
                                         .aspectRatio(1f)

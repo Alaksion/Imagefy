@@ -22,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -30,17 +29,17 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.common.extensions.invert
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.downloadImage
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
+import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
 import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
 import br.com.alaksion.myapplication.ui.theme.OffWhite
-import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.launch
 
 
@@ -181,7 +180,7 @@ internal fun PhotoViewerReady(
     onRateImage: (isLike: Boolean) -> Unit
 ) {
 
-    val showBottomBar = remember { mutableStateOf(true) }
+    val showPhotoViewerBottomBar = remember { mutableStateOf(true) }
     val density = LocalDensity.current
     val clipboardManager = LocalClipboardManager.current
     val isImageLiked = remember { mutableStateOf(photoData.likedByUser) }
@@ -195,7 +194,7 @@ internal fun PhotoViewerReady(
         )
 
     fun toggleBottomBar() {
-        showBottomBar.value = showBottomBar.value.not()
+        showPhotoViewerBottomBar.value = showPhotoViewerBottomBar.value.not()
     }
 
     fun copyLinkToClipboard() {
@@ -216,24 +215,17 @@ internal fun PhotoViewerReady(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        GlideImage(
+        ImageLoader(backgroundColor = photoData.color,
+            imageUrl = photoData.imageUrl,
             modifier = Modifier
                 .fillMaxSize()
                 .clickable(interactionSource = MutableInteractionSource(), indication = null) {
                     toggleBottomBar()
-                },
-            imageModel = photoData.imageUrl,
-            contentScale = ContentScale.Crop,
-            loading = {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    ProgressIndicator()
                 }
-            },
-            failure = {}
         )
         AnimatedVisibility(
             modifier = Modifier.align(Alignment.BottomCenter),
-            visible = showBottomBar.value,
+            visible = showPhotoViewerBottomBar.value,
             enter = slideInVertically(
                 initialOffsetY = {
                     with(density) { 56.dp.roundToPx() }

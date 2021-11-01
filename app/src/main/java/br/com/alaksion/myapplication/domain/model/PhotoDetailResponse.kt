@@ -8,5 +8,6 @@ data class PhotoDetailResponse(
     val authorProfileImage: String,
     val likes: Int,
     val downloads: Int,
-    val likedByUser: Boolean
+    val likedByUser: Boolean,
+    val color: String
 )
