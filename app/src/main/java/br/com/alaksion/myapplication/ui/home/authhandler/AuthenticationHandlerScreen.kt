@@ -30,6 +30,9 @@ fun AuthenticationHandlerScreen(
 
     LaunchedEffect(key1 = bottomSheetState.value) {
         bottomSheetState.value = false
+    }
+
+    LaunchedEffect(key1 = true) {
         viewModel.authenticateUser(authCode)
     }
 

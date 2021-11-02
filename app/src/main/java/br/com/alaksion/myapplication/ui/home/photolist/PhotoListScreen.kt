@@ -39,6 +39,9 @@ fun PhotoListScreen(
 
     LaunchedEffect(key1 = bottomSheetState.value) {
         bottomSheetState.value = true
+    }
+
+    LaunchedEffect(key1 = true){
         viewModel.getImages()
     }
 

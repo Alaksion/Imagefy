@@ -57,7 +57,7 @@ fun HomeNavigator(
 
         composable(
             route = "${HomeScreen.AuthHandler().route}/{authCode}",
-            deepLinks = listOf(navDeepLink { uriPattern = "$uri&code={authCode}" })
+            deepLinks = listOf(navDeepLink { uriPattern = "$uri?code={authCode}" })
         ) {
             AuthenticationHandlerScreen(
                 viewModel = hiltViewModel(),
@@ -151,7 +151,6 @@ fun HomeNavigator(
                 }
         }
     }
-
 }
 
 fun navigateToHome(navHostController: NavHostController) {

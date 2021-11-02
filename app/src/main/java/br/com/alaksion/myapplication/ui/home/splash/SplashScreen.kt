@@ -35,13 +35,16 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = bottomSheetState.value) {
         bottomSheetState.value = false
+    }
+
+    LaunchedEffect(key1 = true) {
         viewModel.verifyUserIsLogged()
     }
 
     SplashScreenContent(
         screenState = viewModel.authenticationState.value,
-        onClickTryAgain = {},
-        goToLoginScreen = {},
+        onClickTryAgain = { viewModel.verifyUserIsLogged() },
+        goToLoginScreen = { navigateToLogin() },
     )
 
     viewModel.isUserLogged.observeEvent(lifeCycleOwner) { isUserLogged ->

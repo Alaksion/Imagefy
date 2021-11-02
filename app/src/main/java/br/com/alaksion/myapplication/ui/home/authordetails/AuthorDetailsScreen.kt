@@ -20,8 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
@@ -48,8 +48,11 @@ fun AuthorDetailsScreen(
     val bottomSheetState = LocalBottomSheetVisibility.current
 
     LaunchedEffect(bottomSheetState.value) {
-        viewModel.getAuthorProfileData(authorUsername)
         bottomSheetState.value = false
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.getAuthorProfileData(authorUsername)
     }
 
     AuthorDetailsScreenContent(

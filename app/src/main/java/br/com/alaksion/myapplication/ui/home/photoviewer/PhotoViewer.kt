@@ -55,8 +55,11 @@ fun PhotoViewerScreen(
     val bottomSheetState = LocalBottomSheetVisibility.current
 
     LaunchedEffect(bottomSheetState.value) {
-        viewModel.getPhotoDetails(photoId)
         bottomSheetState.value = false
+    }
+
+    LaunchedEffect(key1 = true) {
+        viewModel.getPhotoDetails(photoId)
     }
 
     PhotoViewerScreenContent(
