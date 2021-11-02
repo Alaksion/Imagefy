@@ -16,29 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication">
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".ui.home.HomeActivity"
             android:exported="true"
-            android:theme="@style/Theme.MySplash">
+            android:label="@string/app_name"
+            android:theme="@style/Theme.MyApplication.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.authentication.login.LoginActivity"
-            android:exported="true"
-            android:theme="@style/Theme.MyApplication.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".ui.authentication.authhandler.AuthenticationHandlerAct"
-            android:exported="true"
-            android:theme="@style/Theme.MyApplication.NoActionBar">
-            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -48,11 +34,6 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.home.HomeActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.MyApplication.NoActionBar" />
     </application>
 
 </manifest>

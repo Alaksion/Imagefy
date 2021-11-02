@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.authentication.authhandler
+package br.com.alaksion.myapplication.ui.home.authhandler
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -30,13 +30,13 @@ class AuthHandlerViewModel @Inject constructor(
     private val userData: CurrentUserData
 ) : BaseViewModel() {
 
-    private val _authenticationResult: MutableState<ViewState<Unit>> =
+    private val _authenticationState: MutableState<ViewState<Unit>> =
         mutableStateOf(ViewState.Loading())
-    val authenticationResult: State<ViewState<Unit>>
-        get() = _authenticationResult
+    val authenticationState: State<ViewState<Unit>>
+        get() = _authenticationState
 
-    private val _handleNavigationSuccess = MutableLiveData<Event<Boolean>>()
-    val handleNavigationSuccess: LiveData<Event<Boolean>>
+    private val _handleNavigationSuccess = MutableLiveData<Event<Unit>>()
+    val handleNavigationSuccess: LiveData<Event<Unit>>
         get() = _handleNavigationSuccess
 
 
@@ -51,7 +51,7 @@ class AuthHandlerViewModel @Inject constructor(
             }
             return
         }
-        _authenticationResult.value = ViewState.Error()
+        _authenticationState.value = ViewState.Error()
     }
 
     private fun onAuthenticateUserSuccess(data: AuthResponse?) {
@@ -60,7 +60,7 @@ class AuthHandlerViewModel @Inject constructor(
             getCurrentUsername()
             return
         }
-        _authenticationResult.value = ViewState.Error()
+        _authenticationState.value = ViewState.Error()
     }
 
     private fun getCurrentUsername() {
@@ -78,7 +78,7 @@ class AuthHandlerViewModel @Inject constructor(
             getCurrentUserData(response.username)
             return
         }
-        _authenticationResult.value = ViewState.Error()
+        _authenticationState.value = ViewState.Error()
     }
 
     private fun getCurrentUserData(username: String) {
@@ -100,14 +100,14 @@ class AuthHandlerViewModel @Inject constructor(
                 followingCount = response.following
                 profileImageUrl = response.profileImage
             }
-            _handleNavigationSuccess.postValue(Event(true))
+            _handleNavigationSuccess.postValue(Event(Unit))
             return
         }
-        _authenticationResult.value = ViewState.Error()
+        _authenticationState.value = ViewState.Error()
     }
 
     private fun onApiError() {
-        _authenticationResult.value = ViewState.Error()
+        _authenticationState.value = ViewState.Error()
     }
 
 

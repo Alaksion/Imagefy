@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.authentication.login
+package br.com.alaksion.myapplication.ui.home.login
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
@@ -15,13 +15,5 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     fun getLoginUrl(): Uri = Uri.parse(getAuthUrlUseCase())
-
-    private val _isAuthenticationSuccess = MutableLiveData<Event<Unit>>()
-    val isAuthenticationSuccess: LiveData<Event<Unit>>
-        get() = _isAuthenticationSuccess
-
-    fun setAuthResult() {
-        _isAuthenticationSuccess.postValue(Event(Unit))
-    }
 
 }

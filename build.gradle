@@ -21,3 +21,21 @@ buildscript {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+task assignKeys() {
+    doLast {
+        ant.propertyfile(file: "apikey.properties") {
+            entry( key: "PUBLIC_KEY", value: publicKey)
+            entry( key: "SECRET_KEY", value: secretKey)
+        }
+    }
+}
+
+task clearKeys() {
+    doLast {
+        ant.propertyfile(file: "apikey.properties") {
+            entry( key: "PUBLIC_KEY", value: "\"\"")
+            entry( key: "SECRET_KEY", value: "\"\"")
+        }
+    }
+}

@@ -1,12 +1,7 @@
-package br.com.alaksion.myapplication.ui.authentication.login
+package br.com.alaksion.myapplication.ui.home.login
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -15,8 +10,10 @@ import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -26,56 +23,42 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.utils.observeEvent
-import br.com.alaksion.myapplication.ui.PresentationConstants.REGISTER_URL
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
+import br.com.alaksion.myapplication.ui.PresentationConstants
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.DimGray
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+@Composable
+fun LoginScreen(
+    viewModel: LoginViewModel
+) {
+    val context = LocalContext.current
+    val bottomSheetState = LocalBottomSheetVisibility.current
 
-    private val viewModel by viewModels<LoginViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setUpObservers()
-        setContent {
-            ImagefyTheme {
-                LoginActivityContent(
-                    navigateToCreateAccount = { navigateToCreateAccount() },
-                    openBrowserSignIn = { openBrowserSignIn() }
-                )
-            }
-        }
+    LaunchedEffect(key1 = bottomSheetState.value) {
+        bottomSheetState.value = false
     }
 
-    private fun navigateToCreateAccount() {
-        val uri = Uri.parse(REGISTER_URL)
-        startActivity(Intent(Intent.ACTION_VIEW, uri))
+    fun navigateToCreateAccount() {
+        val uri = Uri.parse(PresentationConstants.REGISTER_URL)
+        context.startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
-    private fun openBrowserSignIn() {
+    fun openBrowserSignIn() {
         val uri = viewModel.getLoginUrl()
-        startActivity(Intent(Intent.ACTION_VIEW, uri))
+        context.startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
-    private fun setUpObservers() {
-        viewModel.isAuthenticationSuccess.observeEvent(this) {
-            this.finish()
-        }
-    }
+    LoginScreenContent(
+        navigateToCreateAccount = { navigateToCreateAccount() },
+        openBrowserSignIn = { openBrowserSignIn() }
+    )
 
-    companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, LoginActivity::class.java))
-        }
-    }
 }
 
 @Composable
-fun LoginActivityContent(
+fun LoginScreenContent(
     navigateToCreateAccount: () -> Unit,
     openBrowserSignIn: () -> Unit
 ) {
@@ -159,6 +142,6 @@ fun LoginActivityContent(
 @Composable
 fun LoginPreview() {
     ImagefyTheme {
-        LoginActivityContent({}, {})
+        LoginScreenContent({}, {})
     }
 }

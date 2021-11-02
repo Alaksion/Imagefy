@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.home.navigator
+package br.com.alaksion.myapplication.ui.navigator.bottomnav
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem

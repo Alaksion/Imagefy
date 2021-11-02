@@ -1,12 +1,5 @@
-package br.com.alaksion.myapplication.ui.splash
+package br.com.alaksion.myapplication.ui.home.splash
 
-import android.annotation.SuppressLint
-import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -14,62 +7,46 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
-import br.com.alaksion.myapplication.ui.authentication.login.LoginActivity
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
-import br.com.alaksion.myapplication.ui.home.HomeActivity
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.skydoves.landscapist.rememberDrawablePainter
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-@SuppressLint("CustomSplashScreen")
-@ExperimentalFoundationApi
-@ExperimentalAnimationApi
-class SplashActivity : AppCompatActivity() {
+@Composable
+fun SplashScreen(
+    viewModel: SplashViewModel,
+    navigateToHome: () -> Unit,
+    navigateToLogin: () -> Unit
+) {
+    val bottomSheetState = LocalBottomSheetVisibility.current
+    val lifeCycleOwner = LocalLifecycleOwner.current
 
-    private val viewModel by viewModels<SplashViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
-        super.onCreate(savedInstanceState)
-        setContent {
-            SplashScreenContent(
-                screenState = viewModel.authenticationState.value,
-                onClickTryAgain = { viewModel.verifyUserIsLogged() },
-                goToLoginScreen = {
-                    LoginActivity.start(this)
-                    this.finish()
-                },
-            )
-        }
-        setUpObservers()
-    }
-
-    override fun onResume() {
-        super.onResume()
+    LaunchedEffect(key1 = bottomSheetState.value) {
+        bottomSheetState.value = false
         viewModel.verifyUserIsLogged()
     }
 
-    private fun setUpObservers() {
-        viewModel.isUserLogged.observeEvent(this) { isLogged ->
-            if (isLogged) {
-                HomeActivity.start(this)
-            } else {
-                LoginActivity.start(this)
-            }
-            this.finish()
-        }
+    SplashScreenContent(
+        screenState = viewModel.authenticationState.value,
+        onClickTryAgain = {},
+        goToLoginScreen = {},
+    )
+
+    viewModel.isUserLogged.observeEvent(lifeCycleOwner) { isUserLogged ->
+        if (isUserLogged) navigateToHome()
+        else navigateToLogin()
     }
 
 }

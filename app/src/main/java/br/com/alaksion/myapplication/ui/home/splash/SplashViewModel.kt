@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.splash
+package br.com.alaksion.myapplication.ui.home.splash
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State

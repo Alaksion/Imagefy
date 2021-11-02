@@ -14,15 +14,16 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomNavProvider
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
-import br.com.alaksion.myapplication.ui.authentication.login.LoginActivity
 import br.com.alaksion.myapplication.ui.home.components.navigationdrawer.HomeScreenNavigationDrawer
-import br.com.alaksion.myapplication.ui.home.navigator.HomeBottomNavigation
-import br.com.alaksion.myapplication.ui.home.navigator.HomeNavigator
-import br.com.alaksion.myapplication.ui.home.navigator.navigateToUserProfile
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
+import br.com.alaksion.myapplication.ui.navigator.HomeNavigator
+import br.com.alaksion.myapplication.ui.navigator.bottomnav.HomeBottomNavigation
+import br.com.alaksion.myapplication.ui.navigator.navigateToLogin
+import br.com.alaksion.myapplication.ui.navigator.navigateToUserProfile
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContent {
             LocalBottomNavProvider {
                 ImagefyTheme {
@@ -64,8 +66,7 @@ class HomeActivity : AppCompatActivity() {
                         onLogoutClick = {
                             toggleDrawer()
                             viewModel.clearAuthToken()
-                            LoginActivity.start(this)
-                            this.finish()
+                            navigateToLogin(navController)
                         }
                     ) {
                         Scaffold(
