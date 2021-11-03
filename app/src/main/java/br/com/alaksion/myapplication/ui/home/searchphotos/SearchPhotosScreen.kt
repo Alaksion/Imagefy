@@ -53,6 +53,14 @@ fun SearchPhotosScreen(
         bottomSheetState.value = true
     }
 
+
+    LaunchedEffect(true) {
+        viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
+            Toast.makeText(context, "Could not load more images, try again later", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
     SearchPhotosContent(
         toggleDrawer,
         userProfileUrl,
@@ -65,11 +73,6 @@ fun SearchPhotosScreen(
         photos = viewModel.photoList,
         loadMorePhotos = { viewModel.loadMorePhotos() }
     )
-
-    viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
-        Toast.makeText(context, "Could not load more images, try again later", Toast.LENGTH_SHORT)
-            .show()
-    }
 }
 
 @ExperimentalFoundationApi

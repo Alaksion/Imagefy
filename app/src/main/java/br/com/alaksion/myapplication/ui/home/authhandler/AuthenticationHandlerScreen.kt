@@ -36,15 +36,17 @@ fun AuthenticationHandlerScreen(
         viewModel.authenticateUser(authCode)
     }
 
+    LaunchedEffect(key1 = true) {
+        viewModel.handleNavigationSuccess.observeEvent(lifecycleOwner) {
+            goToHomeScreen()
+        }
+    }
+
     AuthHandlerContent(
         screenState = viewModel.authenticationState.value,
         onClickTryAgain = { viewModel.authenticateUser(authCode) },
         goToLoginScreen = { goToLoginScreen() }
     )
-
-    viewModel.handleNavigationSuccess.observeEvent(lifecycleOwner) {
-        goToHomeScreen()
-    }
 
 }
 

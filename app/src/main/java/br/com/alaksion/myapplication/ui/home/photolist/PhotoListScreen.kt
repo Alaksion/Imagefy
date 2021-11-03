@@ -36,6 +36,8 @@ fun PhotoListScreen(
     userProfileUrl: String,
 ) {
     val bottomSheetState = LocalBottomSheetVisibility.current
+    val lifeCycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = bottomSheetState.value) {
         bottomSheetState.value = true
@@ -45,8 +47,12 @@ fun PhotoListScreen(
         viewModel.getImages()
     }
 
-    val lifeCycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
+    LaunchedEffect(key1 = true){
+        viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
+            Toast.makeText(context, "Could not load more images, try again later", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
 
     PhotoListScreenContent(
         screenState = viewModel.screenState.value,
@@ -61,11 +67,6 @@ fun PhotoListScreen(
         toggleDrawer = toggleDrawer,
         userProfileUrl = userProfileUrl
     )
-
-    viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
-        Toast.makeText(context, "Could not load more images, try again later", Toast.LENGTH_SHORT)
-            .show()
-    }
 }
 
 @ExperimentalAnimationApi

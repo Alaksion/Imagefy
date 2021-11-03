@@ -55,6 +55,17 @@ fun AuthorDetailsScreen(
         viewModel.getAuthorProfileData(authorUsername)
     }
 
+    LaunchedEffect(key1 = true) {
+        viewModel.showErrorToast.observeEvent(lifecycleOwner) {
+            Toast.makeText(
+                context,
+                "Could not load user photos, try again later",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+        }
+    }
+
     AuthorDetailsScreenContent(
         authorData = viewModel.authorData.value,
         authorUsername = authorUsername,
@@ -68,10 +79,6 @@ fun AuthorDetailsScreen(
         }
     )
 
-    viewModel.showErrorToast.observeEvent(lifecycleOwner) {
-        Toast.makeText(context, "Could not load user photos, try again later", Toast.LENGTH_SHORT)
-            .show()
-    }
 }
 
 @ExperimentalFoundationApi
