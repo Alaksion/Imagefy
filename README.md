@@ -22,7 +22,7 @@ To run this application please be sure that the requirements below are met
 To run the application locally follow the steps below:
 1. Clone this repository.
 2. Open the project's directory using Android Studio.
-3. Search for the file named `apikey.properties`, open it and fill the PUBLIC_KEY and PRIVATE_KEY fields with your Unsplash Public/Secret api keys.
+3. Run the following command using your Unsplash api keys: ```gradlew assignKeys -PsecretKey=\"your-secret-key\" -PpublicKey=\"your-public-key\"```
 4. Now your project is ready to be launched!
 
 [⬆ Voltar ao topo](#Imagefy)<br>
