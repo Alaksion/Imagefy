@@ -115,7 +115,10 @@ internal fun AuthorDetailsScreenContent(
                 }
                 Text(
                     authorUsername,
-                    style = MaterialTheme.typography.body1.copy(fontWeight = FontWeight.Black)
+                    style = MaterialTheme.typography.body1.copy(
+                        fontWeight = FontWeight.Black,
+                        color = MaterialTheme.colors.onBackground
+                    )
                 )
             }
         }

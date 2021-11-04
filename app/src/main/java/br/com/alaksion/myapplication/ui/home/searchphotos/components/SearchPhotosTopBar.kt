@@ -90,7 +90,7 @@ fun SearchPhotosTopBar(
             BasicTextField(
                 value = searchQuery,
                 onValueChange = { value -> onSearchQueryChange(value) },
-                textStyle = MaterialTheme.typography.body2,
+                textStyle = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.onBackground),
                 singleLine = true,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)

@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.ui.ViewState
@@ -96,7 +95,10 @@ fun AuthorPhotosList(
                         )
                         Text(
                             "This user has no photos uploaded",
-                            style = MaterialTheme.typography.h6.copy(textAlign = TextAlign.Center)
+                            style = MaterialTheme.typography.h6.copy(
+                                textAlign = TextAlign.Center,
+                                color = MaterialTheme.colors.onBackground
+                            )
                         )
                     }
                 } else {
@@ -116,7 +118,7 @@ fun AuthorPhotosList(
                                     contentDescription = null,
                                     modifier = Modifier
                                         .aspectRatio(1f)
-                                        .border(1.dp, Color.White)
+                                        .border(1.dp, color = MaterialTheme.colors.onBackground)
                                         .clickable {
                                             navigateToPhotoViewer(authorPhoto.photoId)
                                         })
@@ -127,7 +129,7 @@ fun AuthorPhotosList(
                                     imageUrl = authorPhoto.photoUrl,
                                     modifier = Modifier
                                         .aspectRatio(1f)
-                                        .border(1.dp, Color.White)
+                                        .border(1.dp, color = MaterialTheme.colors.background)
                                         .clickable {
                                             navigateToPhotoViewer(authorPhoto.photoId)
                                         }

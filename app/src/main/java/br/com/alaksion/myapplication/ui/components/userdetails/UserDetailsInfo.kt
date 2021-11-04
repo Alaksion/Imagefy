@@ -9,8 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
 @Composable
 fun UserDetailsInfo(
@@ -24,7 +22,10 @@ fun UserDetailsInfo(
     Column(modifier = modifier) {
         Text(
             name,
-            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.body2.copy(
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onBackground,
+            ),
             maxLines = 1,
             modifier = Modifier
                 .fillMaxWidth()
@@ -32,7 +33,7 @@ fun UserDetailsInfo(
         if (bio.isNotEmpty()) {
             Text(
                 bio,
-                style = MaterialTheme.typography.body2,
+                style = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.onBackground),
             )
         }
         AuthorMediaLinks(

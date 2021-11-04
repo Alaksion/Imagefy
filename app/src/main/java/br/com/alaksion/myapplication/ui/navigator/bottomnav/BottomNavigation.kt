@@ -5,8 +5,11 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @Composable
 fun HomeBottomNavigation(
@@ -32,7 +35,7 @@ fun HomeBottomNavigation(
                 icon = {
                     Icon(
                         imageVector = navItem.icon(isRouteSelected),
-                        contentDescription = navItem.route
+                        contentDescription = navItem.route,
                     )
                 },
                 alwaysShowLabel = false,
@@ -48,5 +51,13 @@ private fun handleBottomNavClick(navController: NavHostController, route: String
         }
         launchSingleTop = true
         restoreState = true
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun BottomBarPreview() {
+    ImagefyTheme(true) {
+        HomeBottomNavigation(navController = rememberNavController())
     }
 }

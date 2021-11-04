@@ -24,6 +24,7 @@ class PhotoViewerViewModel @Inject constructor(
         get() = _photoData
 
     fun getPhotoDetails(photoId: String) {
+        _photoData.value = ViewState.Loading()
         viewModelScope.launch {
             handleApiResponse(
                 source = getPhotoDetailsUseCase(photoId),

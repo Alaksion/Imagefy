@@ -2,12 +2,16 @@ package br.com.alaksion.myapplication.ui.home.login
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +30,6 @@ import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.ui.PresentationConstants
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import br.com.alaksion.myapplication.ui.theme.DimGray
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @Composable
@@ -67,7 +70,6 @@ fun LoginScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
             .padding(all = 20.dp)
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -81,7 +83,8 @@ fun LoginScreenContent(
             Text(
                 text = "Share your best moments with the internet",
                 style = MaterialTheme.typography.h5.copy(
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colors.onBackground
                 ),
                 modifier = Modifier
                     .padding()
@@ -91,7 +94,7 @@ fun LoginScreenContent(
                 text = "Bring together pictures of your backyard, pets, hobbies, morning coffee and everything that makes your day brighter.",
                 style = MaterialTheme.typography.body2.copy(
                     textAlign = TextAlign.Center,
-                    color = DimGray
+                    color = MaterialTheme.colors.onBackground.copy(0.66f)
                 )
             )
         }
@@ -109,7 +112,10 @@ fun LoginScreenContent(
                 text = buildAnnotatedString {
                     withStyle(
                         AppTypoGraph.span_roboto_regular()
-                            .copy(fontSize = 14.sp, color = DimGray)
+                            .copy(
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colors.onBackground.copy(0.66f)
+                            )
                     ) {
                         append("Don't have an account? ")
                     }
@@ -141,7 +147,9 @@ fun LoginScreenContent(
 @Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
-    ImagefyTheme {
-        LoginScreenContent({}, {})
+    ImagefyTheme(true) {
+        Scaffold() {
+            LoginScreenContent({}, {})
+        }
     }
 }

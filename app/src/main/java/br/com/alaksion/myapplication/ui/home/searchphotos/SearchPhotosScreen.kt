@@ -19,7 +19,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
@@ -56,7 +55,11 @@ fun SearchPhotosScreen(
 
     LaunchedEffect(true) {
         viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
-            Toast.makeText(context, "Could not load more images, try again later", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                context,
+                "Could not load more images, try again later",
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
     }
@@ -126,7 +129,8 @@ fun SearchPhotosContent(
                         text = "Whoops nothing to see here yet, try to search for something cute like fluffy cats.",
                         style = MaterialTheme.typography.h6.copy(
                             textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colors.onBackground
                         )
                     )
                 }
@@ -239,7 +243,7 @@ fun SearchPhotosList(
                     imageUrl = item.photoUrl,
                     modifier = Modifier
                         .aspectRatio(1f)
-                        .border(1.dp, Color.White)
+                        .border(1.dp, MaterialTheme.colors.background)
                         .clickable {
                         }
                 )

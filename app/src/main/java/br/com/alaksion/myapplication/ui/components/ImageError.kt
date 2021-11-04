@@ -15,8 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ImageError() {
+fun ImageError(modifier: Modifier = Modifier) {
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -30,7 +31,10 @@ fun ImageError() {
         )
         Text(
             "Whoops, an error occurred and this image could not be loaded",
-            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
+            style = MaterialTheme.typography.body2.copy(
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onBackground
+            )
         )
     }
 }

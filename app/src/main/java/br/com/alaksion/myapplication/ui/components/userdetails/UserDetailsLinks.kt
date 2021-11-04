@@ -19,10 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.ui.PresentationConstants
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 
 @Composable
 fun AuthorMediaLinks(
@@ -61,7 +59,10 @@ fun AuthorMediaLinks(
                 )
                 Text(
                     text = "@$twitterUser",
-                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.body2.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.onBackground
+                    ),
                     modifier = Modifier
                         .padding()
                         .padding(start = 10.dp)
@@ -91,7 +92,10 @@ fun AuthorMediaLinks(
                 )
                 Text(
                     text = "@$instagramUser",
-                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.body2.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.onBackground
+                    ),
                     modifier = Modifier
                         .padding()
                         .padding(start = 10.dp)
@@ -124,7 +128,10 @@ fun AuthorMediaLinks(
                 )
                 Text(
                     text = "Personal Portfolio",
-                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.body2.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.onBackground
+                    ),
                 )
 
             }

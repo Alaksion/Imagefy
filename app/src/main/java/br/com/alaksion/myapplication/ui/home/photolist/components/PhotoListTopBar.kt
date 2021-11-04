@@ -11,7 +11,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,9 +31,9 @@ fun PhotoListTopBar(
     val context = LocalContext.current
 
     TopAppBar(
-        elevation = 1.dp,
-        backgroundColor = MaterialTheme.colors.background,
-        contentPadding = PaddingValues(start = 5.dp, end = 5.dp, top = 5.dp)
+        elevation = 0.dp,
+        backgroundColor = Color.Transparent,
+        contentPadding = PaddingValues(start = 5.dp, end = 5.dp, top = 5.dp),
     ) {
         Column() {
             Row(

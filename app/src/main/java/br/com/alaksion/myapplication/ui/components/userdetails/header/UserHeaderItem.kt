@@ -14,15 +14,18 @@ fun AuthorHeaderItem(value: String, label: String, modifier: Modifier = Modifier
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             value,
-            style = MaterialTheme.typography.body1,
+            style = MaterialTheme.typography.body1.copy(color = MaterialTheme.colors.onBackground),
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            maxLines = 1,
         )
         Text(
             label,
-            style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Bold),
+            style = MaterialTheme.typography.caption.copy(
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colors.onBackground
+            ),
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            maxLines = 1,
         )
     }
 }

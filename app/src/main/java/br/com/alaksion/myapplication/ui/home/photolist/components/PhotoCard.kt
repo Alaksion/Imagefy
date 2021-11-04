@@ -87,7 +87,7 @@ fun PhotoCard(
         }
     }
 
-    Box() {
+    Box {
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -100,7 +100,7 @@ fun PhotoCard(
                 profileImageUrl = photoContent.authorProfileThumbUrl,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable() {
+                    .clickable {
                         navigateToAuthor(photoContent.authorUserName)
                     }
                     .padding(horizontal = 10.dp)
@@ -202,9 +202,15 @@ internal fun PhotoCardHeader(
             ) {
                 Text(
                     userName,
-                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold)
+                    style = MaterialTheme.typography.body2.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.onBackground
+                    )
                 )
-                Text(name, style = MaterialTheme.typography.caption)
+                Text(
+                    name,
+                    style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground)
+                )
             }
         }
 
@@ -269,7 +275,10 @@ internal fun PhotoCardInfo(
             NumberScrollerAnimation(value = likes) { currentValue ->
                 Text(
                     "$currentValue likes",
-                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.body2.copy(
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colors.onBackground
+                    ),
                 )
             }
         }

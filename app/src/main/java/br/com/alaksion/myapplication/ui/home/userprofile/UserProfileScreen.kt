@@ -93,7 +93,8 @@ internal fun UserProfileContent(
                 Text(
                     username, style = MaterialTheme.typography.body1.copy(
                         textAlign = TextAlign.Center,
-                        fontWeight = FontWeight.Black
+                        fontWeight = FontWeight.Black,
+                        color = MaterialTheme.colors.onBackground
                     )
                 )
             }
@@ -206,7 +207,7 @@ fun UserProfileLoading() = Box(
 @Preview(showBackground = true)
 fun UserProfilePreview() {
 
-    ImagefyTheme {
+    ImagefyTheme(true) {
         Scaffold() {
             UserProfileContent(
                 userData = ViewState.Ready(

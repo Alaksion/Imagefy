@@ -29,7 +29,10 @@ fun TryAgain(
         icon()
         Text(
             message,
-            style = MaterialTheme.typography.body2.copy(textAlign = TextAlign.Center),
+            style = MaterialTheme.typography.body2.copy(
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.onBackground
+            ),
             modifier = Modifier
                 .padding()
                 .padding(vertical = 10.dp)
