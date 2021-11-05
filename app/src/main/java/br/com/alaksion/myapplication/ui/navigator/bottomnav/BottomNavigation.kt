@@ -6,6 +6,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -21,6 +22,7 @@ fun HomeBottomNavigation(
     )
 
     BottomNavigation(
+        elevation = 0.dp,
         backgroundColor = MaterialTheme.colors.background
     ) {
         val backStackEntry = navController.currentBackStackEntryAsState()

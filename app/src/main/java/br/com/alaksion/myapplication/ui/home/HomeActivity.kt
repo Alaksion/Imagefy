@@ -14,6 +14,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomNavProvider
@@ -59,6 +60,7 @@ class HomeActivity : AppCompatActivity() {
                     Scaffold(
                         scaffoldState = scaffoldState,
                         drawerBackgroundColor = MaterialTheme.colors.background,
+                        drawerElevation = 0.dp,
                         drawerContent = {
                             HomeScreenNavigationDrawer(
                                 userData = currentUserData,
