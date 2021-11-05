@@ -1,7 +1,5 @@
 package br.com.alaksion.myapplication.ui.home
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -20,7 +18,6 @@ import androidx.navigation.compose.rememberNavController
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomNavProvider
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.ui.components.HomeScreenNavigationDrawer
-import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.navigator.HomeNavigator
 import br.com.alaksion.myapplication.ui.navigator.bottomnav.HomeBottomNavigation
 import br.com.alaksion.myapplication.ui.navigator.navigateToLogin
@@ -36,8 +33,6 @@ class HomeActivity : AppCompatActivity() {
 
     private val viewModel: HomeViewModel by viewModels()
 
-    private val currentUserData: CurrentUserData by lazy { viewModel.getUserData() }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -47,6 +42,7 @@ class HomeActivity : AppCompatActivity() {
                     val navController = rememberNavController()
                     val scaffoldState = rememberScaffoldState()
                     val scope = rememberCoroutineScope()
+                    val currentUserData = viewModel.currentUserData
 
                     fun toggleDrawer() {
                         scope.launch {
@@ -63,7 +59,7 @@ class HomeActivity : AppCompatActivity() {
                         drawerElevation = 0.dp,
                         drawerContent = {
                             HomeScreenNavigationDrawer(
-                                userData = currentUserData,
+                                userData = currentUserData.value,
                                 navigateToAuthorProfile = {
                                     scope.launch {
                                         navigateToUserProfile(navController)
@@ -86,18 +82,13 @@ class HomeActivity : AppCompatActivity() {
                             navHostController = navController,
                             modifier = Modifier.padding(screenPadding),
                             toggleDrawer = { toggleDrawer() },
-                            userData = currentUserData,
+                            userData = currentUserData.value,
+                            updateUserData = { viewModel.updateUserData(it) }
                         )
                     }
 
                 }
             }
-        }
-    }
-
-    companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, HomeActivity::class.java))
         }
     }
 }

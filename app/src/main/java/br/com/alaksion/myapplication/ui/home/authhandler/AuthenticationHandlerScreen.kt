@@ -16,6 +16,7 @@ import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibil
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
+import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @Composable
@@ -23,7 +24,8 @@ fun AuthenticationHandlerScreen(
     viewModel: AuthHandlerViewModel,
     goToLoginScreen: () -> Unit,
     goToHomeScreen: () -> Unit,
-    authCode: String?
+    authCode: String?,
+    updateUserData: (CurrentUserData) -> Unit
 ) {
     val bottomSheetState = LocalBottomSheetVisibility.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -34,9 +36,11 @@ fun AuthenticationHandlerScreen(
 
     LaunchedEffect(key1 = true) {
         viewModel.authenticateUser(authCode)
-    }
 
-    LaunchedEffect(key1 = true) {
+        viewModel.currentUserData.observeEvent(lifecycleOwner) {
+            updateUserData(it)
+        }
+
         viewModel.handleNavigationSuccess.observeEvent(lifecycleOwner) {
             goToHomeScreen()
         }

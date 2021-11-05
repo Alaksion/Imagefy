@@ -36,7 +36,8 @@ fun HomeNavigator(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     toggleDrawer: () -> Unit,
-    userData: CurrentUserData,
+    updateUserData: (CurrentUserData) -> Unit,
+    userData: CurrentUserData
 ) {
     NavHost(
         navController = navHostController,
@@ -47,7 +48,8 @@ fun HomeNavigator(
             SplashScreen(
                 viewModel = hiltViewModel(),
                 navigateToHome = { navigateToHome(navHostController) },
-                navigateToLogin = { navigateToLogin(navHostController) }
+                navigateToLogin = { navigateToLogin(navHostController) },
+                updateUserData = updateUserData
             )
         }
 
@@ -63,7 +65,8 @@ fun HomeNavigator(
                 viewModel = hiltViewModel(),
                 goToLoginScreen = { navigateToLogin(navHostController) },
                 goToHomeScreen = { navigateToHome(navHostController) },
-                authCode = it.arguments?.getString("authCode")
+                authCode = it.arguments?.getString("authCode"),
+                updateUserData = updateUserData
             )
         }
 
@@ -81,8 +84,7 @@ fun HomeNavigator(
                 },
                 toggleDrawer = toggleDrawer,
                 userProfileUrl = userData.profileImageUrl,
-
-                )
+            )
         }
 
         composable(

@@ -24,7 +24,6 @@ class SplashViewModel @Inject constructor(
     private val getAuthorizationHeaderUseCase: GetAuthorizationHeaderUseCase,
     private val getCurrentUsernameUseCase: GetCurrentUsernameUseCase,
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase,
-    private val userData: CurrentUserData
 ) : BaseViewModel() {
 
     private val _authenticationState: MutableState<ViewState<Unit>> =
@@ -35,6 +34,10 @@ class SplashViewModel @Inject constructor(
     private var _isUserLogged = MutableLiveData<Event<Boolean>>()
     val isUserLogged: LiveData<Event<Boolean>>
         get() = _isUserLogged
+
+    private var _currentUserData = MutableLiveData<Event<CurrentUserData>>()
+    val currentUserData: LiveData<Event<CurrentUserData>>
+        get() = _currentUserData
 
     fun verifyUserIsLogged() {
         if (getAuthorizationHeaderUseCase().isNotEmpty()) {
@@ -74,13 +77,17 @@ class SplashViewModel @Inject constructor(
 
     private fun onGetCurrentUserDataSuccess(data: AuthorResponse?) {
         data?.let { response ->
-            userData.apply {
-                userName = response.username
-                name = response.name
-                followersCount = response.followers
-                followingCount = response.following
-                profileImageUrl = response.profileImage
-            }
+            _currentUserData.postValue(
+                Event(
+                    CurrentUserData(
+                        userName = response.username,
+                        name = response.name,
+                        followersCount = response.followers,
+                        followingCount = response.following,
+                        profileImageUrl = response.profileImage,
+                    )
+                )
+            )
             _isUserLogged.postValue(Event(true))
             return
         }

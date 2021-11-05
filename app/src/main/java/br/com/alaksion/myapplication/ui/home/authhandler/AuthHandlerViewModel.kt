@@ -27,7 +27,6 @@ class AuthHandlerViewModel @Inject constructor(
     private val storeAuthTokenUseCase: StoreAuthTokenUseCase,
     private val getCurrentUsernameUseCase: GetCurrentUsernameUseCase,
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase,
-    private val userData: CurrentUserData
 ) : BaseViewModel() {
 
     private val _authenticationState: MutableState<ViewState<Unit>> =
@@ -38,6 +37,10 @@ class AuthHandlerViewModel @Inject constructor(
     private val _handleNavigationSuccess = MutableLiveData<Event<Unit>>()
     val handleNavigationSuccess: LiveData<Event<Unit>>
         get() = _handleNavigationSuccess
+
+    private var _currentUserData = MutableLiveData<Event<CurrentUserData>>()
+    val currentUserData: LiveData<Event<CurrentUserData>>
+        get() = _currentUserData
 
 
     fun authenticateUser(authCode: String?) {
@@ -93,13 +96,17 @@ class AuthHandlerViewModel @Inject constructor(
 
     private fun onGetCurrentUserDataSuccess(data: AuthorResponse?) {
         data?.let { response ->
-            userData.apply {
-                userName = response.username
-                name = response.name
-                followersCount = response.followers
-                followingCount = response.following
-                profileImageUrl = response.profileImage
-            }
+            _currentUserData.postValue(
+                Event(
+                    CurrentUserData(
+                        userName = response.username,
+                        name = response.name,
+                        followersCount = response.followers,
+                        followingCount = response.following,
+                        profileImageUrl = response.profileImage,
+                    )
+                )
+            )
             _handleNavigationSuccess.postValue(Event(Unit))
             return
         }

@@ -21,6 +21,7 @@ import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibil
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
+import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.skydoves.landscapist.rememberDrawablePainter
 
@@ -28,7 +29,8 @@ import com.skydoves.landscapist.rememberDrawablePainter
 fun SplashScreen(
     viewModel: SplashViewModel,
     navigateToHome: () -> Unit,
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
+    updateUserData: (CurrentUserData) -> Unit
 ) {
     val bottomSheetState = LocalBottomSheetVisibility.current
     val lifeCycleOwner = LocalLifecycleOwner.current
@@ -39,12 +41,14 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = true) {
         viewModel.verifyUserIsLogged()
-    }
 
-    LaunchedEffect(key1 = true) {
         viewModel.isUserLogged.observeEvent(lifeCycleOwner) { isUserLogged ->
             if (isUserLogged) navigateToHome()
             else navigateToLogin()
+        }
+
+        viewModel.currentUserData.observeEvent(lifeCycleOwner) {
+            updateUserData(it)
         }
     }
 
