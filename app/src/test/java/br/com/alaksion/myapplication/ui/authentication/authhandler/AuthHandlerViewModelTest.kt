@@ -31,17 +31,13 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     private val storeAuthTokenUseCase: StoreAuthTokenUseCase = mockk(relaxed = true)
     private val getCurrentUsernameUseCase: GetCurrentUsernameUseCase = mockk(relaxed = true)
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase = mockk(relaxed = true)
-    private lateinit var userData: CurrentUserData
-
 
     override fun setUp() {
-        userData = CurrentUserData()
         viewModel = AuthHandlerViewModel(
             validateLoginUseCase = validateLoginUseCase,
             storeAuthTokenUseCase = storeAuthTokenUseCase,
             getCurrentUsernameUseCase = getCurrentUsernameUseCase,
             getAuthorProfileUseCase = getAuthorProfileUseCase,
-            userData = userData
         )
     }
 

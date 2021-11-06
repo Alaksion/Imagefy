@@ -14,6 +14,7 @@ import br.com.alaksion.myapplication.data.model.searchphotos.mapToData
 import br.com.alaksion.myapplication.data.model.searchphotos.mapToSearchPhotosResponse
 import br.com.alaksion.myapplication.domain.model.*
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ImagefyRepositoryImpl @Inject constructor(
@@ -83,6 +84,14 @@ class ImagefyRepositoryImpl @Inject constructor(
     override suspend fun searchPhotos(request: SearchPhotosRequest): Source<SearchPhotosResponse> {
         return remoteDataSource.searchPhotos(request.mapToData())
             .mapSource { it?.mapToSearchPhotosResponse() }
+    }
+
+    override suspend fun storeDarkModeConfig(value: Boolean) {
+        localDataSource.storeDarkModeConfig(value)
+    }
+
+    override suspend fun getCurrentDarkModeConfig(): Flow<Boolean> {
+        return localDataSource.getCurrentDarkModeConfig()
     }
 
 }

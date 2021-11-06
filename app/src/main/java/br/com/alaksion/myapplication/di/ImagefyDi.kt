@@ -72,6 +72,7 @@ object ImagefyDi {
         return context.getSharedPreferences(AppLocalConfig.SHARED_PREFS_KEY, Context.MODE_PRIVATE)
     }
 
+
     @Provides
     @Singleton
     fun provideUnsplashRemoteDataSource(
@@ -84,9 +85,10 @@ object ImagefyDi {
     @Provides
     @Singleton
     fun provideImagefyLocalDataSource(
-        sharedPreferences: SharedPreferences
+        sharedPreferences: SharedPreferences,
+        @ApplicationContext context: Context
     ): ImagefyLocalDataSource {
-        return ImagefyLocalDataSourceImpl(sharedPreferences)
+        return ImagefyLocalDataSourceImpl(sharedPreferences, context)
     }
 
     @Provides
@@ -149,6 +151,18 @@ object ImagefyDi {
     @Singleton
     fun provideGetCurrentUsernameUseCasse(repository: ImagefyRepository): GetCurrentUsernameUseCase {
         return GetCurrentUsernameUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetCurrentDarkModeConfig(repository: ImagefyRepository): GetCurrentDarkModeConfigUseCase {
+        return GetCurrentDarkModeConfigUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideStoreDarkModeConfig(repository: ImagefyRepository): StoreDarkModeConfigUseCase {
+        return StoreDarkModeConfigUseCase(repository)
     }
 
 }

@@ -12,7 +12,8 @@ object PhotoDetailsTestData {
         likedByUser = false,
         description = "",
         downloads = 100,
-        links = PhotoLinksData("")
+        links = PhotoLinksData(""),
+        color = ""
     )
 
     val DOMAIN_RESPONSE = DATA_RESPONSE.mapToPhotoDetailResponse()

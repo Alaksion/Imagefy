@@ -67,14 +67,10 @@ fun SplashScreenContent(
     goToLoginScreen: () -> Unit,
     isPreview: Boolean = false
 ) {
-    ImagefyTheme {
-        Scaffold() {
-            when (screenState) {
-                is ViewState.Loading, is ViewState.Idle, is ViewState.Ready ->
-                    SplashContentLoading(isPreview)
-                is ViewState.Error -> SplashContentError(onClickTryAgain, goToLoginScreen)
-            }
-        }
+    when (screenState) {
+        is ViewState.Loading, is ViewState.Idle, is ViewState.Ready ->
+            SplashContentLoading(isPreview)
+        is ViewState.Error -> SplashContentError(onClickTryAgain, goToLoginScreen)
     }
 }
 
@@ -155,7 +151,10 @@ fun SplashContentLoading(
         AppLogo(isPreview)
         Text(
             "Imagefy",
-            style = MaterialTheme.typography.h5.copy(textAlign = TextAlign.Center),
+            style = MaterialTheme.typography.h5.copy(
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.onBackground
+            ),
             modifier = Modifier
                 .padding()
                 .padding(bottom = 10.dp)
@@ -167,7 +166,10 @@ fun SplashContentLoading(
         )
         Text(
             "Loading content...",
-            style = MaterialTheme.typography.body2.copy(textAlign = TextAlign.Center)
+            style = MaterialTheme.typography.body2.copy(
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.onBackground
+            )
         )
     }
 }
@@ -175,10 +177,10 @@ fun SplashContentLoading(
 @Composable
 @Preview
 fun SplashScreenPreview() {
-    ImagefyTheme {
+    ImagefyTheme(true) {
         Scaffold() {
             SplashScreenContent(
-                screenState = ViewState.Error(),
+                screenState = ViewState.Loading (),
                 onClickTryAgain = { /*TODO*/ },
                 goToLoginScreen = {},
                 isPreview = true

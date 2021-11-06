@@ -1,7 +1,10 @@
 package br.com.alaksion.myapplication.ui.home.authhandler
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
@@ -17,7 +20,6 @@ import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
-import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @Composable
 fun AuthenticationHandlerScreen(
@@ -60,14 +62,10 @@ fun AuthHandlerContent(
     onClickTryAgain: () -> Unit,
     goToLoginScreen: () -> Unit
 ) {
-    ImagefyTheme {
-        Scaffold {
-            when (screenState) {
-                is ViewState.Loading, is ViewState.Ready, is ViewState.Idle ->
-                    AuthHandlerContentLoading()
-                is ViewState.Error -> AuthHandlerContentError(onClickTryAgain, goToLoginScreen)
-            }
-        }
+    when (screenState) {
+        is ViewState.Loading, is ViewState.Ready, is ViewState.Idle ->
+            AuthHandlerContentLoading()
+        is ViewState.Error -> AuthHandlerContentError(onClickTryAgain, goToLoginScreen)
     }
 }
 

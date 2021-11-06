@@ -4,14 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Power
+import androidx.compose.material.icons.outlined.PowerSettingsNew
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +39,7 @@ fun HomeScreenNavigationDrawer(
     navigateToAuthorProfile: () -> Unit,
     isPreviewMode: Boolean = false,
     onLogoutClick: () -> Unit,
+    toggleDarkMode: () -> Unit
 ) {
     val horizontalPadding = 20.dp
 
@@ -146,30 +147,31 @@ fun HomeScreenNavigationDrawer(
                 )
             }
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = horizontalPadding)
-                .clickable {
-                    onLogoutClick()
-                },
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Icon(
-                imageVector = Icons.Default.Logout,
-                contentDescription = null,
-                tint = MaterialTheme.colors.onBackground,
+            Divider()
+            Row(
                 modifier = Modifier
-                    .padding()
-                    .padding(end = 5.dp)
-            )
-            Text(
-                "Logout",
-                style = MaterialTheme.typography.body2.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colors.onBackground
-                )
-            )
+                    .fillMaxWidth()
+                    .padding(horizontal = horizontalPadding),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                IconButton(onClick = { toggleDarkMode() }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Lightbulb,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.onBackground
+                    )
+                }
+                IconButton(onClick = { onLogoutClick() }) {
+                    Icon(
+                        imageVector = Icons.Outlined.PowerSettingsNew,
+                        contentDescription = null,
+                        tint = MaterialTheme.colors.secondary
+                    )
+                }
+            }
         }
     }
 }
@@ -218,7 +220,7 @@ fun FollowingData(followersCount: Int, followingCount: Int, modifier: Modifier =
 @Preview(showBackground = true)
 @Composable
 fun DrawerPreview() {
-    ImagefyTheme(true) {
+    ImagefyTheme(false) {
         HomeScreenNavigationDrawer(
             isPreviewMode = true,
             userData = CurrentUserData(
@@ -230,6 +232,7 @@ fun DrawerPreview() {
             ),
             navigateToAuthorProfile = {},
             onLogoutClick = {},
+            toggleDarkMode = {}
         )
     }
 }

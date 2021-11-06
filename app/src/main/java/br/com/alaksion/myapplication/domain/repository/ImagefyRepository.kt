@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.domain.repository
 
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.domain.model.*
+import kotlinx.coroutines.flow.Flow
 
 interface ImagefyRepository {
 
@@ -27,10 +28,14 @@ interface ImagefyRepository {
 
     suspend fun getCurrentUsername(): Source<CurrentUserResponse>
 
+    suspend fun searchPhotos(request: SearchPhotosRequest): Source<SearchPhotosResponse>
+
     fun storeAuthorizationHeader(value: String)
 
     fun clearAuthorizationHeader()
 
-    suspend fun searchPhotos(request: SearchPhotosRequest): Source<SearchPhotosResponse>
+    suspend fun storeDarkModeConfig(value: Boolean)
+
+    suspend fun getCurrentDarkModeConfig(): Flow<Boolean>
 
 }

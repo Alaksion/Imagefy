@@ -13,7 +13,8 @@ object GetImagesTestData {
             likedByUser = false,
             description = "",
             downloads = 100,
-            links = PhotoLinksData("")
+            links = PhotoLinksData(""),
+            color = ""
         )
     )
 
