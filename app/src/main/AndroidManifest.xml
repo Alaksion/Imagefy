@@ -14,19 +14,21 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplication">
+        android:theme="@style/Theme.App.Starting">
         <activity
             android:name=".ui.home.HomeActivity"
+            android:configChanges="uiMode"
             android:exported="true"
             android:label="@string/app_name"
-            android:configChanges="uiMode"
-            android:theme="@style/Theme.MyApplication">
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="imagefy.com.br"
                     android:scheme="https" />
