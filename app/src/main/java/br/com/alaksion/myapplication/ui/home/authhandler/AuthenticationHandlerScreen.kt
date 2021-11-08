@@ -12,8 +12,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
@@ -84,7 +86,7 @@ fun AuthHandlerContentLoading() {
                 .padding(bottom = 20.dp)
         )
         Text(
-            "Validating authentication, this might take a while.",
+            text = stringResource(id = R.string.auth_handler_loading),
             style = MaterialTheme.typography.h5
                 .copy(textAlign = TextAlign.Center),
         )
@@ -103,7 +105,7 @@ fun AuthHandlerContentError(
         verticalArrangement = Arrangement.Center
     ) {
         TryAgain(
-            message = "An error occurred and your login could not be authenticated, please try again.",
+            message = stringResource(id = R.string.auth_handler_error),
             icon = {
                 Icon(
                     imageVector = Icons.Default.Report,
@@ -123,7 +125,10 @@ fun AuthHandlerContentError(
                 .padding(top = 25.dp)
                 .height(48.dp)
         ) {
-            Text("Go to login screen", style = MaterialTheme.typography.body2)
+            Text(
+                stringResource(id = R.string.auth_handler_go_to_login),
+                style = MaterialTheme.typography.body2
+            )
         }
     }
 }

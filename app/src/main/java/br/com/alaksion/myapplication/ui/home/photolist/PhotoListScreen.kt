@@ -16,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
+import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.TryAgain
@@ -43,13 +45,17 @@ fun PhotoListScreen(
         bottomSheetState.value = true
     }
 
-    LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true) {
         viewModel.getImages()
     }
 
-    LaunchedEffect(key1 = true){
+    LaunchedEffect(key1 = true) {
         viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
-            Toast.makeText(context, "Could not load more images, try again later", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                context,
+                context.getString(R.string.load_more_error),
+                Toast.LENGTH_SHORT
+            )
                 .show()
         }
     }
@@ -99,7 +105,7 @@ internal fun PhotoListScreenContent(
                     contentAlignment = Alignment.Center
                 ) {
                     TryAgain(
-                        message = "An error occurred and images could not be loaded, please try again later",
+                        message = stringResource(id = R.string.photo_list_error),
                         icon = {
                             Icon(
                                 imageVector = Icons.Default.Report,

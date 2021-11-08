@@ -11,10 +11,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
@@ -179,7 +181,7 @@ fun UserProfileError(
 ) {
     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
         TryAgain(
-            message = "An error occurred and author data could not be loaded, please try again later",
+            message = stringResource(id = R.string.author_details_error),
             icon = {
                 Icon(
                     imageVector = Icons.Default.Report,

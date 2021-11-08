@@ -13,8 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.skydoves.landscapist.glide.GlideImage
@@ -75,7 +77,7 @@ fun UserDetailsHeader(
         )
         AuthorHeaderItem(
             value = followersCount.formatNumber(),
-            label = "Followers",
+            label = stringResource(id = R.string.followers),
             modifier = Modifier
                 .weight(1.0f)
                 .padding()
@@ -83,7 +85,7 @@ fun UserDetailsHeader(
         )
         AuthorHeaderItem(
             value = followingCount.formatNumber(),
-            label = "Following",
+            label = stringResource(id = R.string.following),
             modifier = Modifier
                 .weight(1.0f)
                 .padding()

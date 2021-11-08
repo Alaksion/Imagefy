@@ -21,11 +21,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
@@ -57,7 +59,7 @@ fun SearchPhotosScreen(
         viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
             Toast.makeText(
                 context,
-                "Could not load more images, try again later",
+                context.getString(R.string.load_more_error),
                 Toast.LENGTH_SHORT
             )
                 .show()
@@ -126,7 +128,7 @@ fun SearchPhotosContent(
                         tint = MaterialTheme.colors.onBackground
                     )
                     Text(
-                        text = "Whoops nothing to see here yet, try to search for something cute like fluffy cats.",
+                        text = stringResource(id = R.string.search_photos_idle),
                         style = MaterialTheme.typography.h6.copy(
                             textAlign = TextAlign.Center,
                             fontWeight = FontWeight.Bold,
@@ -166,7 +168,7 @@ fun SearchPhotosContent(
                 contentAlignment = Alignment.Center
             ) {
                 TryAgain(
-                    message = "An error occurred and your login could not be authenticated, please try again.",
+                    message = stringResource(id = R.string.search_photos_error),
                     icon = {
                         Icon(
                             imageVector = Icons.Default.Report,
@@ -203,7 +205,7 @@ fun SearchPhotosEmpty(modifier: Modifier = Modifier) {
             tint = MaterialTheme.colors.onBackground
         )
         Text(
-            text = "Whoops, no results were found.",
+            text = stringResource(id = R.string.search_photos_empty),
             style = MaterialTheme.typography.h6.copy(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold

@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TopAppBar
@@ -32,7 +33,7 @@ fun PhotoListTopBar(
 
     TopAppBar(
         elevation = 0.dp,
-        backgroundColor = Color.Transparent,
+        backgroundColor = MaterialTheme.colors.background,
         contentPadding = PaddingValues(start = 5.dp, end = 5.dp, top = 5.dp),
     ) {
         Column() {

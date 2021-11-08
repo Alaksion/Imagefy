@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -81,7 +82,7 @@ fun LoginScreenContent(
         ) {
             Image(painter = painterResource(id = R.drawable.img_login), null)
             Text(
-                text = "Share your best moments with the internet",
+                text = stringResource(id = R.string.login_title),
                 style = MaterialTheme.typography.h5.copy(
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colors.onBackground
@@ -91,7 +92,7 @@ fun LoginScreenContent(
                     .padding(top = 10.dp, bottom = 5.dp)
             )
             Text(
-                text = "Bring together pictures of your backyard, pets, hobbies, morning coffee and everything that makes your day brighter.",
+                text = stringResource(id = R.string.login_description),
                 style = MaterialTheme.typography.body2.copy(
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colors.onBackground.copy(0.66f)
@@ -117,13 +118,13 @@ fun LoginScreenContent(
                                 color = MaterialTheme.colors.onBackground.copy(0.66f)
                             )
                     ) {
-                        append("Don't have an account? ")
+                        append(stringResource(id = R.string.login_dont_have_account))
                     }
                     withStyle(
                         AppTypoGraph.span_roboto_bold()
                             .copy(fontSize = 14.sp)
                     ) {
-                        append("Register now!")
+                        append(stringResource(id = R.string.login_register))
                     }
                 }
             )
@@ -135,7 +136,7 @@ fun LoginScreenContent(
                     .height(48.dp)
             ) {
                 Text(
-                    "Sign in",
+                    stringResource(id = R.string.login_sign_in),
                     style = MaterialTheme.typography.body2
                         .copy(fontWeight = FontWeight.Bold, color = MaterialTheme.colors.onPrimary)
                 )

@@ -12,10 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
@@ -109,7 +111,7 @@ fun SplashContentError(
         verticalArrangement = Arrangement.Center
     ) {
         TryAgain(
-            message = "An error occurred and your login could not be authenticated, please try again.",
+            message = stringResource(id = R.string.splash_login_error),
             icon = {
                 Icon(
                     imageVector = Icons.Default.Report,
@@ -150,7 +152,7 @@ fun SplashContentLoading(
     ) {
         AppLogo(isPreview)
         Text(
-            "Imagefy",
+            text = stringResource(id = R.string.app_name),
             style = MaterialTheme.typography.h5.copy(
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colors.onBackground
@@ -165,7 +167,7 @@ fun SplashContentLoading(
                 .padding(bottom = 10.dp)
         )
         Text(
-            "Loading content...",
+            text = stringResource(id = R.string.splash_loading_content),
             style = MaterialTheme.typography.body2.copy(
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colors.onBackground
@@ -180,7 +182,7 @@ fun SplashScreenPreview() {
     ImagefyTheme(true) {
         Scaffold() {
             SplashScreenContent(
-                screenState = ViewState.Loading (),
+                screenState = ViewState.Loading(),
                 onClickTryAgain = { /*TODO*/ },
                 goToLoginScreen = {},
                 isPreview = true

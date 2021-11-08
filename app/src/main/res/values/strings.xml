@@ -1,3 +1,38 @@
 <resources>
     <string name="app_name">Imagefy</string>
+    <string name="following">Following</string>
+    <string name="followers">Followers</string>
+    <string name="load_more_error">Could not load more images, try again later</string>
+
+    <!-- Splash -->
+    <string name="splash_login_error">An error occurred and your login could not be authenticated, please try again.</string>
+    <string name="splash_loading_content">Loading content…</string>
+
+    <!-- Login -->
+    <string name="login_title">Share your best moments with the internet</string>
+    <string name="login_description">Bring together pictures of your backyard, pets, hobbies, morning coffee and everything that makes your day brighter.</string>
+    <string name="login_dont_have_account">Don\'t have an account? </string>
+    <string name="login_register">Register now!</string>
+    <string name="login_sign_in">Sign in</string>
+
+    <!-- Auth Handler -->
+    <string name="auth_handler_loading">Validating authentication, this might take a while.</string>
+    <string name="auth_handler_error">An error occurred and your login could not be authenticated, please try again.</string>
+    <string name="auth_handler_go_to_login">Go to login screen</string>
+
+    <!-- Photo List -->
+    <string name="photo_list_error">An error occurred and images could not be loaded, please try again later</string>
+
+    <!-- Author Details -->
+    <string name="author_details_images_error">Could not load user photos, try again later"</string>
+    <string name="author_details_error">An error occurred and author data could not be loaded, please try again later</string>
+    <string name="author_details_personal_portfoloio">Personal portfolio</string>
+
+    <!-- Search photos -->
+    <string name="search_photos_idle">Whoops nothing to see here yet, try to search for something cute like fluffy cats.</string>
+    <string name="search_photos_error">An error occurred and images could not be loaded, please try again later</string>
+    <string name="search_photos_empty">Whoops, no results were found.</string>
+
+    <!-- General -->
+    <string name="image_load_error">An error occurred and this image could not be loaded</string>
 </resources>
