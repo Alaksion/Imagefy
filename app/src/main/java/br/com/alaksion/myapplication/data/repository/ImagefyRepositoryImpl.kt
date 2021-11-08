@@ -90,7 +90,7 @@ class ImagefyRepositoryImpl @Inject constructor(
         localDataSource.storeDarkModeConfig(value)
     }
 
-    override suspend fun getCurrentDarkModeConfig(): Flow<Boolean> {
+    override fun getCurrentDarkModeConfig(): Flow<Boolean> {
         return localDataSource.getCurrentDarkModeConfig()
     }
 

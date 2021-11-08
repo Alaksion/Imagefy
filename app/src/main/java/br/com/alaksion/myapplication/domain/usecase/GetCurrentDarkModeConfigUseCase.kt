@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class GetCurrentDarkModeConfigUseCase @Inject constructor(private val repository: ImagefyRepository) {
 
-    suspend operator fun invoke(): Flow<Boolean> {
+    operator fun invoke(): Flow<Boolean> {
         return repository.getCurrentDarkModeConfig()
     }
 

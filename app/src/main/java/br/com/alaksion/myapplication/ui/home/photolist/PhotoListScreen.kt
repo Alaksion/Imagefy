@@ -41,9 +41,9 @@ fun PhotoListScreen(
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-    LaunchedEffect(key1 = bottomSheetState.value) {
-        bottomSheetState.value = true
-    }
+//    LaunchedEffect(key1 = bottomSheetState.value) {
+//        bottomSheetState.value = true
+//    }
 
     LaunchedEffect(key1 = true) {
         viewModel.getImages()

@@ -14,6 +14,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,8 +41,11 @@ fun LoginScreen(
     val context = LocalContext.current
     val bottomSheetState = LocalBottomSheetVisibility.current
 
-    LaunchedEffect(key1 = bottomSheetState.value) {
+    DisposableEffect(key1 = true) {
         bottomSheetState.value = false
+        onDispose {
+            bottomSheetState.value = true
+        }
     }
 
     fun navigateToCreateAccount() {

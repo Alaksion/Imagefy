@@ -16,10 +16,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -54,8 +51,11 @@ fun PhotoViewerScreen(
 ) {
     val bottomSheetState = LocalBottomSheetVisibility.current
 
-    LaunchedEffect(bottomSheetState.value) {
+    DisposableEffect(key1 = true) {
         bottomSheetState.value = false
+        onDispose {
+            bottomSheetState.value = true
+        }
     }
 
     LaunchedEffect(key1 = true) {

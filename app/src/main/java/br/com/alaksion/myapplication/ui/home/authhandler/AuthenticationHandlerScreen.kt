@@ -8,6 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,8 +35,11 @@ fun AuthenticationHandlerScreen(
     val bottomSheetState = LocalBottomSheetVisibility.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(key1 = bottomSheetState.value) {
+    DisposableEffect(key1 = true) {
         bottomSheetState.value = false
+        onDispose {
+            bottomSheetState.value = true
+        }
     }
 
     LaunchedEffect(key1 = true) {

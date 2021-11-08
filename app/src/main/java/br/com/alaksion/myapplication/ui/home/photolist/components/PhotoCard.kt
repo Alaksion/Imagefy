@@ -34,10 +34,7 @@ import androidx.compose.ui.zIndex
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
-import br.com.alaksion.myapplication.ui.theme.LightGray
-import br.com.alaksion.myapplication.ui.theme.MediumGray
+import br.com.alaksion.myapplication.ui.theme.*
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
@@ -141,7 +138,7 @@ fun PhotoCard(
             Icon(
                 imageVector = Icons.Filled.Favorite,
                 contentDescription = null,
-                tint = MaterialTheme.colors.background.copy(alpha = 0.95f),
+                tint = OffWhite.copy(alpha = 0.95f),
                 modifier = Modifier
                     .size(120.dp)
                     .align(Alignment.Center)

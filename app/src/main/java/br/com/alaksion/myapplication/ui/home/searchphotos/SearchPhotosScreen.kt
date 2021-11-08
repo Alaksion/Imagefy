@@ -50,10 +50,9 @@ fun SearchPhotosScreen(
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-    LaunchedEffect(bottomSheetState.value) {
-        bottomSheetState.value = true
-    }
-
+//    LaunchedEffect(bottomSheetState.value) {
+//        bottomSheetState.value = true
+//    }
 
     LaunchedEffect(true) {
         viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {

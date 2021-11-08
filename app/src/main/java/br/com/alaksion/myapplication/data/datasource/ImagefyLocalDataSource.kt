@@ -10,6 +10,6 @@ interface ImagefyLocalDataSource {
 
     suspend fun storeDarkModeConfig(value: Boolean)
 
-    suspend fun getCurrentDarkModeConfig(): Flow<Boolean>
+    fun getCurrentDarkModeConfig(): Flow<Boolean>
 
 }

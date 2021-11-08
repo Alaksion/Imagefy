@@ -36,7 +36,7 @@ class ImagefyLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun getCurrentDarkModeConfig(): Flow<Boolean> {
+    override fun getCurrentDarkModeConfig(): Flow<Boolean> {
         return dataStore.data.map { prefs ->
             prefs[AppLocalConfig.DARK_MODE_KEY].handleOptional()
         }
