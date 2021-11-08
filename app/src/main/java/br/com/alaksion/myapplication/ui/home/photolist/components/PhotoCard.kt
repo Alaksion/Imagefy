@@ -1,6 +1,5 @@
 package br.com.alaksion.myapplication.ui.home.photolist.components
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -9,13 +8,11 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +24,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +34,6 @@ import androidx.compose.ui.zIndex
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
-import br.com.alaksion.myapplication.ui.home.photolist.components.photoinfobottomsheet.PhotoInfoBottomSheet
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
 import br.com.alaksion.myapplication.ui.theme.LightGray
@@ -94,7 +89,6 @@ fun PhotoCard(
                 .zIndex(0f)
         ) {
             PhotoCardHeader(
-                imageUrl = photoContent.photoUrl,
                 userName = photoContent.authorUserName,
                 name = photoContent.authorName,
                 profileImageUrl = photoContent.authorProfileThumbUrl,
@@ -163,9 +157,7 @@ internal fun PhotoCardHeader(
     name: String,
     profileImageUrl: String,
     modifier: Modifier = Modifier,
-    imageUrl: String
 ) {
-    val fragManager = (LocalContext.current as AppCompatActivity).supportFragmentManager
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -212,17 +204,6 @@ internal fun PhotoCardHeader(
                     style = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.onBackground)
                 )
             }
-        }
-
-        IconButton(
-            onClick = { PhotoInfoBottomSheet.show(fragManager, imageUrl) },
-            modifier = Modifier.size(48.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                contentDescription = null,
-                tint = MaterialTheme.colors.onBackground
-            )
         }
     }
 }

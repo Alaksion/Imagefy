@@ -12,12 +12,14 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -31,7 +33,6 @@ import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.common.extensions.invert
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
-import br.com.alaksion.myapplication.common.utils.downloadImage
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
@@ -40,7 +41,6 @@ import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
 import br.com.alaksion.myapplication.ui.theme.ErrorLightRed
 import br.com.alaksion.myapplication.ui.theme.OffWhite
-import kotlinx.coroutines.launch
 
 
 const val PHOTO_ID_ARG = "photo_url"
@@ -80,21 +80,7 @@ internal fun PhotoViewerScreenContent(
     onRateImage: (isLike: Boolean) -> Unit,
     onClickTryAgain: () -> Unit
 ) {
-    val showDropdown = remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-
-    fun toggleDropDown() {
-        showDropdown.value = showDropdown.value.not()
-    }
-
-    fun downloadImage() {
-        coroutineScope.launch {
-            toggleDropDown()
-            val url = (photoData as ViewState.Ready).data.downloadLink
-            context.downloadImage(url)
-        }
-    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -114,28 +100,6 @@ internal fun PhotoViewerScreenContent(
                         contentDescription = null,
                         tint = MaterialTheme.colors.onBackground,
                     )
-                }
-                if (photoData is ViewState.Ready) {
-                    Column {
-                        IconButton(
-                            onClick = { toggleDropDown() },
-                            modifier = Modifier.size(48.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.MoreVert,
-                                contentDescription = null,
-                                tint = MaterialTheme.colors.onBackground
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = showDropdown.value,
-                            onDismissRequest = { toggleDropDown() }
-                        ) {
-                            DropdownMenuItem(onClick = { downloadImage() }) {
-                                Text("Save Image")
-                            }
-                        }
-                    }
                 }
             }
         }
