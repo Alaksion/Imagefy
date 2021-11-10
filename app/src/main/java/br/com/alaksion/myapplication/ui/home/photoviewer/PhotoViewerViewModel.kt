@@ -23,14 +23,18 @@ class PhotoViewerViewModel @Inject constructor(
     val photoData: State<ViewState<PhotoDetailResponse>>
         get() = _photoData
 
-    fun getPhotoDetails(photoId: String) {
-        _photoData.value = ViewState.Loading()
-        viewModelScope.launch {
-            handleApiResponse(
-                source = getPhotoDetailsUseCase(photoId),
-                onSuccess = { data -> onGetPhotoDetailsSuccess(data) },
-                onError = { error -> onGetPhotoDetailsError(error) }
-            )
+    private val photoId: String = ""
+
+    fun getPhotoDetails(currentPhotoId: String) {
+        if (photoId != currentPhotoId) {
+            _photoData.value = ViewState.Loading()
+            viewModelScope.launch {
+                handleApiResponse(
+                    source = getPhotoDetailsUseCase(currentPhotoId),
+                    onSuccess = { data -> onGetPhotoDetailsSuccess(data) },
+                    onError = { error -> onGetPhotoDetailsError(error) }
+                )
+            }
         }
     }
 

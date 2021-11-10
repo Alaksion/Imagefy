@@ -10,7 +10,7 @@ import br.com.alaksion.myapplication.domain.usecase.GetCurrentDarkModeConfigUseC
 import br.com.alaksion.myapplication.domain.usecase.StoreDarkModeConfigUseCase
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +29,10 @@ class HomeViewModel @Inject constructor(
     val isConfigDarkMode: State<Boolean>
         get() = _isConfigDarkMode
 
+    init {
+        getCurrentDarkModeConfig()
+    }
+
     fun toggleDarkMode() {
         viewModelScope.launch {
             _isConfigDarkMode.invert()
@@ -44,7 +48,11 @@ class HomeViewModel @Inject constructor(
         _currentUserData.value = current
     }
 
-    fun getCurrentDarkModeConfig(): Flow<Boolean> {
-        return getCurrentDarkModeConfigUseCase()
+    private fun getCurrentDarkModeConfig() {
+        viewModelScope.launch {
+            getCurrentDarkModeConfigUseCase().collect {
+                _isConfigDarkMode.value = it
+            }
+        }
     }
 }

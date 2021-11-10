@@ -7,9 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -33,6 +31,7 @@ import kotlinx.coroutines.launch
 @ExperimentalFoundationApi
 @AndroidEntryPoint
 @ExperimentalAnimationApi
+@ExperimentalMaterialApi
 class HomeActivity : AppCompatActivity() {
 
     private val viewModel: HomeViewModel by viewModels()
@@ -110,5 +109,4 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
-
 }

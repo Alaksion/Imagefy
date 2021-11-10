@@ -47,16 +47,18 @@ class AuthorDetailsViewModel @Inject constructor(
     private var authorUsername: String = ""
     private var page = 1
 
-    fun getAuthorProfileData(authorUsername: String) {
-        this.authorUsername = authorUsername
+    fun getAuthorProfileData(currentAuthorUsername: String) {
+        if (currentAuthorUsername != this.authorUsername) {
+            this.authorUsername = currentAuthorUsername
 
-        viewModelScope.launch {
-            _authorData.value = ViewState.Loading()
-            handleApiResponse(
-                source = getAuthorProfileUseCase(authorUsername),
-                onError = { error -> onGetAuthorDataError(error) },
-                onSuccess = { data -> onGetAuthorDataSuccess(data) }
-            )
+            viewModelScope.launch {
+                _authorData.value = ViewState.Loading()
+                handleApiResponse(
+                    source = getAuthorProfileUseCase(currentAuthorUsername),
+                    onError = { error -> onGetAuthorDataError(error) },
+                    onSuccess = { data -> onGetAuthorDataSuccess(data) }
+                )
+            }
         }
     }
 

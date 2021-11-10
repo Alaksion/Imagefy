@@ -57,11 +57,11 @@ fun AuthorDetailsScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = authorUsername) {
         viewModel.getAuthorProfileData(authorUsername)
     }
 
-    LaunchedEffect(key1 = true) {
+    DisposableEffect(key1 = true) {
         viewModel.showErrorToast.observeEvent(lifecycleOwner) {
             Toast.makeText(
                 context,
@@ -69,6 +69,9 @@ fun AuthorDetailsScreen(
                 Toast.LENGTH_SHORT
             )
                 .show()
+        }
+        onDispose {
+            viewModel.showErrorToast.removeObservers(lifecycleOwner)
         }
     }
 

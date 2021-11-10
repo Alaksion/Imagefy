@@ -39,6 +39,10 @@ class SplashViewModel @Inject constructor(
     val currentUserData: LiveData<Event<CurrentUserData>>
         get() = _currentUserData
 
+    init {
+        verifyUserIsLogged()
+    }
+
     fun verifyUserIsLogged() {
         if (getAuthorizationHeaderUseCase().isNotEmpty()) {
             getCurrentUsername()

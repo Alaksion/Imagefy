@@ -42,6 +42,10 @@ class PhotoListViewModel @Inject constructor(
 
     private var currentPage = 1
 
+    init {
+        getImages()
+    }
+
     fun getImages() {
         _screenState.value = ViewState.Loading()
         viewModelScope.launch {

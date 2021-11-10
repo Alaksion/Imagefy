@@ -12,19 +12,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import br.com.alaksion.myapplication.BuildConfig
+import br.com.alaksion.myapplication.common.extensions.getVmStoreOwner
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthenticationHandlerScreen
 import br.com.alaksion.myapplication.ui.home.authordetails.AUTHOR_USERNAME_ARG
 import br.com.alaksion.myapplication.ui.home.authordetails.AuthorDetailsScreen
 import br.com.alaksion.myapplication.ui.home.login.LoginScreen
 import br.com.alaksion.myapplication.ui.home.photolist.PhotoListScreen
-import br.com.alaksion.myapplication.ui.home.photolist.PhotoListViewModel
 import br.com.alaksion.myapplication.ui.home.photoviewer.PHOTO_ID_ARG
 import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerScreen
 import br.com.alaksion.myapplication.ui.home.searchphotos.SearchPhotosScreen
-import br.com.alaksion.myapplication.ui.home.searchphotos.SearchPhotosViewModel
 import br.com.alaksion.myapplication.ui.home.splash.SplashScreen
 import br.com.alaksion.myapplication.ui.home.userprofile.UserProfileScreen
-import br.com.alaksion.myapplication.ui.home.userprofile.UserProfileViewModel
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
 
 private const val uri = BuildConfig.REDIRECT_URI
@@ -71,11 +69,8 @@ fun HomeNavigator(
         }
 
         composable(route = HomeScreen.PhotosList().route) {
-            val viewModel = hiltViewModel<PhotoListViewModel>(
-                navHostController.getViewModelStoreOwner(navHostController.graph.id)
-            )
             PhotoListScreen(
-                viewModel,
+                viewModel = hiltViewModel(viewModelStoreOwner = navHostController.getVmStoreOwner()),
                 navigateToAuthorDetails = { authorId ->
                     navigateToAuthorDetails(
                         navHostController,
@@ -90,11 +85,8 @@ fun HomeNavigator(
         composable(
             route = HomeScreen.SearchPhotos().route
         ) {
-            val viewModel = hiltViewModel<SearchPhotosViewModel>(
-                navHostController.getViewModelStoreOwner(navHostController.graph.id)
-            )
             SearchPhotosScreen(
-                viewModel = viewModel,
+                viewModel = hiltViewModel(viewModelStoreOwner = navHostController.getVmStoreOwner()),
                 toggleDrawer = toggleDrawer,
                 userProfileUrl = userData.profileImageUrl,
             )
@@ -103,11 +95,8 @@ fun HomeNavigator(
         composable(
             route = HomeScreen.UserProfile().route
         ) {
-            val viewModel = hiltViewModel<UserProfileViewModel>(
-                navHostController.getViewModelStoreOwner(navHostController.graph.id)
-            )
             UserProfileScreen(
-                viewModel = viewModel,
+                viewModel = hiltViewModel(it),
                 popBackStack = { navHostController.popBackStack() },
                 authorUsername = userData.userName,
                 navigateToPhotoViewer = { photoId ->
@@ -126,7 +115,7 @@ fun HomeNavigator(
         ) {
             it.arguments?.getString(AUTHOR_USERNAME_ARG)?.let { authorUsername ->
                 AuthorDetailsScreen(
-                    viewModel = hiltViewModel(),
+                    viewModel = hiltViewModel(it),
                     authorUsername = authorUsername,
                     popBackStack = { navHostController.popBackStack() },
                     navigateToPhotoViewer = { photoId ->
@@ -145,11 +134,10 @@ fun HomeNavigator(
             it.arguments?.getString(PHOTO_ID_ARG)
                 ?.let { photoId ->
                     PhotoViewerScreen(
-                        viewModel = hiltViewModel(),
+                        viewModel = hiltViewModel(viewModelStoreOwner = navHostController.getVmStoreOwner()),
                         photoId = photoId,
                         popBackStack = { navHostController.popBackStack() },
-
-                        )
+                    )
                 }
         }
     }

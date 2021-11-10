@@ -8,7 +8,6 @@ import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -45,16 +44,18 @@ fun SplashScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
-        viewModel.verifyUserIsLogged()
-
+    DisposableEffect(key1 = true) {
         viewModel.isUserLogged.observeEvent(lifeCycleOwner) { isUserLogged ->
             if (isUserLogged) navigateToHome()
             else navigateToLogin()
         }
-
         viewModel.currentUserData.observeEvent(lifeCycleOwner) {
             updateUserData(it)
+        }
+
+        onDispose {
+            viewModel.currentUserData.removeObservers(lifeCycleOwner)
+            viewModel.isUserLogged.removeObservers(lifeCycleOwner)
         }
     }
 

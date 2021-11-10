@@ -11,6 +11,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,19 +38,10 @@ fun PhotoListScreen(
     toggleDrawer: () -> Unit,
     userProfileUrl: String,
 ) {
-    val bottomSheetState = LocalBottomSheetVisibility.current
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-//    LaunchedEffect(key1 = bottomSheetState.value) {
-//        bottomSheetState.value = true
-//    }
-
-    LaunchedEffect(key1 = true) {
-        viewModel.getImages()
-    }
-
-    LaunchedEffect(key1 = true) {
+    DisposableEffect(key1 = true) {
         viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
             Toast.makeText(
                 context,
@@ -57,6 +49,9 @@ fun PhotoListScreen(
                 Toast.LENGTH_SHORT
             )
                 .show()
+        }
+        onDispose {
+            viewModel.showMorePhotosError.removeObservers(lifeCycleOwner)
         }
     }
 
