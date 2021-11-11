@@ -17,6 +17,7 @@ import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -53,11 +54,13 @@ class AuthorDetailsViewModel @Inject constructor(
 
             viewModelScope.launch {
                 _authorData.value = ViewState.Loading()
-                handleApiResponse(
-                    source = getAuthorProfileUseCase(currentAuthorUsername),
-                    onError = { error -> onGetAuthorDataError(error) },
-                    onSuccess = { data -> onGetAuthorDataSuccess(data) }
-                )
+                getAuthorProfileUseCase(currentAuthorUsername).collect {
+                    handleApiResponse(
+                        source = it,
+                        onError = { error -> onGetAuthorDataError(error) },
+                        onSuccess = { data -> onGetAuthorDataSuccess(data) }
+                    )
+                }
             }
         }
     }
@@ -77,14 +80,16 @@ class AuthorDetailsViewModel @Inject constructor(
 
     private fun getAuthorPhotos() {
         viewModelScope.launch {
-            handleApiResponse(
-                source = getAuthorPhotosUseCase(
-                    username = authorUsername,
-                    page = page
-                ),
-                onSuccess = { data -> onGetAuthorPhotosSuccess(data) },
-                onError = { error -> onGetAuthorPhotosError(error) }
-            )
+            getAuthorPhotosUseCase(
+                username = authorUsername,
+                page = page
+            ).collect {
+                handleApiResponse(
+                    source = it,
+                    onSuccess = { data -> onGetAuthorPhotosSuccess(data) },
+                    onError = { error -> onGetAuthorPhotosError(error) }
+                )
+            }
         }
     }
 
@@ -104,14 +109,16 @@ class AuthorDetailsViewModel @Inject constructor(
     fun getMoreAuthorPhotos() {
         page++
         viewModelScope.launch {
-            handleApiResponse(
-                source = getAuthorPhotosUseCase(
-                    username = authorUsername,
-                    page = page
-                ),
-                onSuccess = { data -> onGetMorePhotosSuccess(data) },
-                onError = { onGetMorePhotosError() }
-            )
+            getAuthorPhotosUseCase(
+                username = authorUsername,
+                page = page
+            ).collect {
+                handleApiResponse(
+                    source = it,
+                    onSuccess = { data -> onGetMorePhotosSuccess(data) },
+                    onError = { onGetMorePhotosError() }
+                )
+            }
         }
     }
 

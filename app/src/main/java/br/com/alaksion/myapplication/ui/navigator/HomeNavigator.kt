@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import br.com.alaksion.myapplication.BuildConfig
 import br.com.alaksion.myapplication.common.extensions.getVmStoreOwner
+import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthenticationHandlerScreen
 import br.com.alaksion.myapplication.ui.home.authordetails.AUTHOR_USERNAME_ARG
 import br.com.alaksion.myapplication.ui.home.authordetails.AuthorDetailsScreen
@@ -23,7 +24,6 @@ import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerScreen
 import br.com.alaksion.myapplication.ui.home.searchphotos.SearchPhotosScreen
 import br.com.alaksion.myapplication.ui.home.splash.SplashScreen
 import br.com.alaksion.myapplication.ui.home.userprofile.UserProfileScreen
-import br.com.alaksion.myapplication.ui.model.CurrentUserData
 
 private const val uri = BuildConfig.REDIRECT_URI
 
@@ -34,8 +34,8 @@ fun HomeNavigator(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     toggleDrawer: () -> Unit,
-    updateUserData: (CurrentUserData) -> Unit,
-    userData: CurrentUserData
+    updateUserData: (StoredUser) -> Unit,
+    userData: StoredUser
 ) {
     NavHost(
         navController = navHostController,

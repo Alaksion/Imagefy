@@ -4,6 +4,7 @@ import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.config.AuthConfig
 import br.com.alaksion.myapplication.domain.model.AuthResponse
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ValidateLoginUseCase @Inject constructor(
@@ -12,7 +13,7 @@ class ValidateLoginUseCase @Inject constructor(
     private val getApiSecretKeyUseCase: GetApiSecretKeyUseCase
 ) {
 
-    suspend operator fun invoke(authCode: String): Source<AuthResponse> {
+    suspend operator fun invoke(authCode: String): Flow<Source<AuthResponse>> {
         return repository.validateLogin(
             clientId = getApiKeyUseCase(),
             clientSecret = getApiSecretKeyUseCase(),
@@ -21,5 +22,4 @@ class ValidateLoginUseCase @Inject constructor(
             authCode = authCode
         )
     }
-
 }

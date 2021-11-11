@@ -21,9 +21,9 @@ import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
+import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
-import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.skydoves.landscapist.rememberDrawablePainter
 
@@ -32,7 +32,7 @@ fun SplashScreen(
     viewModel: SplashViewModel,
     navigateToHome: () -> Unit,
     navigateToLogin: () -> Unit,
-    updateUserData: (CurrentUserData) -> Unit
+    updateUserData: (StoredUser) -> Unit
 ) {
     val bottomSheetState = LocalBottomSheetVisibility.current
     val lifeCycleOwner = LocalLifecycleOwner.current
@@ -59,26 +59,13 @@ fun SplashScreen(
         }
     }
 
-    SplashScreenContent(
-        screenState = viewModel.authenticationState.value,
-        onClickTryAgain = { viewModel.verifyUserIsLogged() },
-        goToLoginScreen = { navigateToLogin() },
-    )
+    SplashScreenContent()
 
 }
 
 @Composable
-fun SplashScreenContent(
-    screenState: ViewState<Unit>,
-    onClickTryAgain: () -> Unit,
-    goToLoginScreen: () -> Unit,
-    isPreview: Boolean = false
-) {
-    when (screenState) {
-        is ViewState.Loading, is ViewState.Idle, is ViewState.Ready ->
-            SplashContentLoading(isPreview)
-        is ViewState.Error -> SplashContentError(onClickTryAgain, goToLoginScreen)
-    }
+fun SplashScreenContent(isPreview: Boolean = false) {
+    SplashContentLoading(isPreview)
 }
 
 @Composable
@@ -101,48 +88,6 @@ fun AppLogo(
                 .padding()
                 .padding(bottom = 10.dp)
         )
-    }
-}
-
-@Composable
-fun SplashContentError(
-    onClickTryAgain: () -> Unit,
-    goToLoginScreen: () -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        TryAgain(
-            message = stringResource(id = R.string.splash_login_error),
-            icon = {
-                Icon(
-                    imageVector = Icons.Default.Report,
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.onBackground,
-                    modifier = Modifier.size(40.dp)
-                )
-            },
-            onClick = { onClickTryAgain() },
-            modifier = Modifier.padding(horizontal = 40.dp)
-        )
-        OutlinedButton(
-            onClick = { goToLoginScreen() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp)
-                .padding(top = 25.dp)
-                .height(48.dp)
-        ) {
-            Text(
-                "Go to login screen", style = MaterialTheme.typography.body2.copy(
-                    color = MaterialTheme.colors.onBackground,
-                    fontWeight = FontWeight.Bold
-                )
-            )
-        }
     }
 }
 
@@ -178,20 +123,5 @@ fun SplashContentLoading(
                 color = MaterialTheme.colors.onBackground
             )
         )
-    }
-}
-
-@Composable
-@Preview
-fun SplashScreenPreview() {
-    ImagefyTheme(true) {
-        Scaffold() {
-            SplashScreenContent(
-                screenState = ViewState.Loading(),
-                onClickTryAgain = { /*TODO*/ },
-                goToLoginScreen = {},
-                isPreview = true
-            )
-        }
     }
 }

@@ -10,6 +10,7 @@ import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,11 +30,13 @@ class PhotoViewerViewModel @Inject constructor(
         if (photoId != currentPhotoId) {
             _photoData.value = ViewState.Loading()
             viewModelScope.launch {
-                handleApiResponse(
-                    source = getPhotoDetailsUseCase(currentPhotoId),
-                    onSuccess = { data -> onGetPhotoDetailsSuccess(data) },
-                    onError = { error -> onGetPhotoDetailsError(error) }
-                )
+                getPhotoDetailsUseCase(currentPhotoId).collect {
+                    handleApiResponse(
+                        source = it,
+                        onSuccess = { data -> onGetPhotoDetailsSuccess(data) },
+                        onError = { error -> onGetPhotoDetailsError(error) }
+                    )
+                }
             }
         }
     }
@@ -52,11 +55,13 @@ class PhotoViewerViewModel @Inject constructor(
 
     fun ratePhoto(photoId: String, isLike: Boolean) {
         viewModelScope.launch {
-            handleApiResponse(
-                source = ratePhotoUseCase(isLike, photoId),
-                onSuccess = { },
-                onError = { }
-            )
+            ratePhotoUseCase(isLike, photoId).collect {
+                handleApiResponse(
+                    source = it,
+                    onSuccess = { },
+                    onError = { }
+                )
+            }
         }
     }
 

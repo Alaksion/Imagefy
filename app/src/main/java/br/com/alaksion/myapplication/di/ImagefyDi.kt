@@ -165,4 +165,16 @@ object ImagefyDi {
         return StoreDarkModeConfigUseCase(repository)
     }
 
+    @Provides
+    @Singleton
+    fun provideGetStoredUserUseCase(repository: ImagefyRepository): GetStoredUserDataUseCase {
+        return GetStoredUserDataUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetStoreUserDataUseCase(repository: ImagefyRepository): StoreUserDataUseCase {
+        return StoreUserDataUseCase(repository)
+    }
+
 }

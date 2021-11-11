@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Lightbulb
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material.icons.outlined.Power
 import androidx.compose.material.icons.outlined.PowerSettingsNew
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.formatNumber
-import br.com.alaksion.myapplication.ui.model.CurrentUserData
+import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
 import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.ui.theme.LightGray
@@ -36,7 +34,7 @@ import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun HomeScreenNavigationDrawer(
-    userData: CurrentUserData,
+    userData: StoredUser,
     modifier: Modifier = Modifier,
     navigateToAuthorProfile: () -> Unit,
     isPreviewMode: Boolean = false,
@@ -225,7 +223,7 @@ fun DrawerPreview() {
     ImagefyTheme(false) {
         HomeScreenNavigationDrawer(
             isPreviewMode = true,
-            userData = CurrentUserData(
+            userData = StoredUser(
                 name = "JohenDoe",
                 userName = "SuperJohn",
                 followingCount = 100,

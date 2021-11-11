@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.myapplication.common.extensions.onBottomReached
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
@@ -109,7 +110,7 @@ fun AuthorPhotosList(
                     ) {
                         itemsIndexed(photos) { index, authorPhoto ->
 
-                            if (index == photos.lastIndex - 3) {
+                            listState.onBottomReached(offset = 3) {
                                 loadMorePhotos()
                             }
 

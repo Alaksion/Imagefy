@@ -20,9 +20,9 @@ import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
+import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
-import br.com.alaksion.myapplication.ui.model.CurrentUserData
 
 @Composable
 fun AuthenticationHandlerScreen(
@@ -30,7 +30,7 @@ fun AuthenticationHandlerScreen(
     goToLoginScreen: () -> Unit,
     goToHomeScreen: () -> Unit,
     authCode: String?,
-    updateUserData: (CurrentUserData) -> Unit
+    updateUserData: (StoredUser) -> Unit
 ) {
     val bottomSheetState = LocalBottomSheetVisibility.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -92,7 +92,7 @@ fun AuthHandlerContentLoading() {
         Text(
             text = stringResource(id = R.string.auth_handler_loading),
             style = MaterialTheme.typography.h5
-                .copy(textAlign = TextAlign.Center),
+                .copy(textAlign = TextAlign.Center, color = MaterialTheme.colors.onBackground),
         )
     }
 }

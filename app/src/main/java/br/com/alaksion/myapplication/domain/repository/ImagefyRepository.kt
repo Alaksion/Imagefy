@@ -12,23 +12,26 @@ interface ImagefyRepository {
         redirectUri: String,
         authCode: String,
         grantType: String
-    ): Source<AuthResponse>
+    ): Flow<Source<AuthResponse>>
 
-    suspend fun getPhotos(page: Int): Source<List<PhotoResponse>>
+    suspend fun getPhotos(page: Int): Flow<Source<List<PhotoResponse>>>
 
-    suspend fun getAuthorProfile(username: String): Source<AuthorResponse>
+    suspend fun getAuthorProfile(username: String): Flow<Source<AuthorResponse>>
 
-    suspend fun getAuthorPhotos(username: String, page: Int): Source<List<AuthorPhotosResponse>>
+    suspend fun getAuthorPhotos(
+        username: String,
+        page: Int
+    ): Flow<Source<List<AuthorPhotosResponse>>>
 
-    suspend fun getPhotoDetails(photoId: String): Source<PhotoDetailResponse>
+    suspend fun getPhotoDetails(photoId: String): Flow<Source<PhotoDetailResponse>>
 
-    suspend fun likePhoto(photoId: String): Source<Unit>
+    suspend fun likePhoto(photoId: String): Flow<Source<Unit>>
 
-    suspend fun unlikePhoto(photoId: String): Source<Unit>
+    suspend fun unlikePhoto(photoId: String): Flow<Source<Unit>>
 
-    suspend fun getCurrentUsername(): Source<CurrentUserResponse>
+    suspend fun getCurrentUsername(): Flow<Source<CurrentUserResponse>>
 
-    suspend fun searchPhotos(request: SearchPhotosRequest): Source<SearchPhotosResponse>
+    suspend fun searchPhotos(request: SearchPhotosRequest): Flow<Source<SearchPhotosResponse>>
 
     fun storeAuthorizationHeader(value: String)
 
@@ -37,5 +40,10 @@ interface ImagefyRepository {
     suspend fun storeDarkModeConfig(value: Boolean)
 
     fun getCurrentDarkModeConfig(): Flow<Boolean>
+
+    suspend fun storeCurrentUser(user: StoredUser)
+
+    suspend fun getCurrentUser(): Flow<StoredUser>
+
 
 }

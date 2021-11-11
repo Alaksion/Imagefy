@@ -8,6 +8,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import br.com.alaksion.myapplication.common.extensions.handleOptional
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
+import br.com.alaksion.myapplication.data.model.storeduser.StoredUserData
+import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,7 +22,8 @@ class ImagefyLocalDataSourceImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ImagefyLocalDataSource {
 
-    val dataStore = context.dataStore
+    private val dataStore = context.dataStore
+    val userDataStore = context.currentUserDataStore
 
     override fun storeAuthorizationHeader(value: String) {
         sharedPreferences.edit().putString(AppLocalConfig.AUTH_TOKEN_KEY, value).apply()
@@ -39,6 +42,30 @@ class ImagefyLocalDataSourceImpl @Inject constructor(
     override fun getCurrentDarkModeConfig(): Flow<Boolean> {
         return dataStore.data.map { prefs ->
             prefs[AppLocalConfig.DARK_MODE_KEY].handleOptional()
+        }
+    }
+
+    override suspend fun storeCurrentUser(user: StoredUserData) {
+        userDataStore.updateData {
+            it.toBuilder()
+                .setFollowersCount(user.followersCount)
+                .setFollowingCount(user.followingCount)
+                .setName(user.name)
+                .setUserName(user.userName)
+                .setProfileImageUrl(user.profileImageUrl)
+                .build()
+        }
+    }
+
+    override suspend fun getCurrentUser(): Flow<StoredUserData> {
+        return userDataStore.data.map { storedUser ->
+            StoredUserData(
+                userName = storedUser.userName,
+                name = storedUser.name,
+                followersCount = storedUser.followersCount,
+                followingCount = storedUser.followingCount,
+                profileImageUrl = storedUser.profileImageUrl
+            )
         }
     }
 

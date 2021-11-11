@@ -15,6 +15,7 @@ import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,11 +50,13 @@ class PhotoListViewModel @Inject constructor(
     fun getImages() {
         _screenState.value = ViewState.Loading()
         viewModelScope.launch {
-            handleApiResponse(
-                source = getPhotosUseCase(currentPage),
-                onSuccess = { data -> handleGetPhotosSuccess(data) },
-                onError = { error -> handleGetPhotosError(error) }
-            )
+            getPhotosUseCase(currentPage).collect {
+                handleApiResponse(
+                    source = it,
+                    onSuccess = { data -> handleGetPhotosSuccess(data) },
+                    onError = { error -> handleGetPhotosError(error) }
+                )
+            }
         }
     }
 
@@ -74,11 +77,13 @@ class PhotoListViewModel @Inject constructor(
         viewModelScope.launch {
             _isMorePhotosLoading.value = true
             currentPage++
-            handleApiResponse(
-                source = getPhotosUseCase(currentPage),
-                onSuccess = { data -> handleLoadMorePhotosSuccess(data) },
-                onError = { onLoadMorePhotosError() }
-            )
+            getPhotosUseCase(currentPage).collect {
+                handleApiResponse(
+                    source = it,
+                    onSuccess = { data -> handleLoadMorePhotosSuccess(data) },
+                    onError = { onLoadMorePhotosError() }
+                )
+            }
         }
     }
 
@@ -98,11 +103,13 @@ class PhotoListViewModel @Inject constructor(
 
     fun ratePhoto(photoId: String, isLike: Boolean) {
         viewModelScope.launch {
-            handleApiResponse(
-                source = ratePhotoUseCase(photoId = photoId, isLike = isLike),
-                onSuccess = {},
-                onError = {}
-            )
+            ratePhotoUseCase(photoId = photoId, isLike = isLike).collect {
+                handleApiResponse(
+                    source = it,
+                    onSuccess = {},
+                    onError = {}
+                )
+            }
         }
     }
 

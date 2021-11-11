@@ -11,6 +11,8 @@ import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosRequest
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
 import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
 import br.com.alaksion.myapplication.data.remote.services.UnsplashService
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class ImagefyRemoteDataSourceImpl @Inject constructor(
@@ -24,47 +26,75 @@ class ImagefyRemoteDataSourceImpl @Inject constructor(
         redirectUri: String,
         authCode: String,
         grantType: String
-    ): Source<AuthValidationResponseData> {
-        return authService.validateLogin(clientId, clientSecret, redirectUri, authCode, grantType)
-            .handleApiResponse()
+    ): Flow<Source<AuthValidationResponseData>> {
+        return flow {
+            emit(
+                authService.validateLogin(
+                    clientId,
+                    clientSecret,
+                    redirectUri,
+                    authCode,
+                    grantType
+                ).handleApiResponse()
+            )
+        }
     }
 
-    override suspend fun getPhotos(page: Int): Source<List<PhotoData>> {
-        return service.getPhotos(page).handleApiResponse()
+    override suspend fun getPhotos(page: Int): Flow<Source<List<PhotoData>>> {
+        return flow {
+            emit(service.getPhotos(page).handleApiResponse())
+        }
     }
 
-    override suspend fun getAuthorProfile(userName: String): Source<UserResponseData> {
-        return service.getAuthorProfile(userName).handleApiResponse()
+    override suspend fun getAuthorProfile(userName: String): Flow<Source<UserResponseData>> {
+        return flow {
+            emit(service.getAuthorProfile(userName).handleApiResponse())
+        }
     }
 
     override suspend fun getAuthorPhotos(
         userName: String,
         page: Int
-    ): Source<List<PhotoData>> {
-        return service.getAuthorPhotos(username = userName, page = page).handleApiResponse()
+    ): Flow<Source<List<PhotoData>>> {
+        return flow {
+            emit(
+                service.getAuthorPhotos(username = userName, page = page).handleApiResponse()
+            )
+        }
     }
 
-    override suspend fun getPhotoDetails(photoId: String): Source<PhotoData> {
-        return service.getPhotoDetails(photoId).handleApiResponse()
+    override suspend fun getPhotoDetails(photoId: String): Flow<Source<PhotoData>> {
+        return flow {
+            emit(service.getPhotoDetails(photoId).handleApiResponse())
+        }
     }
 
-    override suspend fun likePhoto(photoId: String): Source<Unit> {
-        return service.likePhoto(photoId).handleApiResponse()
+    override suspend fun likePhoto(photoId: String): Flow<Source<Unit>> {
+        return flow {
+            emit(service.likePhoto(photoId).handleApiResponse())
+        }
     }
 
-    override suspend fun unlikePhoto(photoId: String): Source<Unit> {
-        return service.unlikePhoto(photoId).handleApiResponse()
+    override suspend fun unlikePhoto(photoId: String): Flow<Source<Unit>> {
+        return flow {
+            emit(service.unlikePhoto(photoId).handleApiResponse())
+        }
     }
 
-    override suspend fun getCurrentUsername(): Source<CurrentUserResponseData> {
-        return service.getCurrentUsername().handleApiResponse()
+    override suspend fun getCurrentUsername(): Flow<Source<CurrentUserResponseData>> {
+        return flow {
+            emit(service.getCurrentUsername().handleApiResponse())
+        }
     }
 
-    override suspend fun searchPhotos(request: SearchPhotosRequestData): Source<SearchPhotosResponseData> {
-        return service.searchPhotos(
-            searchQuery = request.query,
-            page = request.page
-        ).handleApiResponse()
+    override suspend fun searchPhotos(request: SearchPhotosRequestData): Flow<Source<SearchPhotosResponseData>> {
+        return flow {
+            emit(
+                service.searchPhotos(
+                    searchQuery = request.query,
+                    page = request.page
+                ).handleApiResponse()
+            )
+        }
     }
-
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.extensions.invert
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
+import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.domain.usecase.ClearAuthTokenUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetCurrentDarkModeConfigUseCase
 import br.com.alaksion.myapplication.domain.usecase.StoreDarkModeConfigUseCase
@@ -21,8 +22,8 @@ class HomeViewModel @Inject constructor(
     private val storeCurrentDarkModeConfigUseCase: StoreDarkModeConfigUseCase
 ) : BaseViewModel() {
 
-    private val _currentUserData = mutableStateOf(CurrentUserData())
-    val currentUserData: State<CurrentUserData>
+    private val _currentUserData = mutableStateOf(StoredUser())
+    val currentUserData: State<StoredUser>
         get() = _currentUserData
 
     private val _isConfigDarkMode = mutableStateOf(false)
@@ -44,7 +45,7 @@ class HomeViewModel @Inject constructor(
         clearAuthTokenUseCase()
     }
 
-    fun updateUserData(current: CurrentUserData) {
+    fun updateUserData(current: StoredUser) {
         _currentUserData.value = current
     }
 

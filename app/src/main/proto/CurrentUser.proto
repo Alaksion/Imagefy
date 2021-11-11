@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package = "br.com.alaksion.myapplication";
+option java_multiple_files = true;
+
+message CurrentUser {
+    string user_name = 1;
+    string name = 2;
+    int32 followers_count = 3;
+    int32 following_count = 4;
+    string profile_image_url = 5;
+}

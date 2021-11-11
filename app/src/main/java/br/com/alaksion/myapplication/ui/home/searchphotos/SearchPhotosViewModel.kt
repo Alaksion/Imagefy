@@ -15,6 +15,7 @@ import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.model.SearchPhotosResponse
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -52,11 +53,13 @@ class SearchPhotosViewModel @Inject constructor(
         onError: (NetworkError) -> Unit
     ) {
         viewModelScope.launch {
-            handleApiResponse(
-                source = searchPhotosUseCase(page = currentPage, searchQuery = searchQuery.value),
-                onError = { error -> onError(error) },
-                onSuccess = { data -> onSuccess(data) }
-            )
+            searchPhotosUseCase(page = currentPage, searchQuery = searchQuery.value).collect {
+                handleApiResponse(
+                    source = it,
+                    onError = { error -> onError(error) },
+                    onSuccess = { data -> onSuccess(data) }
+                )
+            }
         }
     }
 
