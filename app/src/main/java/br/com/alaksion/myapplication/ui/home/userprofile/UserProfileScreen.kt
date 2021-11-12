@@ -46,7 +46,7 @@ fun UserProfileScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = authorUsername) {
         viewModel.getUserProfileData(authorUsername)
     }
 

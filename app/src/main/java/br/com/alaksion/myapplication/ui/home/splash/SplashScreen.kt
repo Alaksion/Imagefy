@@ -44,7 +44,7 @@ fun SplashScreen(
         }
     }
 
-    DisposableEffect(key1 = true) {
+    DisposableEffect(key1 = lifeCycleOwner) {
         viewModel.isUserLogged.observeEvent(lifeCycleOwner) { isUserLogged ->
             if (isUserLogged) navigateToHome()
             else navigateToLogin()

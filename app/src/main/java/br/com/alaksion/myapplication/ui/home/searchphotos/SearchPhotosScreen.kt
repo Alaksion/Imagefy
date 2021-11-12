@@ -49,7 +49,7 @@ fun SearchPhotosScreen(
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-    LaunchedEffect(true) {
+    LaunchedEffect(lifeCycleOwner) {
         viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
             Toast.makeText(
                 context,

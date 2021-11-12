@@ -40,7 +40,7 @@ fun PhotoListScreen(
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-    DisposableEffect(key1 = true) {
+    DisposableEffect(lifeCycleOwner) {
         viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
             Toast.makeText(
                 context,

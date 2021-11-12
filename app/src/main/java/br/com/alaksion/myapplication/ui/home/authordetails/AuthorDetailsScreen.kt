@@ -61,7 +61,7 @@ fun AuthorDetailsScreen(
         viewModel.getAuthorProfileData(authorUsername)
     }
 
-    DisposableEffect(key1 = true) {
+    DisposableEffect(key1 = lifecycleOwner) {
         viewModel.showErrorToast.observeEvent(lifecycleOwner) {
             Toast.makeText(
                 context,

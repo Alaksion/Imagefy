@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -62,7 +61,6 @@ fun SearchPhotosTopBar(
                     modifier = Modifier
                         .size(35.dp)
                         .clip(CircleShape)
-                        .background(Color.Red)
                         .clickable { toggleDrawer() },
                     imageModel = userProfileUrl,
                     contentScale = ContentScale.Fit,

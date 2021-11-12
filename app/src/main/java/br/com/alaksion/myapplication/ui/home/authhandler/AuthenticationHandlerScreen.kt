@@ -42,7 +42,7 @@ fun AuthenticationHandlerScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = lifecycleOwner) {
         viewModel.authenticateUser(authCode)
 
         viewModel.currentUserData.observeEvent(lifecycleOwner) {

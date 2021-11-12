@@ -58,7 +58,7 @@ fun PhotoViewerScreen(
         }
     }
 
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = photoId) {
         viewModel.getPhotoDetails(photoId)
     }
 
