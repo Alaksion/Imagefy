@@ -155,7 +155,6 @@ internal fun PhotoCardHeader(
     profileImageUrl: String,
     modifier: Modifier = Modifier,
 ) {
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.padding(vertical = 5.dp),
@@ -212,7 +211,6 @@ internal fun PhotoCardImage(
     contentDescription: String?,
     modifier: Modifier = Modifier
 ) {
-
     ImageLoader(
         imageUrl = imageUrl,
         contentDescription = contentDescription,

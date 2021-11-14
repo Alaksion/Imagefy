@@ -232,7 +232,8 @@ fun FollowButton(
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = stringResource(id = R.string.following), style = MaterialTheme.typography.caption.copy(
+        text = stringResource(id = R.string.following),
+        style = MaterialTheme.typography.caption.copy(
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colors.onBackground,
             textAlign = TextAlign.Center
@@ -251,32 +252,34 @@ fun FollowButton(
 @Composable
 @Preview(showBackground = true)
 fun AuthorDetailsPreview() {
-    ImagefyTheme {
-        AuthorDetailsScreenContent(
-            authorData = ViewState.Ready(
-                AuthorResponse(
-                    name = "John Doe",
-                    portfolioUrl = "portfolio",
-                    twitterUser = "@john_doe",
-                    instagramUser = "@john_doe",
-                    username = "JohnDoe",
-                    following = 100,
-                    followers = 200,
-                    totalPhotos = 150,
-                    totalLikes = 1,
-                    bio = "This is my bio",
-                    profileImage = "",
-                    followedByUser = true
-                )
-            ),
-            authorUsername = "JohnDoe",
-            authorPhotos = listOf(),
-            authorPhotoState = ViewState.Ready(Unit),
-            popBackStack = { true },
-            getMorePhotos = { },
-            tryAgainGetAuthorData = { },
-            navigateToPhotoViewer = {},
-            isPreview = true
-        )
+    ImagefyTheme(false) {
+        Scaffold() {
+            AuthorDetailsScreenContent(
+                authorData = ViewState.Ready(
+                    AuthorResponse(
+                        name = "John Doe",
+                        portfolioUrl = "portfolio",
+                        twitterUser = "@john_doe",
+                        instagramUser = "@john_doe",
+                        username = "JohnDoe",
+                        following = 100,
+                        followers = 200,
+                        totalPhotos = 150,
+                        totalLikes = 1,
+                        bio = "This is my bio",
+                        profileImage = "",
+                        followedByUser = true
+                    )
+                ),
+                authorUsername = "JohnDoe",
+                authorPhotos = listOf(),
+                authorPhotoState = ViewState.Ready(Unit),
+                popBackStack = { true },
+                getMorePhotos = { },
+                tryAgainGetAuthorData = { },
+                navigateToPhotoViewer = {},
+                isPreview = true
+            )
+        }
     }
 }

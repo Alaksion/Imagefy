@@ -41,11 +41,8 @@ fun LoginScreen(
     val context = LocalContext.current
     val bottomSheetState = LocalBottomSheetVisibility.current
 
-    DisposableEffect(key1 = true) {
+    LaunchedEffect(key1 = true) {
         bottomSheetState.value = false
-        onDispose {
-            bottomSheetState.value = true
-        }
     }
 
     fun navigateToCreateAccount() {

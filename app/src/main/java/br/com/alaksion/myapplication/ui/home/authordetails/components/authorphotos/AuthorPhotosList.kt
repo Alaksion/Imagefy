@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraRoll
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.common.extensions.onBottomReached
 import br.com.alaksion.myapplication.common.ui.ViewState
@@ -30,6 +32,7 @@ import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.TryAgain
 import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
+import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @ExperimentalFoundationApi
 @Composable
@@ -148,6 +151,23 @@ fun AuthorPhotosList(
                     }
                 }
             }
+        }
+    }
+}
+
+@ExperimentalFoundationApi
+@Composable
+@Preview(showBackground = true)
+fun AuthorPhotoListPreview() {
+    ImagefyTheme {
+        Scaffold {
+            AuthorPhotosList(
+                viewState = ViewState.Ready(Unit),
+                photos = listOf(),
+                onClickTryAgain = { },
+                navigateToPhotoViewer = {},
+                loadMorePhotos = {}
+            )
         }
     }
 }

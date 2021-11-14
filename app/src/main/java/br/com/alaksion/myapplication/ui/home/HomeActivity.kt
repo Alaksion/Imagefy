@@ -59,6 +59,7 @@ class HomeActivity : AppCompatActivity() {
                         val navController = rememberNavController()
                         val scaffoldState = rememberScaffoldState()
                         val currentUserData = viewModel.currentUserData
+                        val isBottomsheetVisible = LocalBottomSheetVisibility.current
 
                         fun toggleDrawer() {
                             scope.launch {
@@ -91,7 +92,7 @@ class HomeActivity : AppCompatActivity() {
                                 )
                             },
                             bottomBar = {
-                                if (LocalBottomSheetVisibility.current.value)
+                                if (isBottomsheetVisible.value)
                                     HomeBottomNavigation(navController = navController)
                             },
                         ) { screenPadding ->

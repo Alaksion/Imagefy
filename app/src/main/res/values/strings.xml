@@ -12,7 +12,7 @@
     <string name="login_title">Share your best moments with the internet</string>
     <string name="login_description">Bring together pictures of your backyard, pets, hobbies, morning coffee and everything that makes your day brighter.</string>
     <string name="login_dont_have_account">Don\'t have an account? </string>
-    <string name="login_register">Register now!</string>
+    <string name="login_register"> Register now!</string>
     <string name="login_sign_in">Sign in</string>
 
     <!-- Auth Handler -->
