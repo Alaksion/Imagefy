@@ -35,4 +35,5 @@
 
     <!-- General -->
     <string name="image_load_error">An error occurred and this image could not be loaded</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>

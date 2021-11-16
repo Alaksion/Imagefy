@@ -40,11 +40,8 @@ fun SplashScreen(
     val bottomSheetState = LocalBottomSheetVisibility.current
     val lifeCycleOwner = LocalLifecycleOwner.current
 
-    DisposableEffect(key1 = true) {
+    LaunchedEffect(key1 = true) {
         bottomSheetState.value = false
-        onDispose {
-            bottomSheetState.value = true
-        }
     }
 
     DisposableEffect(key1 = lifeCycleOwner) {

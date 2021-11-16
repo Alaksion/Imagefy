@@ -12,16 +12,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.onBottomReached
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.TryAgain
@@ -40,6 +41,7 @@ fun PhotoListScreen(
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+    val bottomSheetState = LocalBottomSheetVisibility.current
 
     DisposableEffect(lifeCycleOwner) {
         viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
@@ -53,6 +55,10 @@ fun PhotoListScreen(
         onDispose {
             viewModel.showMorePhotosError.removeObservers(lifeCycleOwner)
         }
+    }
+
+    LaunchedEffect(key1 = true) {
+        bottomSheetState.value = true
     }
 
     PhotoListScreenContent(
