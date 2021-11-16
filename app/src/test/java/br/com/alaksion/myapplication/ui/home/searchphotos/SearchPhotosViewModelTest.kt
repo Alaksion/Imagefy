@@ -3,6 +3,7 @@ package br.com.alaksion.myapplication.ui.home.searchphotos
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.domain.model.SearchPhotosResponse
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
 import br.com.alaksion.myapplication.testdata.SearchPhotosTestData
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
@@ -11,6 +12,7 @@ import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -43,7 +45,7 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
                 any(),
                 any()
             )
-        } returns Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)
+        } returns flow { emit(Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)) }
         val searchQuery = "searchQuery"
 
         viewModel.onChangeSearchQuery(searchQuery)
@@ -62,7 +64,7 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
                     any(),
                     any()
                 )
-            } returns Source.Success(null)
+            } returns flow { emit(Source.Success(null)) }
             val searchQuery = "searchQuery"
 
             viewModel.onChangeSearchQuery(searchQuery)
@@ -81,7 +83,7 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
                     any(),
                     any()
                 )
-            } returns Source.Error(NetworkError("500", 0))
+            } returns flow { emit(Source.Error<SearchPhotosResponse>(NetworkError("500", 0))) }
             val searchQuery = "searchQuery"
 
             viewModel.onChangeSearchQuery(searchQuery)
@@ -99,7 +101,7 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
                 any(),
                 any()
             )
-        } returns Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)
+        } returns flow { emit(Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)) }
 
         viewModel.searchPhotos()
         viewModel.loadMorePhotos()
@@ -119,14 +121,14 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
                 1,
                 any()
             )
-        } returns Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)
+        } returns flow { emit(Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)) }
 
         coEvery {
             searchPhotosUseCase(
                 2,
                 any()
             )
-        } returns Source.Error(NetworkError("", 500))
+        } returns flow { emit(Source.Error<SearchPhotosResponse>(NetworkError("", 500))) }
 
         viewModel.searchPhotos()
         viewModel.loadMorePhotos()
@@ -145,14 +147,14 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
                     1,
                     any()
                 )
-            } returns Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)
+            } returns flow { emit(Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)) }
 
             coEvery {
                 searchPhotosUseCase(
                     2,
                     any()
                 )
-            } returns Source.Success(null)
+            } returns flow { emit(Source.Success(null)) }
 
             viewModel.searchPhotos()
             viewModel.loadMorePhotos()

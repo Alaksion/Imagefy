@@ -1,13 +1,14 @@
 package br.com.alaksion.myapplication.domain.usecase
 
-import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.GetImagesTestData
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Test
@@ -23,7 +24,7 @@ class GetPhotosUseCaseTest : ImagefyBaseTest() {
 
     @Test
     fun `Should get photos from repository layer`() = runBlocking {
-        coEvery { repository.getPhotos(any()) } returns Source.Success(GetImagesTestData.DOMAIN_RESPONSE)
+        coEvery { repository.getPhotos(any()) } returns flow { emit(Source.Success(GetImagesTestData.DOMAIN_RESPONSE)) }
 
         val result = useCase.invoke(1)
 

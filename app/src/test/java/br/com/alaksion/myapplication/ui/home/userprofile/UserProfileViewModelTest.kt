@@ -3,6 +3,8 @@ package br.com.alaksion.myapplication.ui.home.userprofile
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
+import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.testdata.AuthorPhotosTestData
@@ -13,6 +15,7 @@ import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -31,7 +34,13 @@ class UserProfileViewModelTest : ImagefyBaseViewModelTest() {
 
     @Test
     fun `Should call get author profile and set viewState`() = runBlocking {
-        coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(AuthorProfileTestData.DOMAIN_RESPONSE)
+        coEvery { getAuthorProfileUseCase(any()) } returns flow {
+            emit(
+                Source.Success(
+                    AuthorProfileTestData.DOMAIN_RESPONSE
+                )
+            )
+        }
 
         viewModel.getUserProfileData("username")
 
@@ -46,7 +55,7 @@ class UserProfileViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should set viewstate to error if get author profile succeeds with null response`() =
         runBlocking {
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(null)
+            coEvery { getAuthorProfileUseCase(any()) } returns flow { emit(Source.Success(null)) }
 
             viewModel.getUserProfileData("username")
 
@@ -58,7 +67,16 @@ class UserProfileViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should set viewstate to error if get author profile fails`() =
         runBlocking {
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Error(NetworkError("", 500))
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Error<AuthorResponse>(
+                        NetworkError(
+                            "",
+                            500
+                        )
+                    )
+                )
+            }
 
             viewModel.getUserProfileData("username")
 
@@ -70,10 +88,20 @@ class UserProfileViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should call get author photos after get author profile success and set viewState`() =
         runBlocking {
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(AuthorProfileTestData.DOMAIN_RESPONSE)
-            coEvery { getAuthorPhotoUseCase(any(), any()) } returns Source.Success(
-                AuthorPhotosTestData.DOMAIN_RESPONSE
-            )
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        AuthorProfileTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery { getAuthorPhotoUseCase(any(), any()) } returns flow {
+                emit(
+                    Source.Success(
+                        AuthorPhotosTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
 
             viewModel.getUserProfileData("username")
 
@@ -85,13 +113,23 @@ class UserProfileViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should set photos state to error when get user photos fails`() =
         runBlocking {
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(AuthorProfileTestData.DOMAIN_RESPONSE)
-            coEvery { getAuthorPhotoUseCase(any(), any()) } returns Source.Error(
-                NetworkError(
-                    "",
-                    500
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        AuthorProfileTestData.DOMAIN_RESPONSE
+                    )
                 )
-            )
+            }
+            coEvery { getAuthorPhotoUseCase(any(), any()) } returns flow {
+                emit(
+                    Source.Error<List<AuthorPhotosResponse>>(
+                        NetworkError(
+                            "",
+                            500
+                        )
+                    )
+                )
+            }
 
             viewModel.getUserProfileData("username")
 
@@ -103,8 +141,19 @@ class UserProfileViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should set photos state to error when get user photos succeeds with null response`() =
         runBlocking {
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(AuthorProfileTestData.DOMAIN_RESPONSE)
-            coEvery { getAuthorPhotoUseCase(any(), any()) } returns Source.Success(null)
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        AuthorProfileTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery {
+                getAuthorPhotoUseCase(
+                    any(),
+                    any()
+                )
+            } returns flow { emit(Source.Success(null)) }
 
             viewModel.getUserProfileData("username")
 
@@ -116,8 +165,19 @@ class UserProfileViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should add more photos to list when get more photos succeeds`() =
         runBlocking {
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(AuthorProfileTestData.DOMAIN_RESPONSE)
-            coEvery { getAuthorPhotoUseCase(any(), any()) } returns Source.Success(null)
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        AuthorProfileTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery {
+                getAuthorPhotoUseCase(
+                    any(),
+                    any()
+                )
+            } returns flow { emit(Source.Success(null)) }
 
             viewModel.getUserProfileData("username")
 

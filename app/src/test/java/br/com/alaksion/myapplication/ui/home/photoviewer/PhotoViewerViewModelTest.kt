@@ -3,6 +3,7 @@ package br.com.alaksion.myapplication.ui.home.photoviewer
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import br.com.alaksion.myapplication.testdata.PhotoDetailsTestData
@@ -12,6 +13,7 @@ import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -30,7 +32,13 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
 
     @Test
     fun `Should call get photo details use case`() = runBlocking {
-        coEvery { getPhotoDetailsUseCase(any()) } returns Source.Success(PhotoDetailsTestData.DOMAIN_RESPONSE)
+        coEvery { getPhotoDetailsUseCase(any()) } returns flow {
+            emit(
+                Source.Success(
+                    PhotoDetailsTestData.DOMAIN_RESPONSE
+                )
+            )
+        }
 
         viewModel.getPhotoDetails("id")
 
@@ -44,7 +52,16 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
 
     @Test
     fun `Should set viewstate to error if get photo details fails`() = runBlocking {
-        coEvery { getPhotoDetailsUseCase(any()) } returns Source.Error(NetworkError("", 500))
+        coEvery { getPhotoDetailsUseCase(any()) } returns flow {
+            emit(
+                Source.Error<PhotoDetailResponse>(
+                    NetworkError(
+                        "",
+                        500
+                    )
+                )
+            )
+        }
 
         viewModel.getPhotoDetails("id")
 
@@ -56,7 +73,7 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should set viewstate to error if get photo details succeeds but returns a null object`() =
         runBlocking {
-            coEvery { getPhotoDetailsUseCase(any()) } returns Source.Success(null)
+            coEvery { getPhotoDetailsUseCase(any()) } returns flow { emit(Source.Success(null)) }
 
             viewModel.getPhotoDetails("id")
 
@@ -67,7 +84,7 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
 
     @Test
     fun `Should rate photo`() = runBlocking {
-        coEvery { ratePhotoUseCase(any(), any()) } returns Source.Success(Unit)
+        coEvery { ratePhotoUseCase(any(), any()) } returns flow { emit(Source.Success(Unit)) }
 
         viewModel.ratePhoto("photoId", false)
 

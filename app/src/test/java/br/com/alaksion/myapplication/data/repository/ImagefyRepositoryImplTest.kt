@@ -1,15 +1,16 @@
 package br.com.alaksion.myapplication.data.repository
 
-import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
 import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.*
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertNotNull
@@ -34,7 +35,7 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
                 any(),
                 any()
             )
-        } returns Source.Success(LoginAuthorizationTestData.DATA_RESPONSE)
+        } returns flow { emit(Source.Success(LoginAuthorizationTestData.DATA_RESPONSE)) }
 
         val result = repository.validateLogin("clientId", "authCode", "uri", "authCode", "granType")
 
@@ -55,7 +56,7 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
     fun `Should get photos in data source layer`() = runBlocking {
         coEvery {
             remoteDataSource.getPhotos(any())
-        } returns Source.Success(GetImagesTestData.DATA_RESPONSE)
+        } returns flow { emit(Source.Success(GetImagesTestData.DATA_RESPONSE)) }
 
         val result = repository.getPhotos(1)
 
@@ -68,7 +69,7 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
     fun `Should get author profile in data source layer`() = runBlocking {
         coEvery {
             remoteDataSource.getAuthorProfile(any())
-        } returns Source.Success(AuthorProfileTestData.DATA_RESPONSE)
+        } returns flow { emit(Source.Success(AuthorProfileTestData.DATA_RESPONSE)) }
 
         val result = repository.getAuthorProfile("profile")
 
@@ -81,7 +82,7 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
     fun `Should get author photos in data source layer`() = runBlocking {
         coEvery {
             remoteDataSource.getAuthorPhotos(any(), any())
-        } returns Source.Success(AuthorPhotosTestData.DATA_RESPONSE)
+        } returns flow { emit(Source.Success(AuthorPhotosTestData.DATA_RESPONSE)) }
 
         val result = repository.getAuthorPhotos("profile", 1)
 
@@ -94,7 +95,7 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
     fun `Should get photo details in data source layer`() = runBlocking {
         coEvery {
             remoteDataSource.getPhotoDetails(any())
-        } returns Source.Success(PhotoDetailsTestData.DATA_RESPONSE)
+        } returns flow { emit(Source.Success(PhotoDetailsTestData.DATA_RESPONSE)) }
 
         val result = repository.getPhotoDetails("photoId")
 
@@ -107,7 +108,7 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
     fun `Should like photo in data source layer`() = runBlocking {
         coEvery {
             remoteDataSource.likePhoto(any())
-        } returns Source.Success(Unit)
+        } returns flow { emit(Source.Success(Unit)) }
 
         val result = repository.likePhoto("photoId")
 
@@ -120,7 +121,7 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
     fun `Should unlike photo in data source layer`() = runBlocking {
         coEvery {
             remoteDataSource.unlikePhoto(any())
-        } returns Source.Success(Unit)
+        } returns flow { emit(Source.Success(Unit)) }
 
         val result = repository.unlikePhoto("photoId")
 
@@ -133,7 +134,7 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
     fun `Should get current username in data source layer`() = runBlocking {
         coEvery {
             remoteDataSource.getCurrentUsername()
-        } returns Source.Success(UserNameTestData.DATA_RESPONSE)
+        } returns flow { emit(Source.Success(UserNameTestData.DATA_RESPONSE)) }
 
         val result = repository.getCurrentUsername()
 
@@ -172,7 +173,7 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
     fun `Should search photos in data source layer`() = runBlocking {
         coEvery {
             remoteDataSource.searchPhotos(any())
-        } returns Source.Success(SearchPhotosTestData.DATA_RESPONSE)
+        } returns flow { emit(Source.Success(SearchPhotosTestData.DATA_RESPONSE)) }
 
         val result = repository.searchPhotos(SearchPhotosTestData.DOMAIN_REQUEST)
 

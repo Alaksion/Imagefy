@@ -3,6 +3,8 @@ package br.com.alaksion.myapplication.ui.home.authordetails
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
+import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.testdata.AuthorPhotosTestData
@@ -13,7 +15,8 @@ import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -31,14 +34,20 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
     }
 
     @Test
-    fun `Should get author profile and first page of author photos`() = runBlockingTest {
-        coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(AuthorProfileTestData.DOMAIN_RESPONSE)
+    fun `Should get author profile and first page of author photos`() = runBlocking {
+        coEvery { getAuthorProfileUseCase(any()) } returns flow {
+            emit(
+                Source.Success(
+                    AuthorProfileTestData.DOMAIN_RESPONSE
+                )
+            )
+        }
         coEvery {
             getAuthorPhotoUseCase(
                 any(),
                 any()
             )
-        } returns Source.Success(AuthorPhotosTestData.DOMAIN_RESPONSE)
+        } returns flow { emit(Source.Success(AuthorPhotosTestData.DOMAIN_RESPONSE)) }
 
         viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
 
@@ -60,8 +69,17 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
     }
 
     @Test
-    fun `Should set viewState to error if get author profile fails`() = runBlockingTest {
-        coEvery { getAuthorProfileUseCase(any()) } returns Source.Error(NetworkError("", 500))
+    fun `Should set viewState to error if get author profile fails`() = runBlocking {
+        coEvery { getAuthorProfileUseCase(any()) } returns flow {
+            emit(
+                Source.Error<AuthorResponse>(
+                    NetworkError(
+                        "",
+                        500
+                    )
+                )
+            )
+        }
 
         viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
 
@@ -75,8 +93,8 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
 
     @Test
     fun `Should set viewState to error if get author profile succeeds but returns a null object`() =
-        runBlockingTest {
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(null)
+        runBlocking {
+            coEvery { getAuthorProfileUseCase(any()) } returns flow { emit(Source.Success(null)) }
 
             viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
 
@@ -89,9 +107,21 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
         }
 
     @Test
-    fun `Should set photos viewstate to error when get author photos fails`() = runBlockingTest {
-        coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(AuthorProfileTestData.DOMAIN_RESPONSE)
-        coEvery { getAuthorPhotoUseCase(any(), any()) } returns Source.Error(NetworkError("", 500))
+    fun `Should set photos viewstate to error when get author photos fails`() = runBlocking {
+        coEvery { getAuthorProfileUseCase(any()) } returns flow {
+            emit(
+                Source.Success(
+                    AuthorProfileTestData.DOMAIN_RESPONSE
+                )
+            )
+        }
+        coEvery { getAuthorPhotoUseCase(any(), any()) } returns flow {
+            emit(
+                Source.Error<List<AuthorPhotosResponse>>(
+                    NetworkError("", 500)
+                )
+            )
+        }
 
         viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
 
@@ -105,9 +135,20 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
 
     @Test
     fun `Should set photos viewstate to error when get author photos succeeds with a null object`() =
-        runBlockingTest {
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(AuthorProfileTestData.DOMAIN_RESPONSE)
-            coEvery { getAuthorPhotoUseCase(any(), any()) } returns Source.Success(null)
+        runBlocking {
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        AuthorProfileTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery {
+                getAuthorPhotoUseCase(
+                    any(),
+                    any()
+                )
+            } returns flow { emit(Source.Success(null)) }
 
             viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
 
@@ -120,13 +161,13 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
         }
 
     @Test
-    fun `Should add photos to list when get more photos succeeds`() = runBlockingTest {
+    fun `Should add photos to list when get more photos succeeds`() = runBlocking {
         coEvery {
             getAuthorPhotoUseCase(
                 any(),
                 any()
             )
-        } returns Source.Success(AuthorPhotosTestData.DOMAIN_RESPONSE)
+        } returns flow { emit(Source.Success(AuthorPhotosTestData.DOMAIN_RESPONSE)) }
 
         viewModel.getMoreAuthorPhotos()
 
@@ -137,13 +178,13 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
     }
 
     @Test
-    fun `Should show error toast when get more photos fails`() = runBlockingTest {
+    fun `Should show error toast when get more photos fails`() = runBlocking {
         coEvery {
             getAuthorPhotoUseCase(
                 any(),
                 any()
             )
-        } returns Source.Error(NetworkError("", 500))
+        } returns flow { emit(Source.Error<List<AuthorPhotosResponse>>(NetworkError("", 500))) }
 
         viewModel.getMoreAuthorPhotos()
 
@@ -155,13 +196,13 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
 
     @Test
     fun `Should show error toast when get more photos succeeds but returns a null object`() =
-        runBlockingTest {
+        runBlocking {
             coEvery {
                 getAuthorPhotoUseCase(
                     any(),
                     any()
                 )
-            } returns Source.Success(null)
+            } returns flow { emit(Source.Success(null)) }
 
             viewModel.getMoreAuthorPhotos()
 

@@ -1,13 +1,14 @@
 package br.com.alaksion.myapplication.domain.usecase
 
-import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.ValidateLoginTestData
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertNotNull
@@ -33,7 +34,7 @@ class ValidateLoginUseCaseTest : ImagefyBaseTest() {
                 any(),
                 any()
             )
-        } returns Source.Success(ValidateLoginTestData.DOMAIN_RESPONSE)
+        } returns flow { emit(Source.Success(ValidateLoginTestData.DOMAIN_RESPONSE)) }
 
         val result = useCase.invoke("authCode")
 

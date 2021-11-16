@@ -3,21 +3,21 @@ package br.com.alaksion.myapplication.ui.authentication.authhandler
 import br.com.alaksion.myapplication.common.network.NetworkError
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
-import br.com.alaksion.myapplication.domain.usecase.GetCurrentUsernameUseCase
-import br.com.alaksion.myapplication.domain.usecase.StoreAuthTokenUseCase
-import br.com.alaksion.myapplication.domain.usecase.ValidateLoginUseCase
+import br.com.alaksion.myapplication.domain.model.AuthResponse
+import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.domain.model.CurrentUserResponse
+import br.com.alaksion.myapplication.domain.usecase.*
 import br.com.alaksion.myapplication.testdata.AuthorProfileTestData
 import br.com.alaksion.myapplication.testdata.UserNameTestData
 import br.com.alaksion.myapplication.testdata.ValidateLoginTestData
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthHandlerViewModel
-import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import kotlin.test.assertNotNull
@@ -31,6 +31,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     private val storeAuthTokenUseCase: StoreAuthTokenUseCase = mockk(relaxed = true)
     private val getCurrentUsernameUseCase: GetCurrentUsernameUseCase = mockk(relaxed = true)
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase = mockk(relaxed = true)
+    private val storeUserDataUseCase: StoreUserDataUseCase = mockk(relaxed = true)
 
     override fun setUp() {
         viewModel = AuthHandlerViewModel(
@@ -38,16 +39,35 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
             storeAuthTokenUseCase = storeAuthTokenUseCase,
             getCurrentUsernameUseCase = getCurrentUsernameUseCase,
             getAuthorProfileUseCase = getAuthorProfileUseCase,
+            storeUserDataUseCase = storeUserDataUseCase
         )
     }
 
     @Test
     fun `should validate login with given authCode and store it in local preferences`() =
         runBlockingTest {
-            coEvery { validateLoginUseCase(any()) } returns Source.Success(ValidateLoginTestData.DOMAIN_RESPONSE)
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        ValidateLoginTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
             coEvery { storeAuthTokenUseCase(any()) } returns Unit
-            coEvery { getCurrentUsernameUseCase() } returns Source.Success(UserNameTestData.DOMAIN_RESPONSE)
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(AuthorProfileTestData.DOMAIN_RESPONSE)
+            coEvery { getCurrentUsernameUseCase() } returns flow {
+                emit(
+                    Source.Success(
+                        UserNameTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        AuthorProfileTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
 
             viewModel.authenticateUser("authCode")
 
@@ -64,7 +84,16 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `should set viewstate to error if authcode is null`() =
         runBlockingTest {
-            coEvery { validateLoginUseCase(any()) } returns Source.Error(NetworkError("", 500))
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(
+                    Source.Error<AuthResponse>(
+                        NetworkError(
+                            "",
+                            500
+                        )
+                    )
+                )
+            }
 
             viewModel.authenticateUser(null)
 
@@ -81,7 +110,9 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `should set viewstate to error if validate login fails`() =
         runBlockingTest {
-            coEvery { validateLoginUseCase(any()) } returns Source.Error(NetworkError("", 500))
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(Source.Error<AuthResponse>(NetworkError("", 500)))
+            }
 
             viewModel.authenticateUser("authCode")
 
@@ -98,7 +129,9 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `should set viewstate to error if validate login succeeds but returns a null object`() =
         runBlockingTest {
-            coEvery { validateLoginUseCase(any()) } returns Source.Success(null)
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(Source.Success(null))
+            }
 
             viewModel.authenticateUser("authCode")
 
@@ -114,9 +147,24 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `should set viewState to error if get current username fails`() =
         runBlockingTest {
-            coEvery { validateLoginUseCase(any()) } returns Source.Success(ValidateLoginTestData.DOMAIN_RESPONSE)
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        ValidateLoginTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
             coEvery { storeAuthTokenUseCase(any()) } returns Unit
-            coEvery { getCurrentUsernameUseCase() } returns Source.Error(NetworkError("", 500))
+            coEvery { getCurrentUsernameUseCase() } returns flow {
+                emit(
+                    Source.Error<CurrentUserResponse>(
+                        NetworkError(
+                            "",
+                            500
+                        )
+                    )
+                )
+            }
 
             viewModel.authenticateUser("authCode")
 
@@ -133,9 +181,15 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `should set viewState to error if get current username succeeds but returns a null object`() =
         runBlockingTest {
-            coEvery { validateLoginUseCase(any()) } returns Source.Success(ValidateLoginTestData.DOMAIN_RESPONSE)
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        ValidateLoginTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
             coEvery { storeAuthTokenUseCase(any()) } returns Unit
-            coEvery { getCurrentUsernameUseCase() } returns Source.Success(null)
+            coEvery { getCurrentUsernameUseCase() } returns flow { emit(Source.Success(null)) }
 
             viewModel.authenticateUser("authCode")
 
@@ -152,10 +206,31 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `should set viewState to error if get author profile fails`() =
         runBlockingTest {
-            coEvery { validateLoginUseCase(any()) } returns Source.Success(ValidateLoginTestData.DOMAIN_RESPONSE)
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        ValidateLoginTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
             coEvery { storeAuthTokenUseCase(any()) } returns Unit
-            coEvery { getCurrentUsernameUseCase() } returns Source.Success(UserNameTestData.DOMAIN_RESPONSE)
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Error(NetworkError("", 500))
+            coEvery { getCurrentUsernameUseCase() } returns flow {
+                emit(
+                    Source.Success(
+                        UserNameTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Error<AuthorResponse>(
+                        NetworkError(
+                            "",
+                            500
+                        )
+                    )
+                )
+            }
 
             viewModel.authenticateUser("authCode")
 
@@ -172,10 +247,22 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `should set viewState to error if get author profile succeeds but returns a null object`() =
         runBlockingTest {
-            coEvery { validateLoginUseCase(any()) } returns Source.Success(ValidateLoginTestData.DOMAIN_RESPONSE)
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        ValidateLoginTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
             coEvery { storeAuthTokenUseCase(any()) } returns Unit
-            coEvery { getCurrentUsernameUseCase() } returns Source.Success(UserNameTestData.DOMAIN_RESPONSE)
-            coEvery { getAuthorProfileUseCase(any()) } returns Source.Success(null)
+            coEvery { getCurrentUsernameUseCase() } returns flow {
+                emit(
+                    Source.Success(
+                        UserNameTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery { getAuthorProfileUseCase(any()) } returns flow { emit(Source.Success(null)) }
 
             viewModel.authenticateUser("authCode")
 

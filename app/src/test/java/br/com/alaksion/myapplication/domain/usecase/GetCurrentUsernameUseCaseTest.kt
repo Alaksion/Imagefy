@@ -1,13 +1,14 @@
 package br.com.alaksion.myapplication.domain.usecase
 
-import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.UserNameTestData
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertNotNull
@@ -23,7 +24,13 @@ class GetCurrentUsernameUseCaseTest : ImagefyBaseTest() {
 
     @Test
     fun `Should get current username from repository layer`() = runBlocking {
-        coEvery { repository.getCurrentUsername() } returns Source.Success(UserNameTestData.DOMAIN_RESPONSE)
+        coEvery { repository.getCurrentUsername() } returns flow {
+            emit(
+                Source.Success(
+                    UserNameTestData.DOMAIN_RESPONSE
+                )
+            )
+        }
 
         val result = useCase.invoke()
 

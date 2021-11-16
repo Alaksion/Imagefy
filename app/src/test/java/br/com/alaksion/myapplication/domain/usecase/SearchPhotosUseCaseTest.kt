@@ -1,14 +1,15 @@
 package br.com.alaksion.myapplication.domain.usecase
 
-import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.domain.model.SearchPhotosRequest
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.SearchPhotosTestData
+import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertNotNull
@@ -26,7 +27,7 @@ class SearchPhotosUseCaseTest : ImagefyBaseTest() {
     fun `Should search photos from layer`() = runBlocking {
         coEvery {
             repository.searchPhotos(any())
-        } returns Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)
+        } returns flow { emit(Source.Success(SearchPhotosTestData.DOMAIN_RESPONSE)) }
 
         val result = useCase.invoke(1, "photoId")
 
