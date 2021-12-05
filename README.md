@@ -1,4 +1,4 @@
-# Imagefy
+# Imagefy Images Host Service blablabal
 > Imagefy is an application developed with Android Jetpack Compose along with the Unsplash Api to serve as a Compose code sample, this project is still in development, so new features and code refactors will oftenly occur.
 
 <img src="https://user-images.githubusercontent.com/30579274/138508180-b6e2cf10-2801-43af-96e0-287eecb228a2.jpg" width=25% height=25%/>
