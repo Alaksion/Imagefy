@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.theme
+package br.com.alaksion.core_ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -4,7 +4,7 @@ import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -19,15 +19,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
+import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.onBottomReached
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
-import br.com.alaksion.myapplication.ui.components.TryAgain
-import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
-import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoListTopBar
 
@@ -68,8 +68,8 @@ fun PhotoListScreen(
         onClickTryAgain = { viewModel.getImages() },
         navigateToAuthorDetails = navigateToAuthorDetails,
         isMorePhotosLoading = viewModel.isMorePhotosLoading.value,
-        ratePhoto = { photoId, isLike ->
-            viewModel.ratePhoto(photoId, isLike)
+        ratePhoto = { photo, isLike ->
+            viewModel.ratePhoto(photo, isLike)
         },
         toggleDrawer = toggleDrawer,
         userProfileUrl = userProfileUrl
@@ -88,7 +88,7 @@ internal fun PhotoListScreenContent(
     toggleDrawer: () -> Unit,
     userProfileUrl: String,
     navigateToAuthorDetails: (authorId: String) -> Unit,
-    ratePhoto: (photoId: String, isLike: Boolean) -> Unit
+    ratePhoto: (photo: PhotoResponse, isLike: Boolean) -> Unit
 ) {
     val listState = rememberLazyListState()
 
@@ -96,10 +96,12 @@ internal fun PhotoListScreenContent(
         PhotoListTopBar(userProfileUrl = userProfileUrl, toggleDrawer = toggleDrawer)
 
         when (screenState) {
-            is ViewState.Loading, is ViewState.Idle -> Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) { ProgressIndicator(Modifier.align(Alignment.Center)) }
+            is ViewState.Loading, is ViewState.Idle -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) { ProgressIndicator(Modifier.align(Alignment.Center)) }
+            }
             is ViewState.Error -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -123,7 +125,7 @@ internal fun PhotoListScreenContent(
             is ViewState.Ready -> {
                 Box(modifier = Modifier.fillMaxSize()) {
                     LazyColumn(state = listState) {
-                        itemsIndexed(photos) { index, item ->
+                        items(photos) { item ->
                             PhotoCard(
                                 photoContent = item,
                                 navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) },

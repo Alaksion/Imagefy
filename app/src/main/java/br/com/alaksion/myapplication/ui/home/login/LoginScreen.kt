@@ -14,7 +14,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,11 +27,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.alaksion.core_ui.theme.ImagefyTheme
+import br.com.alaksion.core_ui.theme.span_roboto_bold
+import br.com.alaksion.core_ui.theme.span_roboto_regular
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.ui.PresentationConstants
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @Composable
 fun LoginScreen(
@@ -113,7 +113,7 @@ fun LoginScreenContent(
                     .padding(bottom = 15.dp),
                 text = buildAnnotatedString {
                     withStyle(
-                        AppTypoGraph.span_roboto_regular()
+                        span_roboto_regular()
                             .copy(
                                 fontSize = 14.sp,
                                 color = MaterialTheme.colors.onBackground.copy(0.66f)
@@ -121,8 +121,9 @@ fun LoginScreenContent(
                     ) {
                         append(stringResource(id = R.string.login_dont_have_account))
                     }
+                    append(" ")
                     withStyle(
-                        AppTypoGraph.span_roboto_bold()
+                        span_roboto_bold()
                             .copy(fontSize = 14.sp)
                     ) {
                         append(stringResource(id = R.string.login_register))

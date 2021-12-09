@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.components.loaders
+package br.com.alaksion.core_ui.components.loaders
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
+import br.com.alaksion.core_ui.theme.ImagefyTheme
 
 @Composable
 fun MorePhotosLoader(modifier: Modifier = Modifier) {

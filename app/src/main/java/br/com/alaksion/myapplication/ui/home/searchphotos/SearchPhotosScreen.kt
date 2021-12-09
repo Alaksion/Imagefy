@@ -27,17 +27,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
-import br.com.alaksion.myapplication.ui.components.TryAgain
-import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
-import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
+import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
+import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.searchphotos.components.SearchPhotosTopBar
-import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 
 @ExperimentalFoundationApi
 @Composable

@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.theme
+package br.com.alaksion.core_ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
@@ -6,7 +6,6 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph.AppTypography
 
 private val darkColors = darkColors(
     onPrimary = BlackRussian,
@@ -32,14 +31,15 @@ private val lightColors = lightColors(
 
 @Composable
 fun ImagefyTheme(
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
+    isDarkMode: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
+    val colors = if (isDarkMode) darkColors else lightColors
 
     MaterialTheme(
-        colors = if (isDarkTheme) darkColors else lightColors,
-        shapes = Shapes,
-        content = content,
-        typography = AppTypography()
+        colors = colors,
+        typography = appTypography(),
+        content = content
     )
+
 }

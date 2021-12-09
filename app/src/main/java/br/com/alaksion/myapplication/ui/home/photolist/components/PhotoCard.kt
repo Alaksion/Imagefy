@@ -31,10 +31,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import br.com.alaksion.core_ui.theme.*
+import br.com.alaksion.myapplication.common.extensions.invert
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
-import br.com.alaksion.myapplication.ui.theme.*
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
@@ -47,7 +48,7 @@ fun PhotoCard(
     photoContent: PhotoResponse,
     modifier: Modifier = Modifier,
     navigateToAuthor: (authorId: String) -> Unit,
-    ratePhoto: (photoId: String, isLike: Boolean) -> Unit
+    ratePhoto: (photo: PhotoResponse, isLike: Boolean) -> Unit
 ) {
     val isLiked = remember { mutableStateOf(photoContent.likedByUser) }
     val likeAnimationVisible = remember { mutableStateOf(false) }
@@ -64,18 +65,17 @@ fun PhotoCard(
 
     fun ratePhoto() {
         coroutineScope.launch {
-            ratePhoto(photoContent.id, isLiked.value)
-            photoContent.likedByUser = photoContent.likedByUser.not()
-            isLiked.value = photoContent.likedByUser
+            ratePhoto(photoContent, isLiked.value)
+            isLiked.invert()
             if (isLiked.value) {
-                photoContent.likes++
+                imageLikes.value = imageLikes.value + 1
                 likeAnimationVisible.value = true
                 delay(400)
                 likeAnimationVisible.value = false
             } else {
-                photoContent.likes--
+                imageLikes.value = imageLikes.value - 1
             }
-            imageLikes.value = photoContent.likes
+
         }
     }
 
@@ -260,13 +260,13 @@ internal fun PhotoCardInfo(
         }
         Text(
             text = buildAnnotatedString {
-                withStyle(AppTypoGraph.span_roboto_regular().copy(fontSize = 12.sp)) {
+                withStyle(span_roboto_regular().copy(fontSize = 12.sp)) {
                     append("Photo by ")
                 }
-                withStyle(AppTypoGraph.span_roboto_bold().copy(fontSize = 12.sp)) {
+                withStyle(span_roboto_bold().copy(fontSize = 12.sp)) {
                     append(authorName)
                 }
-                withStyle(AppTypoGraph.span_roboto_regular().copy(fontSize = 12.sp)) {
+                withStyle(span_roboto_regular().copy(fontSize = 12.sp)) {
                     append(" on Unsplash.")
                 }
             }

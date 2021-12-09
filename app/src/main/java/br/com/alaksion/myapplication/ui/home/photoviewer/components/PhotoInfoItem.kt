@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.myapplication.ui.theme.OffWhite
+import br.com.alaksion.core_ui.theme.OffWhite
 
 @Composable
 fun PhotoInfoItem(

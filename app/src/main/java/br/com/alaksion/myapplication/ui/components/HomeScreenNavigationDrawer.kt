@@ -23,12 +23,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.com.alaksion.core_ui.theme.ImagefyTheme
+import br.com.alaksion.core_ui.theme.LightGray
+import br.com.alaksion.core_ui.theme.span_roboto_bold
+import br.com.alaksion.core_ui.theme.span_roboto_regular
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.domain.model.StoredUser
-import br.com.alaksion.myapplication.ui.theme.AppTypoGraph
-import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
-import br.com.alaksion.myapplication.ui.theme.LightGray
 import com.skydoves.landscapist.glide.GlideImage
 import com.valentinilk.shimmer.shimmer
 
@@ -184,12 +185,12 @@ fun FollowingData(followersCount: Int, followingCount: Int, modifier: Modifier =
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         Text(buildAnnotatedString {
-            withStyle(AppTypoGraph.span_roboto_bold().copy(fontSize = 14.sp)) {
+            withStyle(span_roboto_bold().copy(fontSize = 14.sp)) {
                 append(followingCount.formatNumber())
             }
             append(" ")
             withStyle(
-                AppTypoGraph.span_roboto_regular()
+                span_roboto_regular()
                     .copy(
                         fontSize = 14.sp,
                         color = MaterialTheme.colors.onBackground.copy(alpha = 0.66f)
@@ -199,12 +200,12 @@ fun FollowingData(followersCount: Int, followingCount: Int, modifier: Modifier =
             }
         })
         Text(buildAnnotatedString {
-            withStyle(AppTypoGraph.span_roboto_bold().copy(fontSize = 14.sp)) {
+            withStyle(span_roboto_bold().copy(fontSize = 14.sp)) {
                 append(followersCount.formatNumber())
             }
             append(" ")
             withStyle(
-                AppTypoGraph.span_roboto_regular()
+                span_roboto_regular()
                     .copy(
                         fontSize = 14.sp,
                         color = MaterialTheme.colors.onBackground.copy(alpha = 0.66f)

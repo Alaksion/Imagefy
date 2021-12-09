@@ -7,7 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
@@ -25,14 +25,14 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.common.extensions.onBottomReached
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
-import br.com.alaksion.myapplication.ui.components.TryAgain
-import br.com.alaksion.myapplication.ui.components.loaders.MorePhotosLoader
-import br.com.alaksion.myapplication.ui.components.loaders.ProgressIndicator
-import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
+import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
+import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 
 @ExperimentalFoundationApi
 @Composable
@@ -111,7 +111,7 @@ fun AuthorPhotosList(
                         cells = GridCells.Fixed(3),
                         modifier = Modifier.scale(1.01f)
                     ) {
-                        itemsIndexed(photos) { index, authorPhoto ->
+                        items(photos) { authorPhoto ->
 
                             listState.onBottomReached(offset = 3) {
                                 loadMorePhotos()

@@ -101,12 +101,15 @@ class PhotoListViewModel @Inject constructor(
         _showLoadMorePhotosError.postValue(Event(Unit))
     }
 
-    fun ratePhoto(photoId: String, isLike: Boolean) {
+    fun ratePhoto(photo: PhotoResponse, isLike: Boolean) {
         viewModelScope.launch {
-            ratePhotoUseCase(photoId = photoId, isLike = isLike).collect {
+            ratePhotoUseCase(photoId = photo.id, isLike = isLike).collect {
                 handleApiResponse(
                     source = it,
-                    onSuccess = {},
+                    onSuccess = {
+                        photo.likedByUser = isLike
+                        if (isLike) photo.likes++ else photo.likes--
+                    },
                     onError = {}
                 )
             }

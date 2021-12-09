@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
+import br.com.alaksion.core_ui.theme.ImagefyTheme
 
 @Composable
 fun HomeBottomNavigation(

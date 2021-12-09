@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
+import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomNavProvider
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.ui.components.HomeScreenNavigationDrawer
@@ -25,7 +26,6 @@ import br.com.alaksion.myapplication.ui.navigator.HomeNavigator
 import br.com.alaksion.myapplication.ui.navigator.bottomnav.HomeBottomNavigation
 import br.com.alaksion.myapplication.ui.navigator.navigateToLogin
 import br.com.alaksion.myapplication.ui.navigator.navigateToUserProfile
-import br.com.alaksion.myapplication.ui.theme.ImagefyTheme
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +45,7 @@ class HomeActivity : AppCompatActivity() {
 
         installSplashScreen()
         setContent {
-            ImagefyTheme(isDarkTheme = viewModel.isConfigDarkMode.value) {
+            ImagefyTheme(isDarkMode = viewModel.isConfigDarkMode.value) {
                 val systemUiController = rememberSystemUiController()
                 val scope = rememberCoroutineScope()
                 val colors = MaterialTheme.colors
