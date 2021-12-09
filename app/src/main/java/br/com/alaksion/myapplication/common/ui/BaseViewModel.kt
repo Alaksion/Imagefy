@@ -1,8 +1,8 @@
 package br.com.alaksion.myapplication.common.ui
 
 import androidx.lifecycle.ViewModel
-import br.com.alaksion.myapplication.common.network.NetworkError
-import br.com.alaksion.myapplication.common.network.Source
+import br.com.alaksion.network.NetworkError
+import br.com.alaksion.network.Source
 
 abstract class BaseViewModel : ViewModel() {
 

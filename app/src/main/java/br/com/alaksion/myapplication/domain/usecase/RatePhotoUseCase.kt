@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.domain.usecase
 
-import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
+import br.com.alaksion.network.Source
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

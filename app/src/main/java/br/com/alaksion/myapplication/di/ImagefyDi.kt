@@ -1,10 +1,8 @@
 package br.com.alaksion.myapplication.di
 
 import android.content.Context
-import android.content.SharedPreferences
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
 import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
-import br.com.alaksion.myapplication.data.local.AppLocalConfig
 import br.com.alaksion.myapplication.data.local.ImagefyLocalDataSourceImpl
 import br.com.alaksion.myapplication.data.remote.AppRemoteConfig
 import br.com.alaksion.myapplication.data.remote.ImagefyRemoteDataSourceImpl
@@ -14,9 +12,11 @@ import br.com.alaksion.myapplication.data.repository.ImagefyRepositoryImpl
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.domain.usecase.*
 import br.com.alaksion.myapplication.ui.model.CurrentUserData
+import br.com.alaksion.network.client.domain.usecase.GetAuthorizationHeaderUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -41,12 +41,6 @@ object ImagefyDi {
 
     @Provides
     @Singleton
-    fun provideGetAuthorizationHeaderUseCase(sharedPreferences: SharedPreferences): GetAuthorizationHeaderUseCase {
-        return GetAuthorizationHeaderUseCase(sharedPreferences)
-    }
-
-    @Provides
-    @Singleton
     fun provideGetAuthUrlUseCase(getApiKeyUseCase: GetApiKeyUseCase): GetAuthUrlUseCase {
         return GetAuthUrlUseCase(getApiKeyUseCase)
     }
@@ -66,12 +60,6 @@ object ImagefyDi {
         return UnsplashAuthService.create(null, AppRemoteConfig.AUTH_SERVICE_BASE_URL)
     }
 
-    @Provides
-    @Singleton
-    fun provideSharedPrefs(@ApplicationContext context: Context): SharedPreferences {
-        return context.getSharedPreferences(AppLocalConfig.SHARED_PREFS_KEY, Context.MODE_PRIVATE)
-    }
-
 
     @Provides
     @Singleton
@@ -85,10 +73,9 @@ object ImagefyDi {
     @Provides
     @Singleton
     fun provideImagefyLocalDataSource(
-        sharedPreferences: SharedPreferences,
         @ApplicationContext context: Context
     ): ImagefyLocalDataSource {
-        return ImagefyLocalDataSourceImpl(sharedPreferences, context)
+        return ImagefyLocalDataSourceImpl(context)
     }
 
     @Provides

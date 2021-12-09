@@ -3,6 +3,7 @@ package br.com.alaksion.myapplication.domain.usecase
 import android.content.SharedPreferences
 import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.data.local.AppLocalConfig
+import br.com.alaksion.network.client.domain.usecase.GetAuthorizationHeaderUseCase
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.every

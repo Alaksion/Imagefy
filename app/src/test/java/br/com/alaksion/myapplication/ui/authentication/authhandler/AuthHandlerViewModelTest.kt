@@ -1,7 +1,6 @@
 package br.com.alaksion.myapplication.ui.authentication.authhandler
 
-import br.com.alaksion.myapplication.common.network.NetworkError
-import br.com.alaksion.myapplication.common.network.Source
+import br.com.alaksion.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
@@ -12,6 +11,7 @@ import br.com.alaksion.myapplication.testdata.UserNameTestData
 import br.com.alaksion.myapplication.testdata.ValidateLoginTestData
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthHandlerViewModel
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
+import br.com.alaksion.network.client.domain.usecase.StoreAuthTokenUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified

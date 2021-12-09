@@ -1,7 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.photolist
 
-import br.com.alaksion.myapplication.common.network.NetworkError
-import br.com.alaksion.myapplication.common.network.Source
+import br.com.alaksion.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase

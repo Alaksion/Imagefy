@@ -1,7 +1,5 @@
 package br.com.alaksion.myapplication.data.remote
 
-import br.com.alaksion.myapplication.common.network.Source
-import br.com.alaksion.myapplication.common.network.handleApiResponse
 import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.data.model.auth.AuthValidationResponseData
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
@@ -11,6 +9,8 @@ import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosRequest
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
 import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
 import br.com.alaksion.myapplication.data.remote.services.UnsplashService
+import br.com.alaksion.network.Source
+import br.com.alaksion.network.utils.handleApiResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

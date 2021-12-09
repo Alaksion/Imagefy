@@ -1,8 +1,7 @@
 package br.com.alaksion.myapplication.data.remote.services
 
 import br.com.alaksion.myapplication.data.model.auth.AuthValidationResponseData
-import br.com.alaksion.myapplication.data.remote.UnsplashServiceCompanion
-import kotlinx.coroutines.flow.Flow
+import br.com.alaksion.network.client.UnsplashServiceCompanion
 import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Query

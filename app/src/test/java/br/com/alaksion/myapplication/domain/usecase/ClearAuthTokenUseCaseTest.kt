@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.domain.usecase
 
 import br.com.alaksion.myapplication.utils.ImagefyBaseTest
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
+import br.com.alaksion.network.client.domain.usecase.ClearAuthTokenUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified

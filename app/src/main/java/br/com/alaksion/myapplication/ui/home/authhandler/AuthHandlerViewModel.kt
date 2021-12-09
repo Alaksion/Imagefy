@@ -14,6 +14,7 @@ import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.domain.model.CurrentUserResponse
 import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.domain.usecase.*
+import br.com.alaksion.network.client.domain.usecase.StoreAuthTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

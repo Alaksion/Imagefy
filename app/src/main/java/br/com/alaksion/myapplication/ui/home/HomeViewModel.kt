@@ -6,10 +6,9 @@ import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.extensions.invert
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
 import br.com.alaksion.myapplication.domain.model.StoredUser
-import br.com.alaksion.myapplication.domain.usecase.ClearAuthTokenUseCase
+import br.com.alaksion.network.client.domain.usecase.ClearAuthTokenUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetCurrentDarkModeConfigUseCase
 import br.com.alaksion.myapplication.domain.usecase.StoreDarkModeConfigUseCase
-import br.com.alaksion.myapplication.ui.model.CurrentUserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

@@ -1,7 +1,5 @@
 package br.com.alaksion.myapplication.data.repository
 
-import br.com.alaksion.myapplication.common.network.Source
-import br.com.alaksion.myapplication.common.network.mapSource
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
 import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.data.model.auth.mapToAuthResponse
@@ -16,6 +14,8 @@ import br.com.alaksion.myapplication.data.model.storeduser.mapToData
 import br.com.alaksion.myapplication.data.model.storeduser.mapToDomain
 import br.com.alaksion.myapplication.domain.model.*
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
+import br.com.alaksion.network.Source
+import br.com.alaksion.network.mapSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -87,14 +87,6 @@ class ImagefyRepositoryImpl @Inject constructor(
         return remoteDataSource.searchPhotos(request.mapToData()).map { source ->
             source.mapSource { it?.mapToSearchPhotosResponse() }
         }
-    }
-
-    override fun storeAuthorizationHeader(value: String) {
-        localDataSource.storeAuthorizationHeader(value)
-    }
-
-    override fun clearAuthorizationHeader() {
-        localDataSource.clearAuthorizationHeader()
     }
 
     override suspend fun storeDarkModeConfig(value: Boolean) {

@@ -1,12 +1,12 @@
 package br.com.alaksion.myapplication.data.datasource
 
-import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.data.model.auth.AuthValidationResponseData
 import br.com.alaksion.myapplication.data.model.author.UserResponseData
 import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseData
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosRequestData
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
+import br.com.alaksion.network.Source
 import kotlinx.coroutines.flow.Flow
 
 interface ImagefyRemoteDataSource {
