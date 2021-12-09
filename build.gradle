@@ -3,6 +3,8 @@ buildscript {
     ext {
         compose_version = '1.0.5'
         ext.hilt_extensions_version = "1.0.0-alpha03"
+        kt_version = '1.5.31'
+        hilt_version = '2.40.5'
     }
     repositories {
         google()
@@ -10,10 +12,8 @@ buildscript {
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.3"
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31'
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.39'
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kt_version"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
 }
 
