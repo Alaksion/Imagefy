@@ -1,45 +1,42 @@
 package br.com.alaksion.myapplication.ui.home.photolist
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.common.ui.BaseViewModel
+import br.com.alaksion.myapplication.common.ui.EventViewModel
+import br.com.alaksion.myapplication.common.ui.ViewModelEvent
 import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+sealed class PhotoListEvents() : ViewModelEvent {
+    class ShowMorePhotosError() : PhotoListEvents()
+}
 
 @HiltViewModel
 class PhotoListViewModel @Inject constructor(
     private val getPhotosUseCase: GetPhotosUseCase,
     private val ratePhotoUseCase: RatePhotoUseCase
-) : BaseViewModel() {
+) : EventViewModel<PhotoListEvents>() {
 
     private val _photos = mutableStateListOf<PhotoResponse>()
     val photos: SnapshotStateList<PhotoResponse>
         get() = _photos
 
-    private val _screenState = mutableStateOf<ViewState<Unit>>(ViewState.Loading())
-    val screenState: State<ViewState<Unit>>
+    private val _screenState = MutableStateFlow<ViewState<Unit>>(ViewState.Loading())
+    val screenState: StateFlow<ViewState<Unit>>
         get() = _screenState
 
-    private val _isMorePhotosLoading = mutableStateOf(false)
-    val isMorePhotosLoading: State<Boolean>
+    private val _isMorePhotosLoading = MutableStateFlow(false)
+    val isMorePhotosLoading: StateFlow<Boolean>
         get() = _isMorePhotosLoading
-
-    private val _showLoadMorePhotosError = MutableLiveData<Event<Unit>>()
-    val showMorePhotosError: LiveData<Event<Unit>>
-        get() = _showLoadMorePhotosError
 
     private var currentPage = 1
 
@@ -49,16 +46,13 @@ class PhotoListViewModel @Inject constructor(
 
     fun getImages() {
         _screenState.value = ViewState.Loading()
-        viewModelScope.launch {
-            getPhotosUseCase(currentPage).collect {
-                handleApiResponse(
-                    source = it,
-                    onSuccess = { data -> handleGetPhotosSuccess(data) },
-                    onError = { error -> handleGetPhotosError(error) }
-                )
-            }
-        }
+        handleApiResponse(
+            source = { getPhotosUseCase(currentPage) },
+            onSuccess = { data -> handleGetPhotosSuccess(data) },
+            onError = { error -> handleGetPhotosError(error) }
+        )
     }
+
 
     private fun handleGetPhotosSuccess(data: List<PhotoResponse>?) {
         data?.let { response ->
@@ -74,21 +68,17 @@ class PhotoListViewModel @Inject constructor(
     }
 
     fun loadMorePhotos() {
-        viewModelScope.launch {
-            _isMorePhotosLoading.value = true
-            currentPage++
-            getPhotosUseCase(currentPage).collect {
-                handleApiResponse(
-                    source = it,
-                    onSuccess = { data -> handleLoadMorePhotosSuccess(data) },
-                    onError = { onLoadMorePhotosError() }
-                )
-            }
-        }
+        _isMorePhotosLoading.value = true
+        currentPage++
+        handleApiResponse(
+            source = { getPhotosUseCase(currentPage) },
+            onSuccess = { data -> handleLoadMorePhotosSuccess(data) },
+            onError = { onLoadMorePhotosError() }
+        )
     }
 
     private fun onLoadMorePhotosError() {
-        _showLoadMorePhotosError.postValue(Event(Unit))
+        showMorePhotosError()
         _isMorePhotosLoading.value = false
     }
 
@@ -98,22 +88,23 @@ class PhotoListViewModel @Inject constructor(
             _photos.addAll(response)
             return
         }
-        _showLoadMorePhotosError.postValue(Event(Unit))
+        showMorePhotosError()
     }
 
     fun ratePhoto(photo: PhotoResponse, isLike: Boolean) {
-        viewModelScope.launch {
-            ratePhotoUseCase(photoId = photo.id, isLike = isLike).collect {
-                handleApiResponse(
-                    source = it,
-                    onSuccess = {
-                        photo.likedByUser = isLike
-                        if (isLike) photo.likes++ else photo.likes--
-                    },
-                    onError = {}
-                )
-            }
-        }
+        handleApiResponse(
+            source = { ratePhotoUseCase(photoId = photo.id, isLike = isLike) },
+            onSuccess = {
+                photo.likedByUser = isLike
+                if (isLike) photo.likes++ else photo.likes--
+            },
+            onError = {}
+        )
     }
 
+    private fun showMorePhotosError() {
+        viewModelScope.launch {
+            sendEvent(PhotoListEvents.ShowMorePhotosError())
+        }
+    }
 }

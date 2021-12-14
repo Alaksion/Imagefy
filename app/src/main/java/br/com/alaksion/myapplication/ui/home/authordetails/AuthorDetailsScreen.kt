@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,19 +23,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.DimGray
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
+import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
-import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
-import br.com.alaksion.core_ui.components.TryAgain
-import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
+import kotlinx.coroutines.flow.collect
 
 const val AUTHOR_USERNAME_ARG = "author_username"
 
@@ -57,29 +59,33 @@ fun AuthorDetailsScreen(
         }
     }
 
-    LaunchedEffect(key1 = authorUsername) {
+    LaunchedEffect(
+        key1 = lifecycleOwner,
+        key2 = viewModel,
+        key3 = authorUsername
+    ) {
         viewModel.getAuthorProfileData(authorUsername)
-    }
-
-    DisposableEffect(key1 = lifecycleOwner) {
-        viewModel.showErrorToast.observeEvent(lifecycleOwner) {
-            Toast.makeText(
-                context,
-                context.getString(R.string.author_details_images_error),
-                Toast.LENGTH_SHORT
-            )
-                .show()
-        }
-        onDispose {
-            viewModel.showErrorToast.removeObservers(lifecycleOwner)
+        safeFlowCollect(lifecycleOwner) {
+            viewModel.eventHandler.collect { event ->
+                when (event) {
+                    is AuthorDetailsEvents.ShowErrorToast -> {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.author_details_images_error),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+                }
+            }
         }
     }
 
     AuthorDetailsScreenContent(
-        authorData = viewModel.authorData.value,
+        authorData = viewModel.authorData.collectAsState().value,
         authorUsername = authorUsername,
         authorPhotos = viewModel.authorPhotos.toList(),
-        authorPhotoState = viewModel.authorPhotosState.value,
+        authorPhotoState = viewModel.authorPhotosState.collectAsState().value,
         popBackStack = popBackStack,
         getMorePhotos = { viewModel.getMoreAuthorPhotos() },
         tryAgainGetAuthorData = { viewModel.getAuthorProfileData(authorUsername) },

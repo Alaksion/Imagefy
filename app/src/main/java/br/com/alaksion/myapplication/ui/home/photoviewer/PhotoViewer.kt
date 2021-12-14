@@ -26,6 +26,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ErrorLightRed
 import br.com.alaksion.core_ui.theme.OffWhite
 import br.com.alaksion.myapplication.common.extensions.formatNumber
@@ -35,8 +37,6 @@ import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibil
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
-import br.com.alaksion.core_ui.components.TryAgain
-import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
 
 const val PHOTO_ID_ARG = "photo_url"
@@ -62,7 +62,7 @@ fun PhotoViewerScreen(
     }
 
     PhotoViewerScreenContent(
-        photoData = viewModel.photoData.value,
+        photoData = viewModel.photoData.collectAsState().value,
         popBackStack = popBackStack,
         onRateImage = { isLike ->
             viewModel.ratePhoto(photoId, isLike)

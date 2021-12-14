@@ -1,8 +1,5 @@
 package br.com.alaksion.myapplication.ui.home.photoviewer
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.ui.BaseViewModel
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
@@ -10,8 +7,8 @@ import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,8 +17,9 @@ class PhotoViewerViewModel @Inject constructor(
     private val ratePhotoUseCase: RatePhotoUseCase
 ) : BaseViewModel() {
 
-    private val _photoData = mutableStateOf<ViewState<PhotoDetailResponse>>(ViewState.Loading())
-    val photoData: State<ViewState<PhotoDetailResponse>>
+    private val _photoData: MutableStateFlow<ViewState<PhotoDetailResponse>> =
+        MutableStateFlow(ViewState.Loading())
+    val photoData: StateFlow<ViewState<PhotoDetailResponse>>
         get() = _photoData
 
     private val photoId: String = ""
@@ -29,15 +27,11 @@ class PhotoViewerViewModel @Inject constructor(
     fun getPhotoDetails(currentPhotoId: String) {
         if (photoId != currentPhotoId) {
             _photoData.value = ViewState.Loading()
-            viewModelScope.launch {
-                getPhotoDetailsUseCase(currentPhotoId).collect {
-                    handleApiResponse(
-                        source = it,
-                        onSuccess = { data -> onGetPhotoDetailsSuccess(data) },
-                        onError = { error -> onGetPhotoDetailsError(error) }
-                    )
-                }
-            }
+            handleApiResponse(
+                source = { getPhotoDetailsUseCase(currentPhotoId) },
+                onSuccess = { data -> onGetPhotoDetailsSuccess(data) },
+                onError = { error -> onGetPhotoDetailsError(error) }
+            )
         }
     }
 
@@ -54,15 +48,12 @@ class PhotoViewerViewModel @Inject constructor(
     }
 
     fun ratePhoto(photoId: String, isLike: Boolean) {
-        viewModelScope.launch {
-            ratePhotoUseCase(isLike, photoId).collect {
-                handleApiResponse(
-                    source = it,
-                    onSuccess = { },
-                    onError = { }
-                )
-            }
-        }
-    }
 
+        handleApiResponse(
+            source = { ratePhotoUseCase(isLike, photoId) },
+            onSuccess = { },
+            onError = { }
+        )
+
+    }
 }

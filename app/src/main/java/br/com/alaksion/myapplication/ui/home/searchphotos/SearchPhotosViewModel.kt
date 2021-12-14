@@ -1,49 +1,45 @@
 package br.com.alaksion.myapplication.ui.home.searchphotos
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.network.NetworkError
-import br.com.alaksion.myapplication.common.ui.BaseViewModel
+import br.com.alaksion.myapplication.common.ui.EventViewModel
+import br.com.alaksion.myapplication.common.ui.ViewModelEvent
 import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.model.SearchPhotosResponse
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
+import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+sealed class SearchPhotosEvents() : ViewModelEvent {
+    class MorePhotosError() : SearchPhotosEvents()
+}
 
 @HiltViewModel
 class SearchPhotosViewModel @Inject constructor(
     private val searchPhotosUseCase: SearchPhotosUseCase
-) : BaseViewModel() {
+) : EventViewModel<SearchPhotosEvents>() {
 
-    private val _screenState = mutableStateOf<ViewState<Unit>>(ViewState.Idle())
-    val screenState: State<ViewState<Unit>>
+    private val _screenState: MutableStateFlow<ViewState<Unit>> = MutableStateFlow(ViewState.Idle())
+    val screenState: StateFlow<ViewState<Unit>>
         get() = _screenState
 
-    private val _searchQuery = mutableStateOf("")
-    val searchQuery: State<String>
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery: StateFlow<String>
         get() = _searchQuery
+
+    private val _isMorePhotosLoading = MutableStateFlow(false)
+    val isMorePhotosLoading: StateFlow<Boolean>
+        get() = _isMorePhotosLoading
 
     private val _photoList = mutableStateListOf<PhotoResponse>()
     val photoList: SnapshotStateList<PhotoResponse>
         get() = _photoList
-
-    private val _isMorePhotosLoading = mutableStateOf(false)
-    val isMorePhotosLoading: State<Boolean>
-        get() = _isMorePhotosLoading
-
-    private val _showLoadMorePhotosError = MutableLiveData<Event<Unit>>()
-    val showMorePhotosError: LiveData<Event<Unit>>
-        get() = _showLoadMorePhotosError
-
 
     private var currentPage = 1
     private var maxPages = 1
@@ -52,15 +48,16 @@ class SearchPhotosViewModel @Inject constructor(
         onSuccess: (data: SearchPhotosResponse?) -> Unit,
         onError: (NetworkError) -> Unit
     ) {
-        viewModelScope.launch {
-            searchPhotosUseCase(page = currentPage, searchQuery = searchQuery.value).collect {
-                handleApiResponse(
-                    source = it,
-                    onError = { error -> onError(error) },
-                    onSuccess = { data -> onSuccess(data) }
+        handleApiResponse(
+            source = {
+                searchPhotosUseCase(
+                    page = currentPage,
+                    searchQuery = searchQuery.value
                 )
-            }
-        }
+            },
+            onError = { error -> onError(error) },
+            onSuccess = { data -> onSuccess(data) }
+        )
     }
 
     fun onChangeSearchQuery(value: String) {
@@ -108,13 +105,18 @@ class SearchPhotosViewModel @Inject constructor(
             _photoList.addAll(response.photos)
             return
         }
-        _showLoadMorePhotosError.postValue(Event(Unit))
-
+        showMorePhotosError()
     }
 
     private fun onErrorLoadMorePhotos() {
         _isMorePhotosLoading.value = false
-        _showLoadMorePhotosError.postValue(Event(Unit))
+        showMorePhotosError()
+    }
+
+    private fun showMorePhotosError() {
+        viewModelScope.launch {
+            sendEvent(SearchPhotosEvents.MorePhotosError())
+        }
     }
 
 }

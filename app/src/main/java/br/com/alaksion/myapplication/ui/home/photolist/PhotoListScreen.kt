@@ -11,8 +11,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,12 +24,13 @@ import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.onBottomReached
+import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
-import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoListTopBar
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalAnimationApi
 @Composable
@@ -43,17 +44,19 @@ fun PhotoListScreen(
     val context = LocalContext.current
     val bottomSheetState = LocalBottomSheetVisibility.current
 
-    DisposableEffect(lifeCycleOwner) {
-        viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
-            Toast.makeText(
-                context,
-                context.getString(R.string.load_more_error),
-                Toast.LENGTH_SHORT
-            )
-                .show()
-        }
-        onDispose {
-            viewModel.showMorePhotosError.removeObservers(lifeCycleOwner)
+    LaunchedEffect(viewModel, lifeCycleOwner) {
+        safeFlowCollect(lifeCycleOwner) {
+            viewModel.eventHandler.collect { event ->
+                when (event) {
+                    is PhotoListEvents.ShowMorePhotosError -> {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.load_more_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
     }
 
@@ -62,12 +65,12 @@ fun PhotoListScreen(
     }
 
     PhotoListScreenContent(
-        screenState = viewModel.screenState.value,
+        screenState = viewModel.screenState.collectAsState().value,
         photos = viewModel.photos.toList(),
         loadMorePhotos = { viewModel.loadMorePhotos() },
         onClickTryAgain = { viewModel.getImages() },
         navigateToAuthorDetails = navigateToAuthorDetails,
-        isMorePhotosLoading = viewModel.isMorePhotosLoading.value,
+        isMorePhotosLoading = viewModel.isMorePhotosLoading.collectAsState().value,
         ratePhoto = { photo, isLike ->
             viewModel.ratePhoto(photo, isLike)
         },

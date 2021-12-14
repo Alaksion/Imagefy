@@ -1,17 +1,25 @@
 package br.com.alaksion.myapplication.common.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import br.com.alaksion.network.NetworkError
 import br.com.alaksion.network.Source
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
 
-    protected fun <T> handleApiResponse(
-        source: Source<T>,
+    protected open fun <T> handleApiResponse(
+        source: suspend () -> Flow<Source<T>>,
         onSuccess: (T?) -> Unit,
         onError: (NetworkError) -> Unit
     ) {
-        if (source is Source.Error) onError(source.errorData)
-        else onSuccess((source as Source.Success).data)
+        viewModelScope.launch {
+            source().collect { response ->
+                if (response is Source.Error) onError(response.errorData)
+                else onSuccess((response as Source.Success).data)
+            }
+        }
     }
 }

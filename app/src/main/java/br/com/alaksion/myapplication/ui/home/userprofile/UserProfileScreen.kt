@@ -9,25 +9,29 @@ import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
+import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
-import br.com.alaksion.core_ui.components.TryAgain
-import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalFoundationApi
 @Composable
@@ -38,6 +42,7 @@ fun UserProfileScreen(
     navigateToPhotoViewer: (photoUrl: String) -> Unit,
 ) {
     val bottomSheetState = LocalBottomSheetVisibility.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     DisposableEffect(key1 = true) {
         bottomSheetState.value = false
@@ -46,15 +51,25 @@ fun UserProfileScreen(
         }
     }
 
-    LaunchedEffect(key1 = authorUsername) {
+    LaunchedEffect(key1 = authorUsername, key2 = viewModel, key3 = lifecycleOwner) {
         viewModel.getUserProfileData(authorUsername)
+
+        safeFlowCollect(lifecycleOwner) {
+            viewModel.eventHandler.collect { event ->
+                when (event) {
+                    is UserProfileEvents.ShowMorePhotosError -> {
+
+                    }
+                }
+            }
+        }
     }
 
     UserProfileContent(
-        userData = viewModel.userData.value,
+        userData = viewModel.userData.collectAsState().value,
         username = authorUsername,
         userPhotos = viewModel.userPhotos.toList(),
-        userPhotosState = viewModel.userPhotosState.value,
+        userPhotosState = viewModel.userPhotosState.collectAsState().value,
         popBackStack = popBackStack,
         getMorePhotos = { viewModel.getMoreUserPhotos() },
         tryAgainGetUserData = { viewModel.getUserProfileData(authorUsername) },

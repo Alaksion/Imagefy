@@ -22,13 +22,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
+import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
 import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.common.utils.observeEvent
 import br.com.alaksion.myapplication.domain.model.StoredUser
-import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import com.skydoves.landscapist.rememberDrawablePainter
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun SplashScreen(
@@ -44,18 +46,15 @@ fun SplashScreen(
         bottomSheetState.value = false
     }
 
-    DisposableEffect(key1 = lifeCycleOwner) {
-        viewModel.isUserLogged.observeEvent(lifeCycleOwner) { isUserLogged ->
-            if (isUserLogged) navigateToHome()
-            else navigateToLogin()
-        }
-        viewModel.currentUserData.observeEvent(lifeCycleOwner) {
-            updateUserData(it)
-        }
-
-        onDispose {
-            viewModel.currentUserData.removeObservers(lifeCycleOwner)
-            viewModel.isUserLogged.removeObservers(lifeCycleOwner)
+    LaunchedEffect(key1 = lifeCycleOwner, key2 = viewModel) {
+        safeFlowCollect(lifeCycleOwner) {
+            viewModel.eventHandler.collect { event ->
+                when (event) {
+                    is SplashEvent.NavigateToLogin -> navigateToLogin()
+                    is SplashEvent.NavigateToHome -> navigateToHome()
+                    is SplashEvent.UpdateUserData -> updateUserData(event.user)
+                }
+            }
         }
     }
 

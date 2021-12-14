@@ -5,63 +5,60 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.common.ui.BaseViewModel
+import br.com.alaksion.myapplication.common.ui.EventViewModel
+import br.com.alaksion.myapplication.common.ui.ViewModelEvent
 import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+sealed class UserProfileEvents() : ViewModelEvent {
+    class ShowMorePhotosError() : UserProfileEvents()
+}
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase,
     private val getAuthorPhotosUseCase: GetAuthorPhotosUseCase
-) : BaseViewModel() {
+) : EventViewModel<UserProfileEvents>() {
 
-    private val _userData: MutableState<ViewState<AuthorResponse>> =
-        mutableStateOf(ViewState.Loading())
-    val userData: State<ViewState<AuthorResponse>>
+    private val _userData: MutableStateFlow<ViewState<AuthorResponse>> =
+        MutableStateFlow(ViewState.Loading())
+    val userData: StateFlow<ViewState<AuthorResponse>>
         get() = _userData
 
-    private val _userPhotosState: MutableState<ViewState<Unit>> =
-        mutableStateOf(ViewState.Loading())
-    val userPhotosState: State<ViewState<Unit>>
+    private val _userPhotosState: MutableStateFlow<ViewState<Unit>> =
+        MutableStateFlow(ViewState.Loading())
+    val userPhotosState: StateFlow<ViewState<Unit>>
         get() = _userPhotosState
 
     private val _userPhotos = mutableStateListOf<AuthorPhotosResponse>()
     val userPhotos: SnapshotStateList<AuthorPhotosResponse>
         get() = _userPhotos
 
-    private val _showMorePhotosError = MutableLiveData<Event<Unit>>()
-    val showMorePhotosError: LiveData<Event<Unit>>
-        get() = _showMorePhotosError
-
     private var authorUsername: String = ""
     private var page = 1
 
     fun getUserProfileData(authorUsername: String) {
         this.authorUsername = authorUsername
+        _userData.value = ViewState.Loading()
 
-        viewModelScope.launch {
-            _userData.value = ViewState.Loading()
-            getAuthorProfileUseCase(authorUsername).collect {
-                handleApiResponse(
-                    source = it,
-                    onError = { error -> onGetUserDataError(error) },
-                    onSuccess = { data -> onGetUserDataSuccess(data) }
-                )
-            }
-        }
+        handleApiResponse(
+            source = { getAuthorProfileUseCase(authorUsername) },
+            onError = { error -> onGetUserDataError(error) },
+            onSuccess = { data -> onGetUserDataSuccess(data) }
+        )
+
     }
+
 
     private fun onGetUserDataSuccess(data: AuthorResponse?) {
         data?.let { response ->
@@ -77,18 +74,16 @@ class UserProfileViewModel @Inject constructor(
     }
 
     private fun getUserPhotos() {
-        viewModelScope.launch {
-            getAuthorPhotosUseCase(
-                username = authorUsername,
-                page = page
-            ).collect {
-                handleApiResponse(
-                    source = it,
-                    onSuccess = { data -> onGetUserPhotosSuccess(data) },
-                    onError = { error -> onGetUserPhotosError(error) }
+        handleApiResponse(
+            source = {
+                getAuthorPhotosUseCase(
+                    username = authorUsername,
+                    page = page
                 )
-            }
-        }
+            },
+            onSuccess = { data -> onGetUserPhotosSuccess(data) },
+            onError = { error -> onGetUserPhotosError(error) }
+        )
     }
 
     private fun onGetUserPhotosSuccess(data: List<AuthorPhotosResponse>?) {
@@ -106,18 +101,16 @@ class UserProfileViewModel @Inject constructor(
 
     fun getMoreUserPhotos() {
         page++
-        viewModelScope.launch {
-            getAuthorPhotosUseCase(
-                username = authorUsername,
-                page = page
-            ).collect {
-                handleApiResponse(
-                    source = it,
-                    onSuccess = { data -> getMorePhotosSuccess(data) },
-                    onError = { getMorePhotosError() }
+        handleApiResponse(
+            source = {
+                getAuthorPhotosUseCase(
+                    username = authorUsername,
+                    page = page
                 )
-            }
-        }
+            },
+            onSuccess = { data -> getMorePhotosSuccess(data) },
+            onError = { getMorePhotosError() }
+        )
     }
 
     private fun getMorePhotosSuccess(data: List<AuthorPhotosResponse>?) {
@@ -125,11 +118,17 @@ class UserProfileViewModel @Inject constructor(
             _userPhotos.addAll(it)
             return
         }
-        _showMorePhotosError.postValue(Event(Unit))
+        showMorePhotosError()
     }
 
     private fun getMorePhotosError() {
-        _showMorePhotosError.postValue(Event(Unit))
+        showMorePhotosError()
+    }
+
+    private fun showMorePhotosError() {
+        viewModelScope.launch {
+            sendEvent(UserProfileEvents.ShowMorePhotosError())
+        }
     }
 
 }

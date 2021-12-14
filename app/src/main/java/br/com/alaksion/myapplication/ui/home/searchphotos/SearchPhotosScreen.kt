@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ImageSearch
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -27,16 +28,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import br.com.alaksion.core_ui.theme.ImagefyTheme
-import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.utils.observeEvent
-import br.com.alaksion.myapplication.domain.model.PhotoResponse
-import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.core_ui.components.TryAgain
 import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
+import br.com.alaksion.core_ui.theme.ImagefyTheme
+import br.com.alaksion.myapplication.R
+import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
+import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.domain.model.PhotoResponse
+import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.home.searchphotos.components.SearchPhotosTopBar
+import kotlinx.coroutines.flow.collect
 
 @ExperimentalFoundationApi
 @Composable
@@ -48,14 +50,19 @@ fun SearchPhotosScreen(
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-    LaunchedEffect(lifeCycleOwner) {
-        viewModel.showMorePhotosError.observeEvent(lifeCycleOwner) {
-            Toast.makeText(
-                context,
-                context.getString(R.string.load_more_error),
-                Toast.LENGTH_SHORT
-            )
-                .show()
+    LaunchedEffect(lifeCycleOwner, viewModel) {
+        safeFlowCollect(lifeCycleOwner) {
+            viewModel.eventHandler.collect { event ->
+                when (event) {
+                    is SearchPhotosEvents.MorePhotosError -> {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.load_more_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
     }
 
@@ -64,10 +71,10 @@ fun SearchPhotosScreen(
         userProfileUrl,
         searchPhotos = { viewModel.searchPhotos() },
         onClickTryAgain = { viewModel.searchPhotos() },
-        query = viewModel.searchQuery.value,
+        query = viewModel.searchQuery.collectAsState().value,
         onChangeQuery = { value -> viewModel.onChangeSearchQuery(value) },
-        screenState = viewModel.screenState.value,
-        isMorePhotosLoading = viewModel.isMorePhotosLoading.value,
+        screenState = viewModel.screenState.collectAsState().value,
+        isMorePhotosLoading = viewModel.isMorePhotosLoading.collectAsState().value,
         photos = viewModel.photoList,
         loadMorePhotos = { viewModel.loadMorePhotos() }
     )
@@ -253,7 +260,7 @@ fun SearchPhotosList(
 @Preview(showBackground = true)
 fun SearchPhotosScreenPreview() {
     ImagefyTheme {
-        Scaffold() {
+        Scaffold {
             SearchPhotosContent(
                 toggleDrawer = {},
                 userProfileUrl = "",

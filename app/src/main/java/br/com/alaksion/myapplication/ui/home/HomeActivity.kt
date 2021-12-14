@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -45,12 +46,12 @@ class HomeActivity : AppCompatActivity() {
 
         installSplashScreen()
         setContent {
-            ImagefyTheme(isDarkMode = viewModel.isConfigDarkMode.value) {
+            ImagefyTheme(isDarkMode = viewModel.isConfigDarkMode.collectAsState().value) {
                 val systemUiController = rememberSystemUiController()
                 val scope = rememberCoroutineScope()
                 val colors = MaterialTheme.colors
 
-                LaunchedEffect(key1 = viewModel.isConfigDarkMode.value) {
+                LaunchedEffect(key1 = viewModel.isConfigDarkMode.collectAsState().value) {
                     systemUiController.setStatusBarColor(
                         color = colors.background,
                         darkIcons = viewModel.isConfigDarkMode.value.not()
@@ -79,7 +80,7 @@ class HomeActivity : AppCompatActivity() {
                             drawerElevation = 0.dp,
                             drawerContent = {
                                 HomeScreenNavigationDrawer(
-                                    userData = currentUserData.value,
+                                    userData = currentUserData.collectAsState().value,
                                     navigateToAuthorProfile = {
                                         scope.launch {
                                             navigateToUserProfile(navController)
@@ -103,11 +104,10 @@ class HomeActivity : AppCompatActivity() {
                                 navHostController = navController,
                                 modifier = Modifier.padding(screenPadding),
                                 toggleDrawer = { toggleDrawer() },
-                                userData = currentUserData.value,
+                                userData = currentUserData.collectAsState().value,
                                 updateUserData = { viewModel.updateUserData(it) }
                             )
                         }
-
                     }
                 }
             }

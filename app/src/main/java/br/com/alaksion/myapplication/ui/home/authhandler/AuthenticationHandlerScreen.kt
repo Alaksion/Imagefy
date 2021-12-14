@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -14,14 +15,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.core_ui.theme.ImagefyTheme
-import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
-import br.com.alaksion.myapplication.common.utils.observeEvent
-import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.core_ui.components.TryAgain
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
+import br.com.alaksion.core_ui.theme.ImagefyTheme
+import br.com.alaksion.myapplication.R
+import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
+import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
+import br.com.alaksion.myapplication.domain.model.StoredUser
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun AuthenticationHandlerScreen(
@@ -41,20 +43,21 @@ fun AuthenticationHandlerScreen(
         }
     }
 
-    LaunchedEffect(key1 = lifecycleOwner) {
+    LaunchedEffect(key1 = lifecycleOwner, viewModel) {
         viewModel.authenticateUser(authCode)
 
-        viewModel.currentUserData.observeEvent(lifecycleOwner) {
-            updateUserData(it)
-        }
-
-        viewModel.handleNavigationSuccess.observeEvent(lifecycleOwner) {
-            goToHomeScreen()
+        safeFlowCollect(lifecycleOwner) {
+            viewModel.eventHandler.collect { event ->
+                when (event) {
+                    is AuthHandlerEvents.NavigateToSuccess -> goToHomeScreen()
+                    is AuthHandlerEvents.UpdateUserData -> updateUserData(event.data)
+                }
+            }
         }
     }
 
     AuthHandlerContent(
-        screenState = viewModel.authenticationState.value,
+        screenState = viewModel.authenticationState.collectAsState().value,
         onClickTryAgain = { viewModel.authenticateUser(authCode) },
         goToLoginScreen = { goToLoginScreen() }
     )
