@@ -1,4 +1,4 @@
-# Imagefy Images Host Service blablabal
+# Imagefy
 > Imagefy is an application developed with Android Jetpack Compose along with the Unsplash Api to serve as a Compose code sample, this project is still in development, so new features and code refactors will oftenly occur.
 
 <img src="https://user-images.githubusercontent.com/30579274/138508180-b6e2cf10-2801-43af-96e0-287eecb228a2.jpg" width=25% height=25%/>
@@ -24,5 +24,9 @@ To run the application locally follow the steps below:
 2. Open the project's directory using Android Studio.
 3. Run the following command using your Unsplash api keys: ```gradlew assignKeys -PsecretKey=\"your-secret-key\" -PpublicKey=\"your-public-key\"```
 4. Now your project is ready to be launched!
+
+## Known bugs:
+1. Deep links might be unstable on api 31+
+2. Glide image composable is not downloading images properly on api 31+
 
 [⬆ Voltar ao topo](#Imagefy)<br>
