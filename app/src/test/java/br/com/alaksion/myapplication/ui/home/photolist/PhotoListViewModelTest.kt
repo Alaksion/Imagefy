@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.photolist
 
-import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase

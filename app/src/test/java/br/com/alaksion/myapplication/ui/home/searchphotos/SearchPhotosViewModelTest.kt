@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.searchphotos
 
-import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.SearchPhotosResponse
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
 import br.com.alaksion.myapplication.testdata.SearchPhotosTestData

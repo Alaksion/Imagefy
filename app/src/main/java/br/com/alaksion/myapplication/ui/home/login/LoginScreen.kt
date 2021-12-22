@@ -14,7 +14,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,7 +30,6 @@ import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.core_ui.theme.span_roboto_bold
 import br.com.alaksion.core_ui.theme.span_roboto_regular
 import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.ui.PresentationConstants
 
 @Composable
@@ -39,11 +37,6 @@ fun LoginScreen(
     viewModel: LoginViewModel
 ) {
     val context = LocalContext.current
-    val bottomSheetState = LocalBottomSheetVisibility.current
-
-    LaunchedEffect(key1 = true) {
-        bottomSheetState.value = false
-    }
 
     fun navigateToCreateAccount() {
         val uri = Uri.parse(PresentationConstants.REGISTER_URL)

@@ -5,7 +5,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -20,9 +19,8 @@ import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
-import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.domain.model.StoredUser
+import br.com.alaksion.myapplication.ui.model.ViewState
 import kotlinx.coroutines.flow.collect
 
 @Composable
@@ -33,15 +31,7 @@ fun AuthenticationHandlerScreen(
     authCode: String?,
     updateUserData: (StoredUser) -> Unit
 ) {
-    val bottomSheetState = LocalBottomSheetVisibility.current
     val lifecycleOwner = LocalLifecycleOwner.current
-
-    DisposableEffect(key1 = true) {
-        bottomSheetState.value = false
-        onDispose {
-            bottomSheetState.value = true
-        }
-    }
 
     LaunchedEffect(key1 = lifecycleOwner, viewModel) {
         viewModel.authenticateUser(authCode)

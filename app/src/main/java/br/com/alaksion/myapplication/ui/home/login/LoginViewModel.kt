@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.ui.home.login
 
 import android.net.Uri
-import br.com.alaksion.myapplication.common.ui.BaseViewModel
+import br.com.alaksion.myapplication.ui.model.BaseViewModel
 import br.com.alaksion.myapplication.domain.usecase.GetAuthUrlUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

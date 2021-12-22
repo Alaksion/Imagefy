@@ -3,9 +3,9 @@ package br.com.alaksion.myapplication.ui.home.photolist
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.common.ui.EventViewModel
-import br.com.alaksion.myapplication.common.ui.ViewModelEvent
-import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.ui.model.EventViewModel
+import br.com.alaksion.myapplication.ui.model.ViewModelEvent
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase

@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.ui.home.photoviewer
 
-import br.com.alaksion.myapplication.common.ui.BaseViewModel
-import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.ui.model.BaseViewModel
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase

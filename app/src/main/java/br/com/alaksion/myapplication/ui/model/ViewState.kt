@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.common.ui
+package br.com.alaksion.myapplication.ui.model
 
 import br.com.alaksion.network.NetworkError
 

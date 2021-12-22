@@ -32,12 +32,11 @@ import br.com.alaksion.core_ui.theme.ErrorLightRed
 import br.com.alaksion.core_ui.theme.OffWhite
 import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.common.extensions.invert
-import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
+import br.com.alaksion.myapplication.ui.model.ViewState
 
 const val PHOTO_ID_ARG = "photo_url"
 
@@ -48,14 +47,6 @@ fun PhotoViewerScreen(
     viewModel: PhotoViewerViewModel,
     popBackStack: () -> Boolean,
 ) {
-    val bottomSheetState = LocalBottomSheetVisibility.current
-
-    DisposableEffect(key1 = true) {
-        bottomSheetState.value = false
-        onDispose {
-            bottomSheetState.value = true
-        }
-    }
 
     LaunchedEffect(key1 = photoId) {
         viewModel.getPhotoDetails(photoId)

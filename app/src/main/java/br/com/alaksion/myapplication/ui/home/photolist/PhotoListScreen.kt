@@ -25,11 +25,10 @@ import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.onBottomReached
 import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
-import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoListTopBar
+import br.com.alaksion.myapplication.ui.model.ViewState
 import kotlinx.coroutines.flow.collect
 
 @ExperimentalAnimationApi
@@ -42,7 +41,6 @@ fun PhotoListScreen(
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    val bottomSheetState = LocalBottomSheetVisibility.current
 
     LaunchedEffect(viewModel, lifeCycleOwner) {
         safeFlowCollect(lifeCycleOwner) {
@@ -58,10 +56,6 @@ fun PhotoListScreen(
                 }
             }
         }
-    }
-
-    LaunchedEffect(key1 = true) {
-        bottomSheetState.value = true
     }
 
     PhotoListScreenContent(

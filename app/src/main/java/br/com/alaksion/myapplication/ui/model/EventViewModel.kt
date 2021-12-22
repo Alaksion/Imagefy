@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.common.ui
+package br.com.alaksion.myapplication.ui.model
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

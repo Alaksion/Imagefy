@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -29,13 +28,12 @@ import br.com.alaksion.core_ui.theme.DimGray
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
-import br.com.alaksion.myapplication.common.ui.ViewState
-import br.com.alaksion.myapplication.common.ui.providers.LocalBottomSheetVisibility
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
+import br.com.alaksion.myapplication.ui.model.ViewState
 import kotlinx.coroutines.flow.collect
 
 const val AUTHOR_USERNAME_ARG = "author_username"
@@ -50,14 +48,6 @@ fun AuthorDetailsScreen(
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    val bottomSheetState = LocalBottomSheetVisibility.current
-
-    DisposableEffect(key1 = true) {
-        bottomSheetState.value = false
-        onDispose {
-            bottomSheetState.value = true
-        }
-    }
 
     LaunchedEffect(
         key1 = lifecycleOwner,

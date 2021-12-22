@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.ui.home.userprofile
 
 import br.com.alaksion.network.NetworkError
-import br.com.alaksion.myapplication.common.ui.ViewState
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase

@@ -3,8 +3,8 @@ package br.com.alaksion.myapplication.ui.home.splash
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.common.ui.EventViewModel
-import br.com.alaksion.myapplication.common.ui.ViewModelEvent
+import br.com.alaksion.myapplication.ui.model.EventViewModel
+import br.com.alaksion.myapplication.ui.model.ViewModelEvent
 import br.com.alaksion.myapplication.common.utils.Event
 import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.domain.usecase.GetStoredUserDataUseCase
