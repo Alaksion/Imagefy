@@ -1,11 +1,11 @@
 package br.com.alaksion.myapplication.data.repository
 
-import br.com.alaksion.myapplication.common.network.Source
 import br.com.alaksion.myapplication.data.datasource.ImagefyLocalDataSource
 import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.*
 import br.com.alaksion.myapplication.utils.ImagefyBaseTest
+import br.com.alaksion.network.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
@@ -141,32 +141,6 @@ class ImagefyRepositoryImplTest : ImagefyBaseTest() {
         assertNotNull(result)
         coVerify(exactly = 1) { remoteDataSource.getCurrentUsername() }
         confirmVerified(remoteDataSource)
-    }
-
-    @Test
-    fun `Should store auth token in data source layer`() = runBlocking {
-        coEvery {
-            localDataSource.storeAuthorizationHeader(any())
-        } returns Unit
-
-        val result = repository.storeAuthorizationHeader("value")
-
-        assertNotNull(result)
-        coVerify(exactly = 1) { localDataSource.storeAuthorizationHeader("value") }
-        confirmVerified(localDataSource)
-    }
-
-    @Test
-    fun `Should clear auth token in data source layer`() = runBlocking {
-        coEvery {
-            localDataSource.clearAuthorizationHeader()
-        } returns Unit
-
-        val result = repository.clearAuthorizationHeader()
-
-        assertNotNull(result)
-        coVerify(exactly = 1) { localDataSource.clearAuthorizationHeader() }
-        confirmVerified(localDataSource)
     }
 
     @Test

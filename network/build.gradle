@@ -45,4 +45,11 @@ dependencies {
     implementation "com.google.dagger:dagger:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     kapt "com.google.dagger:dagger-compiler:$hilt_version"
+
+    testImplementation "io.mockk:mockk:1.12.0"
+    testImplementation "android.arch.core:core-testing:1.1.1"
+    testImplementation 'androidx.test:core:1.4.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2'
 }

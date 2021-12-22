@@ -1,21 +1,22 @@
 package br.com.alaksion.myapplication.ui.home.searchphotos
 
-import br.com.alaksion.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.SearchPhotosResponse
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
 import br.com.alaksion.myapplication.testdata.SearchPhotosTestData
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
+import br.com.alaksion.network.NetworkError
+import br.com.alaksion.network.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
@@ -135,7 +136,7 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
         coVerify(exactly = 1) { searchPhotosUseCase(1, any()) }
         coVerify(exactly = 1) { searchPhotosUseCase(2, any()) }
         confirmVerified(searchPhotosUseCase)
-        assertNotNull(viewModel.showMorePhotosError.value?.getContentIfNotHandled())
+        assertTrue(viewModel.eventHandler.first() is SearchPhotosEvents.MorePhotosError)
     }
 
     @Test
@@ -160,9 +161,9 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
 
             coVerify(exactly = 1) { searchPhotosUseCase(1, "") }
             coVerify(exactly = 1) { searchPhotosUseCase(2, "") }
-
             confirmVerified(searchPhotosUseCase)
-            assertNotNull(viewModel.showMorePhotosError.value?.getContentIfNotHandled())
+
+            assertTrue(viewModel.eventHandler.first() is SearchPhotosEvents.MorePhotosError)
         }
 
 }

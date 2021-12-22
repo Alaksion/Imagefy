@@ -1,6 +1,5 @@
 package br.com.alaksion.myapplication.ui.home.authordetails
 
-import br.com.alaksion.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
@@ -9,16 +8,18 @@ import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.testdata.AuthorPhotosTestData
 import br.com.alaksion.myapplication.testdata.AuthorProfileTestData
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
+import br.com.alaksion.network.NetworkError
+import br.com.alaksion.network.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
@@ -183,14 +184,23 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
                 any(),
                 any()
             )
-        } returns flow { emit(Source.Error<List<AuthorPhotosResponse>>(NetworkError("", 500))) }
+        } returns flow<Source<List<AuthorPhotosResponse>>> {
+            emit(
+                Source.Error(
+                    NetworkError(
+                        "",
+                        500
+                    )
+                )
+            )
+        }
 
         viewModel.getMoreAuthorPhotos()
 
         coVerify(exactly = 1) { getAuthorPhotoUseCase(any(), any()) }
         confirmVerified(getAuthorPhotoUseCase)
 
-        assertNotNull(viewModel.showErrorToast.value?.getContentIfNotHandled())
+        assertTrue(viewModel.eventHandler.first() is AuthorDetailsEvents.ShowErrorToast)
     }
 
     @Test
@@ -208,6 +218,6 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
             coVerify(exactly = 1) { getAuthorPhotoUseCase(any(), any()) }
             confirmVerified(getAuthorPhotoUseCase)
 
-            assertNotNull(viewModel.showErrorToast.value?.getContentIfNotHandled())
+            assertTrue(viewModel.eventHandler.first() is AuthorDetailsEvents.ShowErrorToast)
         }
 }

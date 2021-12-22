@@ -1,26 +1,33 @@
 package br.com.alaksion.myapplication.ui.authentication.authhandler
 
-import br.com.alaksion.network.NetworkError
 import br.com.alaksion.myapplication.common.ui.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthResponse
 import br.com.alaksion.myapplication.domain.model.AuthorResponse
 import br.com.alaksion.myapplication.domain.model.CurrentUserResponse
-import br.com.alaksion.myapplication.domain.usecase.*
+import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
+import br.com.alaksion.myapplication.domain.usecase.GetCurrentUsernameUseCase
+import br.com.alaksion.myapplication.domain.usecase.StoreUserDataUseCase
+import br.com.alaksion.myapplication.domain.usecase.ValidateLoginUseCase
 import br.com.alaksion.myapplication.testdata.AuthorProfileTestData
 import br.com.alaksion.myapplication.testdata.UserNameTestData
 import br.com.alaksion.myapplication.testdata.ValidateLoginTestData
+import br.com.alaksion.myapplication.ui.home.authhandler.AuthHandlerEvents
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthHandlerViewModel
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
+import br.com.alaksion.network.NetworkError
+import br.com.alaksion.network.Source
 import br.com.alaksion.network.client.domain.usecase.StoreAuthTokenUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
-import kotlin.test.assertNotNull
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
@@ -46,6 +53,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `should validate login with given authCode and store it in local preferences`() =
         runBlockingTest {
+
             coEvery { validateLoginUseCase(any()) } returns flow {
                 emit(
                     Source.Success(
@@ -78,7 +86,80 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 getUsernameCalls = 1
             )
 
-            assertNotNull(viewModel.handleNavigationSuccess.value?.getContentIfNotHandled())
+            assertEquals(
+                viewModel.eventHandler.first()::class,
+                AuthHandlerEvents.UpdateUserData::class
+            )
+        }
+
+    @Test
+    fun `Should update user data if login succeeds`() =
+        runBlockingTest {
+
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        ValidateLoginTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery { storeAuthTokenUseCase(any()) } returns Unit
+            coEvery { getCurrentUsernameUseCase() } returns flow {
+                emit(
+                    Source.Success(
+                        UserNameTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        AuthorProfileTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+
+            viewModel.authenticateUser("authCode")
+
+            assertEquals(
+                viewModel.eventHandler.first()::class,
+                AuthHandlerEvents.UpdateUserData::class
+            )
+        }
+
+    @Test
+    fun `Should navigate to home  if login succeeds`() =
+        runBlockingTest {
+
+            coEvery { validateLoginUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        ValidateLoginTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery { storeAuthTokenUseCase(any()) } returns Unit
+            coEvery { getCurrentUsernameUseCase() } returns flow {
+                emit(
+                    Source.Success(
+                        UserNameTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+            coEvery { getAuthorProfileUseCase(any()) } returns flow {
+                emit(
+                    Source.Success(
+                        AuthorProfileTestData.DOMAIN_RESPONSE
+                    )
+                )
+            }
+
+            viewModel.authenticateUser("authCode")
+
+            assertEquals(
+                viewModel.eventHandler.drop(1).first()::class,
+                AuthHandlerEvents.NavigateToSuccess::class
+            )
         }
 
     @Test
