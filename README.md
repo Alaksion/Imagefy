@@ -5,10 +5,10 @@
 <img src="https://user-images.githubusercontent.com/30579274/138508252-ded98da5-88b4-49db-adec-681a5af10003.jpg" width=25% height=25%/>
 
 ### Future features and enhancements
-
-- [ ] Implement follow/unfollow feature
 - [ ] Allow users to download images from the photo viewer
-- [ ] Refact the user profiles photo grid to scroll with the screen instead of being a scrollable container
+- [ ] Refact the user profile photo grid to scroll with the screen instead of being a scrollable container
+- [ ] Add swipe refresh to photo list
+- [ ] Refact lazy columns/vertical grids to launch onListEnd more effectively 
 
 ## 💻 Requisites
 
@@ -25,8 +25,9 @@ To run the application locally follow the steps below:
 3. Run the following command using your Unsplash api keys: ```gradlew assignKeys -PsecretKey=\"your-secret-key\" -PpublicKey=\"your-public-key\"```
 4. Now your project is ready to be launched!
 
-## Known bugs:
-1. Deep links might be unstable on api 31+
-2. Glide image composable is not downloading images properly on api 31+
+## Known Issues:
+1. Deep links must be manually allowed in the device's app configuration.
+2. Image's Vertical grid sometimes launches getMoreItems() improperly
+3. Some images take too much time to load in the image viewer
 
 [⬆ Voltar ao topo](#Imagefy)<br>
