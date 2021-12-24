@@ -3,27 +3,32 @@ package br.com.alaksion.myapplication.ui.home.searchphotos
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.ui.model.EventViewModel
-import br.com.alaksion.myapplication.ui.model.ViewModelEvent
-import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.domain.model.SearchPhotos
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
+import br.com.alaksion.myapplication.ui.model.BaseViewModel
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class SearchPhotosEvents() : ViewModelEvent {
+sealed class SearchPhotosEvents() {
     class MorePhotosError() : SearchPhotosEvents()
 }
 
 @HiltViewModel
 class SearchPhotosViewModel @Inject constructor(
     private val searchPhotosUseCase: SearchPhotosUseCase
-) : EventViewModel<SearchPhotosEvents>() {
+) : BaseViewModel() {
+
+    private val _events = MutableSharedFlow<SearchPhotosEvents>()
+    val events: SharedFlow<SearchPhotosEvents>
+        get() = _events
 
     private val _screenState: MutableStateFlow<ViewState<Unit>> = MutableStateFlow(ViewState.Idle())
     val screenState: StateFlow<ViewState<Unit>>
@@ -114,9 +119,15 @@ class SearchPhotosViewModel @Inject constructor(
     }
 
     private fun showMorePhotosError() {
+        produceEvent(SearchPhotosEvents.MorePhotosError())
+    }
+
+
+    private fun produceEvent(event: SearchPhotosEvents) {
         viewModelScope.launch {
-            sendEvent(SearchPhotosEvents.MorePhotosError())
+            _events.emit(event)
         }
+
     }
 
 }

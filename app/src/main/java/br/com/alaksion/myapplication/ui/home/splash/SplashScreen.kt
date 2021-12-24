@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
 import br.com.alaksion.myapplication.domain.model.StoredUser
 import com.skydoves.landscapist.rememberDrawablePainter
 import kotlinx.coroutines.flow.collect
@@ -36,22 +35,19 @@ fun SplashScreen(
     navigateToLogin: () -> Unit,
     updateUserData: (StoredUser) -> Unit
 ) {
-    val lifeCycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(key1 = viewModel) {
+        viewModel.verifyUserIsLogged()
 
-    LaunchedEffect(key1 = lifeCycleOwner, key2 = viewModel) {
-        safeFlowCollect(lifeCycleOwner) {
-            viewModel.eventHandler.collect { event ->
-                when (event) {
-                    is SplashEvent.NavigateToLogin -> navigateToLogin()
-                    is SplashEvent.NavigateToHome -> navigateToHome()
-                    is SplashEvent.UpdateUserData -> updateUserData(event.user)
-                }
+        viewModel.events.collect { event ->
+            when (event) {
+                is SplashEvent.NavigateToLogin -> navigateToLogin()
+                is SplashEvent.NavigateToHome -> navigateToHome()
+                is SplashEvent.UpdateUserData -> updateUserData(event.user)
             }
         }
     }
 
     SplashScreenContent()
-
 }
 
 @Composable

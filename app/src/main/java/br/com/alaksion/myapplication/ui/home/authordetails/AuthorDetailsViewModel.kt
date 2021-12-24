@@ -3,21 +3,22 @@ package br.com.alaksion.myapplication.ui.home.authordetails
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.ui.model.EventViewModel
-import br.com.alaksion.myapplication.ui.model.ViewModelEvent
-import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.AuthorPhotos
 import br.com.alaksion.myapplication.domain.model.Author
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
+import br.com.alaksion.myapplication.ui.model.BaseViewModel
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class AuthorDetailsEvents() : ViewModelEvent {
+sealed class AuthorDetailsEvents() {
     class ShowErrorToast() : AuthorDetailsEvents()
 }
 
@@ -25,7 +26,11 @@ sealed class AuthorDetailsEvents() : ViewModelEvent {
 class AuthorDetailsViewModel @Inject constructor(
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase,
     private val getAuthorPhotosUseCase: GetAuthorPhotosUseCase
-) : EventViewModel<AuthorDetailsEvents>() {
+) : BaseViewModel() {
+
+    private val _events = MutableSharedFlow<AuthorDetailsEvents>()
+    val events: SharedFlow<AuthorDetailsEvents>
+        get() = _events
 
     private val _authorData: MutableStateFlow<ViewState<Author>> =
         MutableStateFlow(ViewState.Loading())
@@ -110,16 +115,17 @@ class AuthorDetailsViewModel @Inject constructor(
             _authorPhotos.addAll(response)
             return
         }
-        showErrorToast()
+        produceEvent(AuthorDetailsEvents.ShowErrorToast())
     }
 
     private fun onGetMorePhotosError() {
-        showErrorToast()
+        produceEvent(AuthorDetailsEvents.ShowErrorToast())
     }
 
-    private fun showErrorToast() {
+
+    private fun produceEvent(event: AuthorDetailsEvents) {
         viewModelScope.launch {
-            sendEvent(AuthorDetailsEvents.ShowErrorToast())
+            _events.emit(event)
         }
     }
 

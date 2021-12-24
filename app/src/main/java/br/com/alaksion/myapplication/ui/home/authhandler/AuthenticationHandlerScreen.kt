@@ -9,7 +9,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,7 +17,6 @@ import br.com.alaksion.core_ui.components.TryAgain
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
 import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.ui.model.ViewState
 import kotlinx.coroutines.flow.collect
@@ -31,17 +29,14 @@ fun AuthenticationHandlerScreen(
     authCode: String?,
     updateUserData: (StoredUser) -> Unit
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(key1 = lifecycleOwner, viewModel) {
+    LaunchedEffect(viewModel) {
         viewModel.authenticateUser(authCode)
 
-        safeFlowCollect(lifecycleOwner) {
-            viewModel.eventHandler.collect { event ->
-                when (event) {
-                    is AuthHandlerEvents.NavigateToSuccess -> goToHomeScreen()
-                    is AuthHandlerEvents.UpdateUserData -> updateUserData(event.data)
-                }
+        viewModel.events.collect { event ->
+            when (event) {
+                is AuthHandlerEvents.NavigateToSuccess -> goToHomeScreen()
+                is AuthHandlerEvents.UpdateUserData -> updateUserData(event.data)
             }
         }
     }

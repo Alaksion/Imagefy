@@ -33,11 +33,10 @@ import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
-import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.home.searchphotos.components.SearchPhotosTopBar
+import br.com.alaksion.myapplication.ui.model.ViewState
 import kotlinx.coroutines.flow.collect
 
 @ExperimentalFoundationApi
@@ -51,16 +50,14 @@ fun SearchPhotosScreen(
     val context = LocalContext.current
 
     LaunchedEffect(lifeCycleOwner, viewModel) {
-        safeFlowCollect(lifeCycleOwner) {
-            viewModel.eventHandler.collect { event ->
-                when (event) {
-                    is SearchPhotosEvents.MorePhotosError -> {
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.load_more_error),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+        viewModel.events.collect { event ->
+            when (event) {
+                is SearchPhotosEvents.MorePhotosError -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.load_more_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

@@ -24,7 +24,6 @@ import br.com.alaksion.core_ui.components.paginatedlazycolumn.PaginatedLazyColum
 import br.com.alaksion.core_ui.components.paginatedlazycolumn.rememberPaginatedLazyColumnState
 import br.com.alaksion.core_ui.extensions.onBottomReached
 import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
 import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoListTopBar
@@ -41,20 +40,17 @@ fun PhotoListScreen(
     toggleDrawer: () -> Unit,
     userProfileUrl: String,
 ) {
-    val lifeCycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
-    LaunchedEffect(viewModel, lifeCycleOwner) {
-        safeFlowCollect(lifeCycleOwner) {
-            viewModel.eventHandler.collect { event ->
-                when (event) {
-                    is PhotoListEvents.ShowMorePhotosError -> {
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.load_more_error),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+    LaunchedEffect(viewModel, context) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is PhotoListEvents.ShowMorePhotosError -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.load_more_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

@@ -6,17 +6,18 @@ import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
-import br.com.alaksion.myapplication.ui.model.EventViewModel
-import br.com.alaksion.myapplication.ui.model.ViewModelEvent
+import br.com.alaksion.myapplication.ui.model.BaseViewModel
 import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class PhotoListEvents() : ViewModelEvent {
+sealed class PhotoListEvents() {
     class ShowMorePhotosError() : PhotoListEvents()
 }
 
@@ -24,7 +25,11 @@ sealed class PhotoListEvents() : ViewModelEvent {
 class PhotoListViewModel @Inject constructor(
     private val getPhotosUseCase: GetPhotosUseCase,
     private val ratePhotoUseCase: RatePhotoUseCase
-) : EventViewModel<PhotoListEvents>() {
+) : BaseViewModel() {
+
+    private val _events = MutableSharedFlow<PhotoListEvents>()
+    val events: SharedFlow<PhotoListEvents>
+        get() = _events
 
     private val _photos = mutableStateListOf<Photo>()
     val photos: SnapshotStateList<Photo>
@@ -106,9 +111,7 @@ class PhotoListViewModel @Inject constructor(
     }
 
     private fun showMorePhotosError() {
-        viewModelScope.launch {
-            sendEvent(PhotoListEvents.ShowMorePhotosError())
-        }
+        produceEvent(PhotoListEvents.ShowMorePhotosError())
     }
 
     fun onRefreshList() {
@@ -117,7 +120,7 @@ class PhotoListViewModel @Inject constructor(
         handleApiResponse(
             source = { getPhotosUseCase(currentPage) },
             onSuccess = { data -> onRefreshSuccess(data) },
-            onError = { error -> handleGetPhotosError(error) }
+            onError = { error -> showMorePhotosError() }
         )
     }
 
@@ -129,6 +132,13 @@ class PhotoListViewModel @Inject constructor(
             return
         }
         showMorePhotosError()
+    }
+
+    private fun produceEvent(event: PhotoListEvents) {
+        viewModelScope.launch {
+            _events.emit(event)
+        }
+
     }
 
 }

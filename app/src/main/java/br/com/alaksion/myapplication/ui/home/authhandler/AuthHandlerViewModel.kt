@@ -1,9 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.authhandler
 
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.ui.model.EventViewModel
-import br.com.alaksion.myapplication.ui.model.ViewModelEvent
-import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.Auth
 import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.domain.model.CurrentUser
@@ -12,15 +9,19 @@ import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetCurrentUsernameUseCase
 import br.com.alaksion.myapplication.domain.usecase.StoreUserDataUseCase
 import br.com.alaksion.myapplication.domain.usecase.ValidateLoginUseCase
+import br.com.alaksion.myapplication.ui.model.BaseViewModel
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.network.client.domain.usecase.StoreAuthTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class AuthHandlerEvents() : ViewModelEvent {
-    class NavigateToSuccess() : AuthHandlerEvents()
+sealed class AuthHandlerEvents {
+    object NavigateToSuccess : AuthHandlerEvents()
     class UpdateUserData(val data: StoredUser) : AuthHandlerEvents()
 }
 
@@ -31,13 +32,16 @@ class AuthHandlerViewModel @Inject constructor(
     private val getCurrentUsernameUseCase: GetCurrentUsernameUseCase,
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase,
     private val storeUserDataUseCase: StoreUserDataUseCase
-) : EventViewModel<AuthHandlerEvents>() {
+) : BaseViewModel() {
+
+    private val _events = MutableSharedFlow<AuthHandlerEvents>()
+    val events: SharedFlow<AuthHandlerEvents>
+        get() = _events
 
     private val _authenticationState: MutableStateFlow<ViewState<Unit>> =
         MutableStateFlow(ViewState.Loading())
     val authenticationState: StateFlow<ViewState<Unit>>
         get() = _authenticationState
-
 
     fun authenticateUser(authCode: String?) {
         authCode?.let { code ->
@@ -86,7 +90,6 @@ class AuthHandlerViewModel @Inject constructor(
         )
     }
 
-
     private fun onGetCurrentUserDataSuccess(data: Author?) {
         data?.let { response ->
             viewModelScope.launch {
@@ -97,8 +100,8 @@ class AuthHandlerViewModel @Inject constructor(
                     followingCount = response.following,
                     profileImageUrl = response.profileImage,
                 )
-                sendEvent(AuthHandlerEvents.UpdateUserData(userData))
-                sendEvent(AuthHandlerEvents.NavigateToSuccess())
+                produceEvent(AuthHandlerEvents.UpdateUserData(userData))
+                produceEvent(AuthHandlerEvents.NavigateToSuccess)
                 storeUserDataUseCase(userData)
             }
             return
@@ -109,5 +112,12 @@ class AuthHandlerViewModel @Inject constructor(
     private fun onApiError() {
         _authenticationState.value = ViewState.Error()
     }
+
+    private fun produceEvent(event: AuthHandlerEvents) {
+        viewModelScope.launch {
+            _events.emit(event)
+        }
+    }
+
 }
 

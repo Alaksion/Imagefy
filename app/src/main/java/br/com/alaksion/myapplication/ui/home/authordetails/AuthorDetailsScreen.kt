@@ -27,9 +27,8 @@ import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.DimGray
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
-import br.com.alaksion.myapplication.domain.model.AuthorPhotos
 import br.com.alaksion.myapplication.domain.model.Author
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
@@ -55,17 +54,15 @@ fun AuthorDetailsScreen(
         key3 = authorUsername
     ) {
         viewModel.getAuthorProfileData(authorUsername)
-        safeFlowCollect(lifecycleOwner) {
-            viewModel.eventHandler.collect { event ->
-                when (event) {
-                    is AuthorDetailsEvents.ShowErrorToast -> {
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.author_details_images_error),
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    }
+
+        viewModel.events.collect { event ->
+            when (event) {
+                is AuthorDetailsEvents.ShowErrorToast -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.author_details_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

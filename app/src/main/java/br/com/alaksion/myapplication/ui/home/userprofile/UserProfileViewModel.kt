@@ -3,21 +3,22 @@ package br.com.alaksion.myapplication.ui.home.userprofile
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.ui.model.EventViewModel
-import br.com.alaksion.myapplication.ui.model.ViewModelEvent
-import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.AuthorPhotos
 import br.com.alaksion.myapplication.domain.model.Author
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
+import br.com.alaksion.myapplication.ui.model.BaseViewModel
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class UserProfileEvents() : ViewModelEvent {
+sealed class UserProfileEvents() {
     class ShowMorePhotosError() : UserProfileEvents()
 }
 
@@ -25,7 +26,11 @@ sealed class UserProfileEvents() : ViewModelEvent {
 class UserProfileViewModel @Inject constructor(
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase,
     private val getAuthorPhotosUseCase: GetAuthorPhotosUseCase
-) : EventViewModel<UserProfileEvents>() {
+) : BaseViewModel() {
+
+    private val _events = MutableSharedFlow<UserProfileEvents>()
+    val events: SharedFlow<UserProfileEvents>
+        get() = _events
 
     private val _userData: MutableStateFlow<ViewState<Author>> =
         MutableStateFlow(ViewState.Loading())
@@ -124,8 +129,13 @@ class UserProfileViewModel @Inject constructor(
 
     private fun showMorePhotosError() {
         viewModelScope.launch {
-            sendEvent(UserProfileEvents.ShowMorePhotosError())
+            produceEvent(UserProfileEvents.ShowMorePhotosError())
         }
     }
+
+    private suspend fun produceEvent(event: UserProfileEvents) {
+        _events.emit(event)
+    }
+
 
 }

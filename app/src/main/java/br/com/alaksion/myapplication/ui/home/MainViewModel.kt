@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class MainViewModel @Inject constructor(
     private val clearAuthTokenUseCase: ClearAuthTokenUseCase,
     private val getCurrentDarkModeConfigUseCase: GetCurrentDarkModeConfigUseCase,
     private val storeCurrentDarkModeConfigUseCase: StoreDarkModeConfigUseCase

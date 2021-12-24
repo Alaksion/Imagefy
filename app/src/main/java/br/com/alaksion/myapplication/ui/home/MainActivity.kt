@@ -34,9 +34,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
-class HomeActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

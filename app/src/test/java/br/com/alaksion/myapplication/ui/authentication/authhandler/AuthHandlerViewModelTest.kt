@@ -87,7 +87,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
             )
 
             assertEquals(
-                viewModel.eventHandler.first()::class,
+                viewModel.events.first()::class,
                 AuthHandlerEvents.UpdateUserData::class
             )
         }
@@ -122,7 +122,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
             viewModel.authenticateUser("authCode")
 
             assertEquals(
-                viewModel.eventHandler.first()::class,
+                viewModel.events.first()::class,
                 AuthHandlerEvents.UpdateUserData::class
             )
         }
@@ -157,7 +157,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
             viewModel.authenticateUser("authCode")
 
             assertEquals(
-                viewModel.eventHandler.drop(1).first()::class,
+                viewModel.events.drop(1).first()::class,
                 AuthHandlerEvents.NavigateToSuccess::class
             )
         }
