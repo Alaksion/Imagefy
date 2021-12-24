@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.domain.model
 
-data class PhotoDetailResponse(
+data class PhotoDetail(
     val imageUrl: String,
     val downloadLink: String,
     val id: String,

@@ -1,5 +1,5 @@
 package br.com.alaksion.myapplication.domain.model
 
-data class CurrentUserResponse(
+data class CurrentUser(
     val username: String
 )

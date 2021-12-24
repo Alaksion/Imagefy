@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.core_ui.extensions.onBottomReached
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.core_ui.components.TryAgain
 import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
@@ -38,7 +38,7 @@ import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 @Composable
 fun AuthorPhotosList(
     viewState: ViewState<Unit>,
-    photos: List<AuthorPhotosResponse>,
+    photos: List<AuthorPhotos>,
     modifier: Modifier = Modifier,
     onClickTryAgain: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit,

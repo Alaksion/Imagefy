@@ -12,26 +12,26 @@ interface ImagefyRepository {
         redirectUri: String,
         authCode: String,
         grantType: String
-    ): Flow<Source<AuthResponse>>
+    ): Flow<Source<Auth>>
 
-    suspend fun getPhotos(page: Int): Flow<Source<List<PhotoResponse>>>
+    suspend fun getPhotos(page: Int): Flow<Source<List<Photo>>>
 
-    suspend fun getAuthorProfile(username: String): Flow<Source<AuthorResponse>>
+    suspend fun getAuthorProfile(username: String): Flow<Source<Author>>
 
     suspend fun getAuthorPhotos(
         username: String,
         page: Int
-    ): Flow<Source<List<AuthorPhotosResponse>>>
+    ): Flow<Source<List<AuthorPhotos>>>
 
-    suspend fun getPhotoDetails(photoId: String): Flow<Source<PhotoDetailResponse>>
+    suspend fun getPhotoDetails(photoId: String): Flow<Source<PhotoDetail>>
 
     suspend fun likePhoto(photoId: String): Flow<Source<Unit>>
 
     suspend fun unlikePhoto(photoId: String): Flow<Source<Unit>>
 
-    suspend fun getCurrentUsername(): Flow<Source<CurrentUserResponse>>
+    suspend fun getCurrentUsername(): Flow<Source<CurrentUser>>
 
-    suspend fun searchPhotos(request: SearchPhotosRequest): Flow<Source<SearchPhotosResponse>>
+    suspend fun searchPhotos(request: SearchPhotosRequest): Flow<Source<SearchPhotos>>
 
     suspend fun storeDarkModeConfig(value: Boolean)
 

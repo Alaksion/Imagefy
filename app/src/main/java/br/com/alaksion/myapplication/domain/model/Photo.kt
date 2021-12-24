@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.domain.model
 
-data class PhotoResponse(
+data class Photo(
     val id: String,
     var likes: Int,
     val description: String,

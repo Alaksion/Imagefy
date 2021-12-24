@@ -23,8 +23,8 @@ import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
-import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
+import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
@@ -72,9 +72,9 @@ fun UserProfileScreen(
 @ExperimentalFoundationApi
 @Composable
 internal fun UserProfileContent(
-    userData: ViewState<AuthorResponse>,
+    userData: ViewState<Author>,
     username: String,
-    userPhotos: List<AuthorPhotosResponse>,
+    userPhotos: List<AuthorPhotos>,
     userPhotosState: ViewState<Unit>,
     popBackStack: () -> Boolean,
     getMorePhotos: () -> Unit,
@@ -128,8 +128,8 @@ internal fun UserProfileContent(
 @ExperimentalFoundationApi
 @Composable
 fun UserProfileReady(
-    authorData: AuthorResponse,
-    authorPhotos: List<AuthorPhotosResponse>,
+    authorData: Author,
+    authorPhotos: List<AuthorPhotos>,
     authorPhotoState: ViewState<Unit>,
     getMorePhotos: () -> Unit,
     isPreview: Boolean = false,
@@ -221,7 +221,7 @@ fun UserProfilePreview() {
         Scaffold() {
             UserProfileContent(
                 userData = ViewState.Ready(
-                    AuthorResponse(
+                    Author(
                         username = "SuperJohn",
                         name = "John Doe",
                         profileImage = "",

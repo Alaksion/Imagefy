@@ -32,7 +32,7 @@ import br.com.alaksion.core_ui.theme.ErrorLightRed
 import br.com.alaksion.core_ui.theme.OffWhite
 import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.common.extensions.invert
-import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
+import br.com.alaksion.myapplication.domain.model.PhotoDetail
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
@@ -65,7 +65,7 @@ fun PhotoViewerScreen(
 @ExperimentalAnimationApi
 @Composable
 internal fun PhotoViewerScreenContent(
-    photoData: ViewState<PhotoDetailResponse>,
+    photoData: ViewState<PhotoDetail>,
     popBackStack: () -> Boolean,
     onRateImage: (isLike: Boolean) -> Unit,
     onClickTryAgain: () -> Unit
@@ -132,7 +132,7 @@ internal fun PhotoViewerScreenContent(
 @ExperimentalAnimationApi
 @Composable
 internal fun PhotoViewerReady(
-    photoData: PhotoDetailResponse,
+    photoData: PhotoDetail,
     context: Context,
     onRateImage: (isLike: Boolean) -> Unit
 ) {

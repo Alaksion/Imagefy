@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.ui.model.EventViewModel
 import br.com.alaksion.myapplication.ui.model.ViewModelEvent
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
+import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.network.NetworkError
@@ -27,9 +27,9 @@ class AuthorDetailsViewModel @Inject constructor(
     private val getAuthorPhotosUseCase: GetAuthorPhotosUseCase
 ) : EventViewModel<AuthorDetailsEvents>() {
 
-    private val _authorData: MutableStateFlow<ViewState<AuthorResponse>> =
+    private val _authorData: MutableStateFlow<ViewState<Author>> =
         MutableStateFlow(ViewState.Loading())
-    val authorData: StateFlow<ViewState<AuthorResponse>>
+    val authorData: StateFlow<ViewState<Author>>
         get() = _authorData
 
     private val _authorPhotosState: MutableStateFlow<ViewState<Unit>> =
@@ -37,8 +37,8 @@ class AuthorDetailsViewModel @Inject constructor(
     val authorPhotosState: StateFlow<ViewState<Unit>>
         get() = _authorPhotosState
 
-    private val _authorPhotos = mutableStateListOf<AuthorPhotosResponse>()
-    val authorPhotos: SnapshotStateList<AuthorPhotosResponse>
+    private val _authorPhotos = mutableStateListOf<AuthorPhotos>()
+    val authorPhotos: SnapshotStateList<AuthorPhotos>
         get() = _authorPhotos
 
     private var authorUsername: String = ""
@@ -53,7 +53,7 @@ class AuthorDetailsViewModel @Inject constructor(
         )
     }
 
-    private fun onGetAuthorDataSuccess(data: AuthorResponse?) {
+    private fun onGetAuthorDataSuccess(data: Author?) {
         data?.let { response ->
             _authorData.value = ViewState.Ready(response)
             getAuthorPhotos()
@@ -79,7 +79,7 @@ class AuthorDetailsViewModel @Inject constructor(
         )
     }
 
-    private fun onGetAuthorPhotosSuccess(data: List<AuthorPhotosResponse>?) {
+    private fun onGetAuthorPhotosSuccess(data: List<AuthorPhotos>?) {
         data?.let { response ->
             _authorPhotos.addAll(response)
             _authorPhotosState.value = ViewState.Ready(Unit)
@@ -105,7 +105,7 @@ class AuthorDetailsViewModel @Inject constructor(
         )
     }
 
-    private fun onGetMorePhotosSuccess(data: List<AuthorPhotosResponse>?) {
+    private fun onGetMorePhotosSuccess(data: List<AuthorPhotos>?) {
         data?.let { response ->
             _authorPhotos.addAll(response)
             return

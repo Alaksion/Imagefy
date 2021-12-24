@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.ui.model.EventViewModel
 import br.com.alaksion.myapplication.ui.model.ViewModelEvent
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.AuthResponse
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
-import br.com.alaksion.myapplication.domain.model.CurrentUserResponse
+import br.com.alaksion.myapplication.domain.model.Auth
+import br.com.alaksion.myapplication.domain.model.Author
+import br.com.alaksion.myapplication.domain.model.CurrentUser
 import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetCurrentUsernameUseCase
@@ -52,7 +52,7 @@ class AuthHandlerViewModel @Inject constructor(
     }
 
 
-    private fun onAuthenticateUserSuccess(data: AuthResponse?) {
+    private fun onAuthenticateUserSuccess(data: Auth?) {
         data?.let { response ->
             storeAuthTokenUseCase(response.accessToken)
             getCurrentUsername()
@@ -70,7 +70,7 @@ class AuthHandlerViewModel @Inject constructor(
     }
 
 
-    private fun onGetCurrentUsernameSuccess(data: CurrentUserResponse?) {
+    private fun onGetCurrentUsernameSuccess(data: CurrentUser?) {
         data?.let { response ->
             getCurrentUserData(response.username)
             return
@@ -87,7 +87,7 @@ class AuthHandlerViewModel @Inject constructor(
     }
 
 
-    private fun onGetCurrentUserDataSuccess(data: AuthorResponse?) {
+    private fun onGetCurrentUserDataSuccess(data: Author?) {
         data?.let { response ->
             viewModelScope.launch {
                 val userData = StoredUser(

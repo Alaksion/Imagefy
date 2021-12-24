@@ -1,9 +1,9 @@
 package br.com.alaksion.myapplication.ui.authentication.authhandler
 
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.AuthResponse
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
-import br.com.alaksion.myapplication.domain.model.CurrentUserResponse
+import br.com.alaksion.myapplication.domain.model.Auth
+import br.com.alaksion.myapplication.domain.model.Author
+import br.com.alaksion.myapplication.domain.model.CurrentUser
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetCurrentUsernameUseCase
 import br.com.alaksion.myapplication.domain.usecase.StoreUserDataUseCase
@@ -167,7 +167,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
         runBlockingTest {
             coEvery { validateLoginUseCase(any()) } returns flow {
                 emit(
-                    Source.Error<AuthResponse>(
+                    Source.Error<Auth>(
                         NetworkError(
                             "",
                             500
@@ -192,7 +192,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
     fun `should set viewstate to error if validate login fails`() =
         runBlockingTest {
             coEvery { validateLoginUseCase(any()) } returns flow {
-                emit(Source.Error<AuthResponse>(NetworkError("", 500)))
+                emit(Source.Error<Auth>(NetworkError("", 500)))
             }
 
             viewModel.authenticateUser("authCode")
@@ -238,7 +238,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
             coEvery { storeAuthTokenUseCase(any()) } returns Unit
             coEvery { getCurrentUsernameUseCase() } returns flow {
                 emit(
-                    Source.Error<CurrentUserResponse>(
+                    Source.Error<CurrentUser>(
                         NetworkError(
                             "",
                             500
@@ -304,7 +304,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
             }
             coEvery { getAuthorProfileUseCase(any()) } returns flow {
                 emit(
-                    Source.Error<AuthorResponse>(
+                    Source.Error<Author>(
                         NetworkError(
                             "",
                             500

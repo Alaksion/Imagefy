@@ -31,7 +31,7 @@ class ImagefyRepositoryImpl @Inject constructor(
         redirectUri: String,
         authCode: String,
         grantType: String
-    ): Flow<Source<AuthResponse>> {
+    ): Flow<Source<Auth>> {
         return remoteDataSource.validateLogin(
             clientId,
             clientSecret,
@@ -41,13 +41,13 @@ class ImagefyRepositoryImpl @Inject constructor(
         ).map { it.mapSource { response -> response?.mapToAuthResponse() } }
     }
 
-    override suspend fun getPhotos(page: Int): Flow<Source<List<PhotoResponse>>> {
+    override suspend fun getPhotos(page: Int): Flow<Source<List<Photo>>> {
         return remoteDataSource.getPhotos(page).map { source ->
             source.mapSource { photos -> photos?.map { photo -> photo.mapToPhotoResponse() } }
         }
     }
 
-    override suspend fun getAuthorProfile(username: String): Flow<Source<AuthorResponse>> {
+    override suspend fun getAuthorProfile(username: String): Flow<Source<Author>> {
         return remoteDataSource.getAuthorProfile(username).map { source ->
             source.mapSource { userData -> userData?.mapToAuthorResponse() }
         }
@@ -57,13 +57,13 @@ class ImagefyRepositoryImpl @Inject constructor(
     override suspend fun getAuthorPhotos(
         username: String,
         page: Int
-    ): Flow<Source<List<AuthorPhotosResponse>>> {
+    ): Flow<Source<List<AuthorPhotos>>> {
         return remoteDataSource.getAuthorPhotos(userName = username, page = page).map { source ->
             source.mapSource { photos -> photos?.map { item -> item.mapToAuthorPhotoResponse() } }
         }
     }
 
-    override suspend fun getPhotoDetails(photoId: String): Flow<Source<PhotoDetailResponse>> {
+    override suspend fun getPhotoDetails(photoId: String): Flow<Source<PhotoDetail>> {
         return remoteDataSource.getPhotoDetails(photoId).map { source ->
             source.mapSource { it?.mapToPhotoDetailResponse() }
         }
@@ -77,13 +77,13 @@ class ImagefyRepositoryImpl @Inject constructor(
         return remoteDataSource.unlikePhoto(photoId).map { source -> source.mapSource { } }
     }
 
-    override suspend fun getCurrentUsername(): Flow<Source<CurrentUserResponse>> {
+    override suspend fun getCurrentUsername(): Flow<Source<CurrentUser>> {
         return remoteDataSource.getCurrentUsername().map { source ->
             source.mapSource { it?.mapToCurrentUserResponse() }
         }
     }
 
-    override suspend fun searchPhotos(request: SearchPhotosRequest): Flow<Source<SearchPhotosResponse>> {
+    override suspend fun searchPhotos(request: SearchPhotosRequest): Flow<Source<SearchPhotos>> {
         return remoteDataSource.searchPhotos(request.mapToData()).map { source ->
             source.mapSource { it?.mapToSearchPhotosResponse() }
         }

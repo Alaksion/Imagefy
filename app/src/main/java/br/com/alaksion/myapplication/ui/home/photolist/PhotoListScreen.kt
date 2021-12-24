@@ -25,7 +25,7 @@ import br.com.alaksion.core_ui.components.paginatedlazycolumn.rememberPaginatedL
 import br.com.alaksion.core_ui.extensions.onBottomReached
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
-import br.com.alaksion.myapplication.domain.model.PhotoResponse
+import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoListTopBar
 import br.com.alaksion.myapplication.ui.model.ViewState
@@ -81,7 +81,7 @@ fun PhotoListScreen(
 @Composable
 internal fun PhotoListScreenContent(
     screenState: ViewState<Unit>,
-    photos: List<PhotoResponse>,
+    photos: List<Photo>,
     modifier: Modifier = Modifier,
     onClickTryAgain: () -> Unit,
     loadMorePhotos: () -> Unit,
@@ -91,7 +91,7 @@ internal fun PhotoListScreenContent(
     isRefreshing: Boolean,
     onRefreshList: () -> Unit,
     navigateToAuthorDetails: (authorId: String) -> Unit,
-    ratePhoto: (photo: PhotoResponse, isLike: Boolean) -> Unit
+    ratePhoto: (photo: Photo, isLike: Boolean) -> Unit
 ) {
     val listState = rememberLazyListState()
 

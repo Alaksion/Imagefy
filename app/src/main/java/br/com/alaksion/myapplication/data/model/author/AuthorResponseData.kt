@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.data.model.author
 
 import br.com.alaksion.myapplication.common.extensions.handleOptional
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.domain.model.Author
 import com.google.gson.annotations.SerializedName
 
 data class UserResponseData(
@@ -32,7 +32,7 @@ data class UserResponseData(
     val followedByUser: Boolean?
 )
 
-fun UserResponseData.mapToAuthorResponse() = AuthorResponse(
+fun UserResponseData.mapToAuthorResponse() = Author(
     username = this.username.handleOptional(),
     name = this.name.handleOptional(),
     instagramUser = this.instagramUser.handleOptional(),

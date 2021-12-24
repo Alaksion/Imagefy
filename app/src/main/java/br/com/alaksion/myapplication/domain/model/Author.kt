@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.domain.model
 
-data class AuthorResponse(
+data class Author(
     val username: String,
     val name: String,
     val instagramUser: String,

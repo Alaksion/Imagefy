@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.ui.home.photoviewer
 
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
+import br.com.alaksion.myapplication.domain.model.PhotoDetail
 import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import br.com.alaksion.myapplication.testdata.PhotoDetailsTestData
@@ -54,7 +54,7 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
     fun `Should set viewstate to error if get photo details fails`() = runBlocking {
         coEvery { getPhotoDetailsUseCase(any()) } returns flow {
             emit(
-                Source.Error<PhotoDetailResponse>(
+                Source.Error<PhotoDetail>(
                     NetworkError(
                         "",
                         500

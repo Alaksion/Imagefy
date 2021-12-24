@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.data.model.auth
 
-import br.com.alaksion.myapplication.domain.model.AuthResponse
+import br.com.alaksion.myapplication.domain.model.Auth
 import com.google.gson.annotations.SerializedName
 
 data class AuthValidationResponseData(
@@ -8,6 +8,6 @@ data class AuthValidationResponseData(
     val accessToken: String
 )
 
-fun AuthValidationResponseData.mapToAuthResponse() = AuthResponse(
+fun AuthValidationResponseData.mapToAuthResponse() = Auth(
     accessToken = this.accessToken
 )

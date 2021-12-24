@@ -2,8 +2,8 @@ package br.com.alaksion.myapplication.ui.home.userprofile
 
 import br.com.alaksion.network.NetworkError
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
+import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.testdata.AuthorPhotosTestData
@@ -69,7 +69,7 @@ class UserProfileViewModelTest : ImagefyBaseViewModelTest() {
         runBlocking {
             coEvery { getAuthorProfileUseCase(any()) } returns flow {
                 emit(
-                    Source.Error<AuthorResponse>(
+                    Source.Error<Author>(
                         NetworkError(
                             "",
                             500
@@ -122,7 +122,7 @@ class UserProfileViewModelTest : ImagefyBaseViewModelTest() {
             }
             coEvery { getAuthorPhotoUseCase(any(), any()) } returns flow {
                 emit(
-                    Source.Error<List<AuthorPhotosResponse>>(
+                    Source.Error<List<AuthorPhotos>>(
                         NetworkError(
                             "",
                             500

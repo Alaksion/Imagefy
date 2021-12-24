@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.ui.home.photolist
 
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.PhotoResponse
+import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import br.com.alaksion.myapplication.testdata.GetImagesTestData
@@ -45,7 +45,7 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
     fun `Should set viewstate to error if get images fails`() = runBlocking {
         coEvery { getPhotosUseCase(any()) } returns flow {
             emit(
-                Source.Error<List<PhotoResponse>>(
+                Source.Error<List<Photo>>(
                     NetworkError(
                         "",
                         500
@@ -85,7 +85,7 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
     fun `Should set show error toast when get more photos fails`() = runBlocking {
         coEvery { getPhotosUseCase(any()) } returns flow {
             emit(
-                Source.Error<List<PhotoResponse>>(
+                Source.Error<List<Photo>>(
                     NetworkError(
                         "",
                         500
@@ -120,7 +120,7 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
         coEvery { ratePhotosUseCase(any(), any()) } returns flow { emit(Source.Success(Unit)) }
 
         viewModel.ratePhoto(
-            PhotoResponse(
+            Photo(
                 "photoId",
                 1,
                 "",

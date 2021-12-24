@@ -1,7 +1,7 @@
 package br.com.alaksion.myapplication.ui.home.searchphotos
 
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.SearchPhotosResponse
+import br.com.alaksion.myapplication.domain.model.SearchPhotos
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
 import br.com.alaksion.myapplication.testdata.SearchPhotosTestData
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
@@ -83,7 +83,7 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
                     any(),
                     any()
                 )
-            } returns flow { emit(Source.Error<SearchPhotosResponse>(NetworkError("500", 0))) }
+            } returns flow { emit(Source.Error<SearchPhotos>(NetworkError("500", 0))) }
             val searchQuery = "searchQuery"
 
             viewModel.onChangeSearchQuery(searchQuery)
@@ -128,7 +128,7 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
                 2,
                 any()
             )
-        } returns flow { emit(Source.Error<SearchPhotosResponse>(NetworkError("", 500))) }
+        } returns flow { emit(Source.Error<SearchPhotos>(NetworkError("", 500))) }
 
         viewModel.searchPhotos()
         viewModel.loadMorePhotos()

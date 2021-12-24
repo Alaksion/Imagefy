@@ -2,7 +2,7 @@ package br.com.alaksion.myapplication.ui.home.photoviewer
 
 import br.com.alaksion.myapplication.ui.model.BaseViewModel
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.PhotoDetailResponse
+import br.com.alaksion.myapplication.domain.model.PhotoDetail
 import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import br.com.alaksion.network.NetworkError
@@ -17,9 +17,9 @@ class PhotoViewerViewModel @Inject constructor(
     private val ratePhotoUseCase: RatePhotoUseCase
 ) : BaseViewModel() {
 
-    private val _photoData: MutableStateFlow<ViewState<PhotoDetailResponse>> =
+    private val _photoData: MutableStateFlow<ViewState<PhotoDetail>> =
         MutableStateFlow(ViewState.Loading())
-    val photoData: StateFlow<ViewState<PhotoDetailResponse>>
+    val photoData: StateFlow<ViewState<PhotoDetail>>
         get() = _photoData
 
     private val photoId: String = ""
@@ -39,7 +39,7 @@ class PhotoViewerViewModel @Inject constructor(
         _photoData.value = ViewState.Error(error)
     }
 
-    private fun onGetPhotoDetailsSuccess(data: PhotoDetailResponse?) {
+    private fun onGetPhotoDetailsSuccess(data: PhotoDetail?) {
         data?.let { response ->
             _photoData.value = ViewState.Ready(response)
             return

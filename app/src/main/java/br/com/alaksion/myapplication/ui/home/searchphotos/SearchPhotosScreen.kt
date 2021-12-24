@@ -35,7 +35,7 @@ import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.PhotoResponse
+import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.home.searchphotos.components.SearchPhotosTopBar
 import kotlinx.coroutines.flow.collect
@@ -86,7 +86,7 @@ fun SearchPhotosContent(
     toggleDrawer: () -> Unit,
     userProfileUrl: String,
     isPreview: Boolean = false,
-    photos: List<PhotoResponse>,
+    photos: List<Photo>,
     searchPhotos: () -> Unit,
     query: String,
     onChangeQuery: (value: String) -> Unit,
@@ -217,7 +217,7 @@ fun SearchPhotosEmpty(modifier: Modifier = Modifier) {
 @ExperimentalFoundationApi
 @Composable
 fun SearchPhotosList(
-    photos: List<PhotoResponse>,
+    photos: List<Photo>,
     listState: LazyListState,
     onLoadMorePhotos: () -> Unit,
     modifier: Modifier = Modifier,
@@ -271,7 +271,7 @@ fun SearchPhotosScreenPreview() {
                 screenState = ViewState.Ready(Unit),
                 isMorePhotosLoading = true,
                 photos = (1..40).toList().map {
-                    PhotoResponse(
+                    Photo(
                         "", 0, "", "", "", "", "", false, ""
                     )
                 },

@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import br.com.alaksion.core_ui.theme.*
 import br.com.alaksion.myapplication.common.extensions.invert
-import br.com.alaksion.myapplication.domain.model.PhotoResponse
+import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import com.skydoves.landscapist.CircularReveal
@@ -45,10 +45,10 @@ import kotlinx.coroutines.launch
 @ExperimentalAnimationApi
 @Composable
 fun PhotoCard(
-    photoContent: PhotoResponse,
+    photoContent: Photo,
     modifier: Modifier = Modifier,
     navigateToAuthor: (authorId: String) -> Unit,
-    ratePhoto: (photo: PhotoResponse, isLike: Boolean) -> Unit
+    ratePhoto: (photo: Photo, isLike: Boolean) -> Unit
 ) {
     val isLiked = remember { mutableStateOf(photoContent.likedByUser) }
     val likeAnimationVisible = remember { mutableStateOf(false) }

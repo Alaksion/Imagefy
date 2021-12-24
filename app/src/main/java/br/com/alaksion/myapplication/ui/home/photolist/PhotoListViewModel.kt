@@ -3,8 +3,7 @@ package br.com.alaksion.myapplication.ui.home.photolist
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.common.extensions.invert
-import br.com.alaksion.myapplication.domain.model.PhotoResponse
+import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import br.com.alaksion.myapplication.ui.model.EventViewModel
@@ -27,8 +26,8 @@ class PhotoListViewModel @Inject constructor(
     private val ratePhotoUseCase: RatePhotoUseCase
 ) : EventViewModel<PhotoListEvents>() {
 
-    private val _photos = mutableStateListOf<PhotoResponse>()
-    val photos: SnapshotStateList<PhotoResponse>
+    private val _photos = mutableStateListOf<Photo>()
+    val photos: SnapshotStateList<Photo>
         get() = _photos
 
     private val _screenState = MutableStateFlow<ViewState<Unit>>(ViewState.Loading())
@@ -58,7 +57,7 @@ class PhotoListViewModel @Inject constructor(
         )
     }
 
-    private fun handleGetPhotosSuccess(data: List<PhotoResponse>?) {
+    private fun handleGetPhotosSuccess(data: List<Photo>?) {
         data?.let { response ->
             _photos.addAll(response)
             _screenState.value = ViewState.Ready(Unit)
@@ -86,7 +85,7 @@ class PhotoListViewModel @Inject constructor(
         _isMorePhotosLoading.value = false
     }
 
-    private fun handleLoadMorePhotosSuccess(data: List<PhotoResponse>?) {
+    private fun handleLoadMorePhotosSuccess(data: List<Photo>?) {
         data?.let { response ->
             _isMorePhotosLoading.value = false
             _photos.addAll(response)
@@ -95,7 +94,7 @@ class PhotoListViewModel @Inject constructor(
         showMorePhotosError()
     }
 
-    fun ratePhoto(photo: PhotoResponse, isLike: Boolean) {
+    fun ratePhoto(photo: Photo, isLike: Boolean) {
         handleApiResponse(
             source = { ratePhotoUseCase(photoId = photo.id, isLike = isLike) },
             onSuccess = {
@@ -122,7 +121,7 @@ class PhotoListViewModel @Inject constructor(
         )
     }
 
-    private fun onRefreshSuccess(data: List<PhotoResponse>?) {
+    private fun onRefreshSuccess(data: List<Photo>?) {
         data?.let { response ->
             _isListRefreshing.value = false
             _photos.clear()

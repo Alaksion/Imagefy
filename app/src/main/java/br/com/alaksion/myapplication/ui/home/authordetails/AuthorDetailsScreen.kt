@@ -28,8 +28,8 @@ import br.com.alaksion.core_ui.theme.DimGray
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
-import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
+import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
@@ -90,9 +90,9 @@ fun AuthorDetailsScreen(
 @Composable
 internal fun AuthorDetailsScreenContent(
     isPreview: Boolean = false,
-    authorData: ViewState<AuthorResponse>,
+    authorData: ViewState<Author>,
     authorUsername: String,
-    authorPhotos: List<AuthorPhotosResponse>,
+    authorPhotos: List<AuthorPhotos>,
     authorPhotoState: ViewState<Unit>,
     popBackStack: () -> Boolean,
     getMorePhotos: () -> Unit,
@@ -146,8 +146,8 @@ internal fun AuthorDetailsScreenContent(
 @Composable
 fun AuthorDetailsReady(
     isPreview: Boolean,
-    authorData: AuthorResponse,
-    authorPhotos: List<AuthorPhotosResponse>,
+    authorData: Author,
+    authorPhotos: List<AuthorPhotos>,
     authorPhotoState: ViewState<Unit>,
     getMorePhotos: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit
@@ -252,7 +252,7 @@ fun AuthorDetailsPreview() {
         Scaffold() {
             AuthorDetailsScreenContent(
                 authorData = ViewState.Ready(
-                    AuthorResponse(
+                    Author(
                         name = "John Doe",
                         portfolioUrl = "portfolio",
                         twitterUser = "@john_doe",

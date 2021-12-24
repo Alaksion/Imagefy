@@ -1,8 +1,8 @@
 package br.com.alaksion.myapplication.ui.home.authordetails
 
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
+import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.testdata.AuthorPhotosTestData
@@ -72,7 +72,7 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
     fun `Should set viewState to error if get author profile fails`() = runBlocking {
         coEvery { getAuthorProfileUseCase(any()) } returns flow {
             emit(
-                Source.Error<AuthorResponse>(
+                Source.Error<Author>(
                     NetworkError(
                         "",
                         500
@@ -117,7 +117,7 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
         }
         coEvery { getAuthorPhotoUseCase(any(), any()) } returns flow {
             emit(
-                Source.Error<List<AuthorPhotosResponse>>(
+                Source.Error<List<AuthorPhotos>>(
                     NetworkError("", 500)
                 )
             )
@@ -184,7 +184,7 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
                 any(),
                 any()
             )
-        } returns flow<Source<List<AuthorPhotosResponse>>> {
+        } returns flow<Source<List<AuthorPhotos>>> {
             emit(
                 Source.Error(
                     NetworkError(

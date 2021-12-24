@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.domain.usecase
 
-import br.com.alaksion.myapplication.domain.model.AuthorResponse
+import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.network.Source
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +10,7 @@ class GetAuthorProfileUseCase @Inject constructor(
     private val repository: ImagefyRepository
 ) {
 
-    suspend operator fun invoke(username: String): Flow<Source<AuthorResponse>> {
+    suspend operator fun invoke(username: String): Flow<Source<Author>> {
         return repository.getAuthorProfile(username)
     }
 

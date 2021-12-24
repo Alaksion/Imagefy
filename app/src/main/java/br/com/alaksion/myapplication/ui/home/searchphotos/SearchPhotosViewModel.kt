@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.ui.model.EventViewModel
 import br.com.alaksion.myapplication.ui.model.ViewModelEvent
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.PhotoResponse
-import br.com.alaksion.myapplication.domain.model.SearchPhotosResponse
+import br.com.alaksion.myapplication.domain.model.Photo
+import br.com.alaksion.myapplication.domain.model.SearchPhotos
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
 import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,15 +37,15 @@ class SearchPhotosViewModel @Inject constructor(
     val isMorePhotosLoading: StateFlow<Boolean>
         get() = _isMorePhotosLoading
 
-    private val _photoList = mutableStateListOf<PhotoResponse>()
-    val photoList: SnapshotStateList<PhotoResponse>
+    private val _photoList = mutableStateListOf<Photo>()
+    val photoList: SnapshotStateList<Photo>
         get() = _photoList
 
     private var currentPage = 1
     private var maxPages = 1
 
     private fun getPhotos(
-        onSuccess: (data: SearchPhotosResponse?) -> Unit,
+        onSuccess: (data: SearchPhotos?) -> Unit,
         onError: (NetworkError) -> Unit
     ) {
         handleApiResponse(
@@ -73,7 +73,7 @@ class SearchPhotosViewModel @Inject constructor(
         )
     }
 
-    private fun onSearchPhotosSuccess(data: SearchPhotosResponse?) {
+    private fun onSearchPhotosSuccess(data: SearchPhotos?) {
         data?.let { response ->
             _photoList.clear()
             _photoList.addAll(response.photos)
@@ -99,7 +99,7 @@ class SearchPhotosViewModel @Inject constructor(
         }
     }
 
-    private fun onLoadMorePhotosSuccess(data: SearchPhotosResponse?) {
+    private fun onLoadMorePhotosSuccess(data: SearchPhotos?) {
         data?.let { response ->
             _isMorePhotosLoading.value = false
             _photoList.addAll(response.photos)
