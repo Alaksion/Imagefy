@@ -16,6 +16,12 @@ To run this application please be sure that the requirements below are met
 * Install the most recent version of Android Studio Canary you can find the link download link [here](https://developer.android.com/studio/preview?hl=pt&gclid=CjwKCAjwwsmLBhACEiwANq-tXLkBkEHvrK_Tt4JdHaJHr435HTJJDc01GMtwKp_CRt_jeqLhq9cbLxoCnTcQAvD_BwE&gclsrc=aw.ds)
 * Install a mobile emulator compatible with Android Studio or prepare a physical device to run the application, you can find more about this [here](https://developer.android.com/training/basics/firstapp/running-app)
 * Create your own Unsplash Api Keys by creating an [Unsplash account and registering as a developer](https://unsplash.com/developers)
+* In the "Redirect URI & Permissions" section replace the default url with ```https://imagefy.com.br/auth```
+* In the "Redirect URI & Permissions" mark the following permissions: ```Public Access, Read User Access, Write likes access```
+* Click Save.
+
+## 💻 If you are using Android Api 31+ (Android 12.0 or newer)
+Android 12 comes with new security features and one of this features is not allow unvalidated deep links work by default, because Imagefy's "domain" is not configured in the official Unsplash domain you will have to manually open the app settings in your device and manually add the following domain ```https://imagefy.com.br/auth``` (Yes the same used in Unsplash platform configuration) 
 
 ## ☕ How to use Imagefy
 

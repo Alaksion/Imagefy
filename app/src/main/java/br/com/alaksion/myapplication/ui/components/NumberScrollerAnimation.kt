@@ -14,13 +14,13 @@ fun NumberScrollerAnimation(
     AnimatedContent(modifier = modifier, targetState = value, transitionSpec = {
         /* If the image was liked "scroll up" the like value*/
         if (targetState > initialState) {
-            slideInVertically({ height -> height }) + fadeIn() with
-                    slideOutVertically({ height -> -height }) + fadeOut()
+            slideInVertically(initialOffsetY = { height -> height }) + fadeIn() with
+                    slideOutVertically(targetOffsetY = { height -> -height }) + fadeOut()
         }
         /* If the image was unliked "scroll down" the like value*/
         else {
-            slideInVertically({ height -> -height }) + fadeIn() with
-                    slideOutVertically({ height -> height }) + fadeOut()
+            slideInVertically(initialOffsetY = { height -> -height }) + fadeIn() with
+                    slideOutVertically(targetOffsetY = { height -> height }) + fadeOut()
         }.using(SizeTransform(clip = false))
     }) { targetCount ->
         content(targetCount.toString())

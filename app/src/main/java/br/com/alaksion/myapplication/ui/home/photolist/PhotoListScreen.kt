@@ -3,7 +3,6 @@ package br.com.alaksion.myapplication.ui.home.photolist
 import android.widget.Toast
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Icon
@@ -20,15 +19,18 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.core_ui.components.TryAgain
-import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
+import br.com.alaksion.core_ui.components.paginatedlazycolumn.PaginatedLazyColumn
+import br.com.alaksion.core_ui.components.paginatedlazycolumn.rememberPaginatedLazyColumnState
+import br.com.alaksion.core_ui.extensions.onBottomReached
 import br.com.alaksion.myapplication.R
-import br.com.alaksion.myapplication.common.extensions.onBottomReached
 import br.com.alaksion.myapplication.common.extensions.safeFlowCollect
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoCard
 import br.com.alaksion.myapplication.ui.home.photolist.components.PhotoListTopBar
 import br.com.alaksion.myapplication.ui.model.ViewState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.flow.collect
 
 @ExperimentalAnimationApi
@@ -69,7 +71,9 @@ fun PhotoListScreen(
             viewModel.ratePhoto(photo, isLike)
         },
         toggleDrawer = toggleDrawer,
-        userProfileUrl = userProfileUrl
+        userProfileUrl = userProfileUrl,
+        isRefreshing = viewModel.isListRefreshing.collectAsState().value,
+        onRefreshList = { viewModel.onRefreshList() }
     )
 }
 
@@ -84,10 +88,19 @@ internal fun PhotoListScreenContent(
     isMorePhotosLoading: Boolean,
     toggleDrawer: () -> Unit,
     userProfileUrl: String,
+    isRefreshing: Boolean,
+    onRefreshList: () -> Unit,
     navigateToAuthorDetails: (authorId: String) -> Unit,
     ratePhoto: (photo: PhotoResponse, isLike: Boolean) -> Unit
 ) {
     val listState = rememberLazyListState()
+
+    val paginatorState = rememberPaginatedLazyColumnState(
+        lazyListState = listState,
+        showIndicator = isMorePhotosLoading
+    )
+
+    val swipeState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
     Column(modifier.fillMaxSize()) {
         PhotoListTopBar(userProfileUrl = userProfileUrl, toggleDrawer = toggleDrawer)
@@ -121,30 +134,30 @@ internal fun PhotoListScreenContent(
             }
             is ViewState.Ready -> {
                 Box(modifier = Modifier.fillMaxSize()) {
-                    LazyColumn(state = listState) {
-                        items(photos) { item ->
-                            PhotoCard(
-                                photoContent = item,
-                                navigateToAuthor = { authorId -> navigateToAuthorDetails(authorId) },
-                                ratePhoto = ratePhoto
-                            )
-                            listState.onBottomReached(offset = 2) {
-                                loadMorePhotos()
+                    SwipeRefresh(state = swipeState, onRefresh = { onRefreshList() }) {
+                        PaginatedLazyColumn(
+                            state = paginatorState,
+                            paginatorOffset = 2,
+                            onListEnd = { loadMorePhotos() }
+                        ) {
+                            items(photos) { item ->
+                                PhotoCard(
+                                    photoContent = item,
+                                    navigateToAuthor = { authorId ->
+                                        navigateToAuthorDetails(
+                                            authorId
+                                        )
+                                    },
+                                    ratePhoto = ratePhoto
+                                )
+                                listState.onBottomReached(offset = 2) {
+                                    loadMorePhotos()
+                                }
                             }
                         }
-                    }
-                    if (isMorePhotosLoading) {
-                        MorePhotosLoader(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding()
-                                .padding(bottom = 20.dp)
-                        )
                     }
                 }
             }
         }
-
     }
-
 }

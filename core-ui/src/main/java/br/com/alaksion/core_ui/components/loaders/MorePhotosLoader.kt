@@ -18,11 +18,11 @@ fun MorePhotosLoader(modifier: Modifier = Modifier) {
     Box(
         modifier
             .clip(CircleShape)
-            .background(MaterialTheme.colors.onBackground)
+            .background(MaterialTheme.colors.background)
             .padding(10.dp)
     ) {
         ProgressIndicator(
-            tint = MaterialTheme.colors.background, width = 2.dp,
+            tint = MaterialTheme.colors.onBackground, width = 2.dp,
             modifier = Modifier.size(20.dp)
         )
     }

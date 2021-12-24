@@ -122,8 +122,10 @@ dependencies {
     implementation "com.google.protobuf:protobuf-javalite:3.10.0"
 
     //Accompanist
-    implementation "com.google.accompanist:accompanist-systemuicontroller:0.21.2-beta"
-    implementation "com.google.accompanist:accompanist-insets:0.21.2-beta"
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
+
 }
 
 protobuf {

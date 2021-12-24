@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.common.extensions
+package br.com.alaksion.core_ui.extensions
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.*

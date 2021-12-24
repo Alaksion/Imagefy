@@ -3,12 +3,13 @@ package br.com.alaksion.myapplication.ui.home.photolist
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.viewModelScope
-import br.com.alaksion.myapplication.ui.model.EventViewModel
-import br.com.alaksion.myapplication.ui.model.ViewModelEvent
-import br.com.alaksion.myapplication.ui.model.ViewState
+import br.com.alaksion.myapplication.common.extensions.invert
 import br.com.alaksion.myapplication.domain.model.PhotoResponse
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
+import br.com.alaksion.myapplication.ui.model.EventViewModel
+import br.com.alaksion.myapplication.ui.model.ViewModelEvent
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.network.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,6 +39,10 @@ class PhotoListViewModel @Inject constructor(
     val isMorePhotosLoading: StateFlow<Boolean>
         get() = _isMorePhotosLoading
 
+    private val _isListRefreshing = MutableStateFlow(false)
+    val isListRefreshing: StateFlow<Boolean>
+        get() = _isListRefreshing
+
     private var currentPage = 1
 
     init {
@@ -52,7 +57,6 @@ class PhotoListViewModel @Inject constructor(
             onError = { error -> handleGetPhotosError(error) }
         )
     }
-
 
     private fun handleGetPhotosSuccess(data: List<PhotoResponse>?) {
         data?.let { response ->
@@ -107,4 +111,25 @@ class PhotoListViewModel @Inject constructor(
             sendEvent(PhotoListEvents.ShowMorePhotosError())
         }
     }
+
+    fun onRefreshList() {
+        currentPage = 1
+        _isListRefreshing.value = true
+        handleApiResponse(
+            source = { getPhotosUseCase(currentPage) },
+            onSuccess = { data -> onRefreshSuccess(data) },
+            onError = { error -> handleGetPhotosError(error) }
+        )
+    }
+
+    private fun onRefreshSuccess(data: List<PhotoResponse>?) {
+        data?.let { response ->
+            _isListRefreshing.value = false
+            _photos.clear()
+            _photos.addAll(response)
+            return
+        }
+        showMorePhotosError()
+    }
+
 }

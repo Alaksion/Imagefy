@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.core_ui.theme.ImagefyTheme
-import br.com.alaksion.myapplication.common.extensions.onBottomReached
+import br.com.alaksion.core_ui.extensions.onBottomReached
 import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.AuthorPhotosResponse
 import br.com.alaksion.myapplication.ui.components.ImageLoader
