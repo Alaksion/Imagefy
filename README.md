@@ -35,5 +35,6 @@ To run the application locally follow the steps below:
 1. Deep links must be manually allowed in the device's app configuration.
 2. Image's Vertical grid sometimes launches getMoreItems() improperly
 3. Some images take too much time to load in the image viewer
+4. Eventually the Glide image loader will crash the application when downloading the PhotoViewer image
 
 [⬆ Voltar ao topo](#Imagefy)<br>
