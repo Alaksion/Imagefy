@@ -48,6 +48,7 @@ class AuthorDetailsViewModel @Inject constructor(
 
     private var authorUsername: String = ""
     private var page = 1
+    private var shouldLoadMorePhotos = true
 
     fun getAuthorProfileData(currentAuthorUsername: String) {
         this.authorUsername = currentAuthorUsername
@@ -98,21 +99,25 @@ class AuthorDetailsViewModel @Inject constructor(
     }
 
     fun getMoreAuthorPhotos() {
-        handleApiResponse(
-            source = {
-                getAuthorPhotosUseCase(
-                    username = authorUsername,
-                    page = page
-                )
-            },
-            onSuccess = { data -> onGetMorePhotosSuccess(data) },
-            onError = { onGetMorePhotosError() }
-        )
+        if (shouldLoadMorePhotos) {
+            page++
+            handleApiResponse(
+                source = {
+                    getAuthorPhotosUseCase(
+                        username = authorUsername,
+                        page = page
+                    )
+                },
+                onSuccess = { data -> onGetMorePhotosSuccess(data) },
+                onError = { onGetMorePhotosError() }
+            )
+        }
     }
 
     private fun onGetMorePhotosSuccess(data: List<AuthorPhotos>?) {
         data?.let { response ->
-            _authorPhotos.addAll(response)
+            if (response.isEmpty()) shouldLoadMorePhotos = false
+            else _authorPhotos.addAll(response)
             return
         }
         produceEvent(AuthorDetailsEvents.ShowErrorToast())

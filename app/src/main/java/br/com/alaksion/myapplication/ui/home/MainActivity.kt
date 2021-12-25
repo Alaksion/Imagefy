@@ -20,11 +20,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.ui.components.HomeScreenNavigationDrawer
-import br.com.alaksion.myapplication.ui.navigator.HomeNavigator
-import br.com.alaksion.myapplication.ui.navigator.HomeScreen
+import br.com.alaksion.myapplication.ui.navigator.*
 import br.com.alaksion.myapplication.ui.navigator.bottomnav.HomeBottomNavigation
-import br.com.alaksion.myapplication.ui.navigator.navigateToLogin
-import br.com.alaksion.myapplication.ui.navigator.navigateToUserProfile
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -86,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                                 userData = currentUserData.collectAsState().value,
                                 navigateToAuthorProfile = {
                                     scope.launch {
-                                        navigateToUserProfile(navController)
+                                        navigateToAuthorDetails(navController, currentUserData.value.userName)
                                         scaffoldState.drawerState.close()
                                     }
                                 },

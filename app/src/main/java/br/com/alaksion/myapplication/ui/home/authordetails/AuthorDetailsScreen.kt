@@ -1,14 +1,22 @@
 package br.com.alaksion.myapplication.ui.home.authordetails
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CameraRoll
 import androidx.compose.material.icons.filled.Report
+import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,14 +32,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.core_ui.components.TryAgain
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
+import br.com.alaksion.core_ui.extensions.onBottomReached
 import br.com.alaksion.core_ui.theme.DimGray
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.domain.model.AuthorPhotos
+import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
-import br.com.alaksion.myapplication.ui.home.authordetails.components.authorphotos.AuthorPhotosList
+import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorPhotoGrid
 import br.com.alaksion.myapplication.ui.model.ViewState
 import kotlinx.coroutines.flow.collect
 
@@ -149,43 +159,71 @@ fun AuthorDetailsReady(
     getMorePhotos: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
-    Column {
-        UserDetailsHeader(
-            profileImageUrl = authorData.profileImage,
-            photoCount = authorData.totalPhotos,
-            followersCount = authorData.followers,
-            followingCount = authorData.following,
-            modifier = Modifier
-                .padding(horizontal = 10.dp)
-                .padding(bottom = 10.dp),
-            isPreview = isPreview
-        )
-        UserDetailsInfo(
-            bio = authorData.bio,
-            name = authorData.name,
-            portfolioUrl = authorData.portfolioUrl,
-            twitterUser = authorData.twitterUser,
-            instagramUser = authorData.instagramUser,
-            modifier = Modifier
-                .padding()
-                .padding(horizontal = 10.dp)
-        )
-        if (authorData.followedByUser) {
-            FollowButton(
+    val listState = rememberLazyListState()
+
+    LazyColumn(state = listState) {
+        item {
+            UserDetailsHeader(
+                profileImageUrl = authorData.profileImage,
+                photoCount = authorData.totalPhotos,
+                followersCount = authorData.followers,
+                followingCount = authorData.following,
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
-                    .padding(bottom = 10.dp)
-                    .width(150.dp)
+                    .padding(bottom = 10.dp),
+                isPreview = isPreview
             )
+            UserDetailsInfo(
+                bio = authorData.bio,
+                name = authorData.name,
+                portfolioUrl = authorData.portfolioUrl,
+                twitterUser = authorData.twitterUser,
+                instagramUser = authorData.instagramUser,
+                modifier = Modifier
+                    .padding()
+                    .padding(horizontal = 10.dp)
+            )
+            if (authorData.followedByUser) {
+                FollowButton(
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .padding(bottom = 10.dp)
+                        .width(150.dp)
+                )
+            }
         }
-
-        AuthorPhotosList(
-            photos = authorPhotos,
-            onClickTryAgain = { },
-            navigateToPhotoViewer = navigateToPhotoViewer,
-            viewState = authorPhotoState,
-            isPreview = isPreview
-        ) { getMorePhotos() }
+        when (authorPhotoState) {
+            is ViewState.Ready -> {
+                AuthorPhotoGrid(
+                    listState = listState,
+                    authorPhotos = authorPhotos,
+                    getMorePhotos =  getMorePhotos,
+                    navigateToPhotoViewer = navigateToPhotoViewer
+                )
+            }
+            is ViewState.Loading, is ViewState.Idle -> item {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    ProgressIndicator()
+                }
+            }
+            is ViewState.Error -> item {
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                    TryAgain(
+                        message = "An error occurred and author data could not be loaded, please try again later",
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.Report,
+                                contentDescription = null,
+                                tint = MaterialTheme.colors.onBackground,
+                                modifier = Modifier.size(40.dp)
+                            )
+                        },
+                        onClick = { },
+                        modifier = Modifier.padding(horizontal = 40.dp)
+                    )
+                }
+            }
+        }
     }
 }
 

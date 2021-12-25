@@ -23,7 +23,6 @@ import br.com.alaksion.myapplication.ui.home.photoviewer.PHOTO_ID_ARG
 import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerScreen
 import br.com.alaksion.myapplication.ui.home.searchphotos.SearchPhotosScreen
 import br.com.alaksion.myapplication.ui.home.splash.SplashScreen
-import br.com.alaksion.myapplication.ui.home.userprofile.UserProfileScreen
 
 private const val uri = BuildConfig.REDIRECT_URI
 
@@ -93,19 +92,6 @@ fun HomeNavigator(
         }
 
         composable(
-            route = HomeScreen.UserProfile().route
-        ) {
-            UserProfileScreen(
-                viewModel = hiltViewModel(it),
-                popBackStack = { navHostController.popBackStack() },
-                authorUsername = userData.userName,
-                navigateToPhotoViewer = { photoId ->
-                    navigateToPhotoViewer(navHostController, photoId)
-                },
-            )
-        }
-
-        composable(
             route = "${HomeScreen.AuthorDetails().route}/{$AUTHOR_USERNAME_ARG}",
             arguments = listOf(
                 navArgument(AUTHOR_USERNAME_ARG) {
@@ -161,8 +147,4 @@ fun navigateToAuthorDetails(navHostController: NavHostController, authorUsername
 
 fun navigateToPhotoViewer(navHostController: NavHostController, photoUrl: String) {
     navHostController.navigate("${HomeScreen.PhotoViewer().route}/$photoUrl")
-}
-
-fun navigateToUserProfile(navHostController: NavHostController) {
-    navHostController.navigate(HomeScreen.UserProfile().route)
 }

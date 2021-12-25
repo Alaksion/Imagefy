@@ -6,8 +6,8 @@
 
 ### Future features and enhancements
 - [ ] Allow users to download images from the photo viewer
-- [ ] Refact the user profile photo grid to scroll with the screen instead of being a scrollable container
-- [ ] Add swipe refresh to photo list
+- [x] Refact the user profile photo grid to scroll with the screen instead of being a scrollable container
+- [x] Add swipe refresh to photo list
 - [ ] Refact lazy columns/vertical grids to launch onListEnd more effectively 
 
 ## 💻 Requisites

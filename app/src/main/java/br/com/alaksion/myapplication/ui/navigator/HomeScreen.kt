@@ -9,7 +9,5 @@ sealed class HomeScreen(val route: String) {
     class SearchPhotos : HomeScreen("search_photos")
     class PhotoViewer : HomeScreen("photo")
     class AuthorDetails : HomeScreen("author")
-    class UserProfile : HomeScreen("user_profile")
-    class UserLikedPosts : HomeScreen("user_liked_posts")
 
 }
