@@ -1,5 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.photolist
 
+import app.cash.turbine.test
 import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.domain.usecase.GetPhotosUseCase
@@ -94,12 +95,19 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
             )
         }
 
-        viewModel.loadMorePhotos()
 
-        coVerify(exactly = 1) { getPhotosUseCase(1) }
-        coVerify(exactly = 1) { getPhotosUseCase(2) }
-        confirmVerified(getPhotosUseCase)
-        assertTrue(viewModel.eventHandler.first() is PhotoListEvents.ShowMorePhotosError)
+        viewModel.events.test {
+
+            viewModel.loadMorePhotos()
+
+            coVerify(exactly = 1) { getPhotosUseCase(1) }
+            coVerify(exactly = 1) { getPhotosUseCase(2) }
+            confirmVerified(getPhotosUseCase)
+
+            val emission = awaitItem()
+            assertTrue(emission is PhotoListEvents.ShowMorePhotosError)
+            cancelAndConsumeRemainingEvents()
+        }
     }
 
     @Test
@@ -107,12 +115,19 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
         runBlocking {
             coEvery { getPhotosUseCase(any()) } returns flow { emit(Source.Success(null)) }
 
-            viewModel.loadMorePhotos()
+            viewModel.events.test {
 
-            coVerify(exactly = 1) { getPhotosUseCase(1) }
-            coVerify(exactly = 1) { getPhotosUseCase(2) }
-            confirmVerified(getPhotosUseCase)
-            assertTrue(viewModel.eventHandler.first() is PhotoListEvents.ShowMorePhotosError)
+                viewModel.loadMorePhotos()
+
+                coVerify(exactly = 1) { getPhotosUseCase(1) }
+                coVerify(exactly = 1) { getPhotosUseCase(2) }
+                confirmVerified(getPhotosUseCase)
+
+                val emission = awaitItem()
+                assertTrue(emission is PhotoListEvents.ShowMorePhotosError)
+                cancelAndConsumeRemainingEvents()
+            }
+
         }
 
     @Test

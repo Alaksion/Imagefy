@@ -1,5 +1,6 @@
 package br.com.alaksion.myapplication.ui.home.searchphotos
 
+import app.cash.turbine.test
 import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.SearchPhotos
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
@@ -130,13 +131,19 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
             )
         } returns flow { emit(Source.Error<SearchPhotos>(NetworkError("", 500))) }
 
-        viewModel.searchPhotos()
-        viewModel.loadMorePhotos()
+        viewModel.events.test {
 
-        coVerify(exactly = 1) { searchPhotosUseCase(1, any()) }
-        coVerify(exactly = 1) { searchPhotosUseCase(2, any()) }
-        confirmVerified(searchPhotosUseCase)
-        assertTrue(viewModel.eventHandler.first() is SearchPhotosEvents.MorePhotosError)
+            viewModel.searchPhotos()
+            viewModel.loadMorePhotos()
+
+            coVerify(exactly = 1) { searchPhotosUseCase(1, any()) }
+            coVerify(exactly = 1) { searchPhotosUseCase(2, any()) }
+            confirmVerified(searchPhotosUseCase)
+
+            val emission = awaitItem()
+            assertTrue(emission is SearchPhotosEvents.MorePhotosError)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
@@ -156,14 +163,20 @@ class SearchPhotosViewModelTest : ImagefyBaseViewModelTest() {
                 )
             } returns flow { emit(Source.Success(null)) }
 
-            viewModel.searchPhotos()
-            viewModel.loadMorePhotos()
+            viewModel.events.test {
 
-            coVerify(exactly = 1) { searchPhotosUseCase(1, "") }
-            coVerify(exactly = 1) { searchPhotosUseCase(2, "") }
-            confirmVerified(searchPhotosUseCase)
+                viewModel.searchPhotos()
+                viewModel.loadMorePhotos()
 
-            assertTrue(viewModel.eventHandler.first() is SearchPhotosEvents.MorePhotosError)
+                coVerify(exactly = 1) { searchPhotosUseCase(1, "") }
+                coVerify(exactly = 1) { searchPhotosUseCase(2, "") }
+                confirmVerified(searchPhotosUseCase)
+
+                val emission = awaitItem()
+                assertTrue(emission is SearchPhotosEvents.MorePhotosError)
+                cancelAndIgnoreRemainingEvents()
+            }
+
         }
 
 }

@@ -1,12 +1,13 @@
 package br.com.alaksion.myapplication.ui.home.authordetails
 
-import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.myapplication.domain.model.AuthorPhotos
+import app.cash.turbine.test
 import br.com.alaksion.myapplication.domain.model.Author
+import br.com.alaksion.myapplication.domain.model.AuthorPhotos
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorPhotosUseCase
 import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.testdata.AuthorPhotosTestData
 import br.com.alaksion.myapplication.testdata.AuthorProfileTestData
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
 import br.com.alaksion.network.NetworkError
 import br.com.alaksion.network.Source
@@ -18,6 +19,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -178,7 +180,7 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
     }
 
     @Test
-    fun `Should show error toast when get more photos fails`() = runBlocking {
+    fun `Should show error toast when get more photos fails`() = runBlockingTest {
         coEvery {
             getAuthorPhotoUseCase(
                 any(),
@@ -195,12 +197,18 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
             )
         }
 
-        viewModel.getMoreAuthorPhotos()
+        viewModel.events.test {
 
-        coVerify(exactly = 1) { getAuthorPhotoUseCase(any(), any()) }
-        confirmVerified(getAuthorPhotoUseCase)
+            viewModel.getMoreAuthorPhotos()
 
-        assertTrue(viewModel.eventHandler.first() is AuthorDetailsEvents.ShowErrorToast)
+            coVerify(exactly = 1) { getAuthorPhotoUseCase(any(), any()) }
+            confirmVerified(getAuthorPhotoUseCase)
+
+
+            val emission = awaitItem()
+            assertTrue(emission is AuthorDetailsEvents.ShowErrorToast)
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
@@ -213,11 +221,15 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
                 )
             } returns flow { emit(Source.Success(null)) }
 
-            viewModel.getMoreAuthorPhotos()
+            viewModel.events.test {
+                viewModel.getMoreAuthorPhotos()
 
-            coVerify(exactly = 1) { getAuthorPhotoUseCase(any(), any()) }
-            confirmVerified(getAuthorPhotoUseCase)
+                coVerify(exactly = 1) { getAuthorPhotoUseCase(any(), any()) }
+                confirmVerified(getAuthorPhotoUseCase)
 
-            assertTrue(viewModel.eventHandler.first() is AuthorDetailsEvents.ShowErrorToast)
+                val emission = awaitItem()
+                assertTrue(emission is AuthorDetailsEvents.ShowErrorToast)
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 }

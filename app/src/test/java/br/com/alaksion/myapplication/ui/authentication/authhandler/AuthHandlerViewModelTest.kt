@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.ui.authentication.authhandler
 
-import br.com.alaksion.myapplication.ui.model.ViewState
+import app.cash.turbine.test
 import br.com.alaksion.myapplication.domain.model.Auth
 import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.domain.model.CurrentUser
@@ -13,6 +13,7 @@ import br.com.alaksion.myapplication.testdata.UserNameTestData
 import br.com.alaksion.myapplication.testdata.ValidateLoginTestData
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthHandlerEvents
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthHandlerViewModel
+import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
 import br.com.alaksion.network.NetworkError
 import br.com.alaksion.network.Source
@@ -22,12 +23,9 @@ import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
@@ -77,19 +75,22 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 )
             }
 
-            viewModel.authenticateUser("authCode")
+            viewModel.events.test {
 
-            checkCalls(
-                validateLoginCalls = 1,
-                storeAuthTokenCalls = 1,
-                getAuthorProfileCalls = 1,
-                getUsernameCalls = 1
-            )
+                viewModel.authenticateUser("authCode")
 
-            assertEquals(
-                viewModel.events.first()::class,
-                AuthHandlerEvents.UpdateUserData::class
-            )
+                checkCalls(
+                    validateLoginCalls = 1,
+                    storeAuthTokenCalls = 1,
+                    getAuthorProfileCalls = 1,
+                    getUsernameCalls = 1
+                )
+
+                val emission = awaitItem()
+                assertTrue(emission is AuthHandlerEvents.UpdateUserData)
+                cancelAndIgnoreRemainingEvents()
+
+            }
         }
 
     @Test
@@ -119,12 +120,13 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 )
             }
 
-            viewModel.authenticateUser("authCode")
+            viewModel.events.test {
+                viewModel.authenticateUser("authCode")
 
-            assertEquals(
-                viewModel.events.first()::class,
-                AuthHandlerEvents.UpdateUserData::class
-            )
+                val emission = awaitItem()
+                assertTrue(emission is AuthHandlerEvents.UpdateUserData)
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test
@@ -154,12 +156,13 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 )
             }
 
-            viewModel.authenticateUser("authCode")
-
-            assertEquals(
-                viewModel.events.drop(1).first()::class,
-                AuthHandlerEvents.NavigateToSuccess::class
-            )
+            viewModel.events.test {
+                viewModel.authenticateUser("authCode")
+                awaitItem()
+                val emission = awaitItem()
+                assertTrue(emission is AuthHandlerEvents.NavigateToSuccess)
+                cancelAndIgnoreRemainingEvents()
+            }
         }
 
     @Test

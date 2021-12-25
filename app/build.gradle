@@ -21,9 +21,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
         vectorDrawables {
             useSupportLibrary true
         }
+
         buildConfigField("String", "PUBLIC_KEY", apiKeyProperties["PUBLIC_KEY"])
         buildConfigField("String", "SECRET_KEY", apiKeyProperties["SECRET_KEY"])
         buildConfigField("String", "REDIRECT_URI", apiKeyProperties["REDIRECT_URI"])
