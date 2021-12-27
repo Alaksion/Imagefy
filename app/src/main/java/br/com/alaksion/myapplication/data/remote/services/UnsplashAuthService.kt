@@ -2,7 +2,6 @@ package br.com.alaksion.myapplication.data.remote.services
 
 import br.com.alaksion.myapplication.data.model.auth.AuthValidationResponseData
 import br.com.alaksion.network.client.UnsplashServiceCompanion
-import retrofit2.Response
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -15,7 +14,7 @@ interface UnsplashAuthService {
         @Query("redirect_uri") redirectUri: String,
         @Query("code") authCode: String,
         @Query("grant_type") grantType: String
-    ): Response<AuthValidationResponseData>
+    ): AuthValidationResponseData
 
     companion object : UnsplashServiceCompanion<UnsplashAuthService>()
 

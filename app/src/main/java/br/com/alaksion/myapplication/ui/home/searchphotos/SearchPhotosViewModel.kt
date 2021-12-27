@@ -8,7 +8,7 @@ import br.com.alaksion.myapplication.domain.model.SearchPhotos
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
 import br.com.alaksion.myapplication.ui.model.BaseViewModel
 import br.com.alaksion.myapplication.ui.model.ViewState
-import br.com.alaksion.network.NetworkError
+import br.com.alaksion.network.model.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

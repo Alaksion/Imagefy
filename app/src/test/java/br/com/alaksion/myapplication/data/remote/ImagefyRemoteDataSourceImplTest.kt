@@ -12,7 +12,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import retrofit2.Response
 import kotlin.test.assertNotNull
 
 class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
@@ -35,7 +34,7 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
                 "code",
                 "grant"
             )
-        } returns Response.success(LoginAuthorizationTestData.DATA_RESPONSE)
+        } returns LoginAuthorizationTestData.DATA_RESPONSE
 
         val result = dataSource.validateLogin("clientId", "secret", "uri", "code", "grant").first()
 
@@ -54,7 +53,7 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
 
     @Test
     fun `Should get images from unsplash service`() = runBlocking {
-        coEvery { unsplashService.getPhotos(any()) } returns Response.success(GetImagesTestData.DATA_RESPONSE)
+        coEvery { unsplashService.getPhotos(any()) } returns GetImagesTestData.DATA_RESPONSE
 
         val result = dataSource.getPhotos((1)).first()
 
@@ -65,9 +64,9 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
 
     @Test
     fun `Should get author profile from unsplash service`() = runBlocking {
-        coEvery { unsplashService.getAuthorProfile(any()) } returns Response.success(
-            AuthorProfileTestData.DATA_RESPONSE
-        )
+        coEvery { unsplashService.getAuthorProfile(any()) } returns
+                AuthorProfileTestData.DATA_RESPONSE
+
 
         val result = dataSource.getAuthorProfile("username").first()
 
@@ -78,9 +77,9 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
 
     @Test
     fun `Should get author photos from unsplash service`() = runBlocking {
-        coEvery { unsplashService.getAuthorPhotos(any(), any(), any()) } returns Response.success(
-            AuthorPhotosTestData.DATA_RESPONSE
-        )
+        coEvery { unsplashService.getAuthorPhotos(any(), any(), any()) } returns
+                AuthorPhotosTestData.DATA_RESPONSE
+
 
         val result = dataSource.getAuthorPhotos("username", 13).first()
 
@@ -91,9 +90,8 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
 
     @Test
     fun `Should get photo details from unsplash service`() = runBlocking {
-        coEvery { unsplashService.getPhotoDetails(any()) } returns Response.success(
-            PhotoDetailsTestData.DATA_RESPONSE
-        )
+        coEvery { unsplashService.getPhotoDetails(any()) } returns
+                PhotoDetailsTestData.DATA_RESPONSE
 
         val result = dataSource.getPhotoDetails("photoId").first()
 
@@ -104,7 +102,7 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
 
     @Test
     fun `Should like photo in unsplash service`() = runBlocking {
-        coEvery { unsplashService.likePhoto(any()) } returns Response.success(Unit)
+        coEvery { unsplashService.likePhoto(any()) } returns Unit
 
         val result = dataSource.likePhoto("photoId").first()
 
@@ -115,7 +113,7 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
 
     @Test
     fun `Should unlike photo in unsplash service`() = runBlocking {
-        coEvery { unsplashService.unlikePhoto(any()) } returns Response.success(Unit)
+        coEvery { unsplashService.unlikePhoto(any()) } returns Unit
 
         val result = dataSource.unlikePhoto("photoId").first()
 
@@ -126,7 +124,7 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
 
     @Test
     fun `Should get current username from unsplash service`() = runBlocking {
-        coEvery { unsplashService.getCurrentUsername() } returns Response.success(UserNameTestData.DATA_RESPONSE)
+        coEvery { unsplashService.getCurrentUsername() } returns UserNameTestData.DATA_RESPONSE
 
         val result = dataSource.getCurrentUsername().first()
 
@@ -137,9 +135,8 @@ class ImagefyRemoteDataSourceImplTest : ImagefyBaseTest() {
 
     @Test
     fun `Should search photos in unsplash service`() = runBlocking {
-        coEvery { unsplashService.searchPhotos(any(), any()) } returns Response.success(
-            SearchPhotosTestData.DATA_RESPONSE
-        )
+        coEvery { unsplashService.searchPhotos(any(), any()) } returns
+                SearchPhotosTestData.DATA_RESPONSE
 
         val result = dataSource.searchPhotos(SearchPhotosTestData.DATA_REQUEST).first()
 

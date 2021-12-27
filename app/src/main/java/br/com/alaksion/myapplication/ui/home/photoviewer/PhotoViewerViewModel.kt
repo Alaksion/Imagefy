@@ -5,7 +5,7 @@ import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoDetail
 import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
-import br.com.alaksion.network.NetworkError
+import br.com.alaksion.network.model.NetworkError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -8,7 +8,7 @@ abstract class UnsplashServiceCompanion<T> {
         getAuthTokenUseCase: GetAuthorizationHeaderUseCase? = null,
         baseUrl: String
     ): T {
-        return makeRetrofitClient(
+        return RetrofitClient.makeClient(
             getAuthTokenUseCase,
             baseUrl
         ).create(T::class.java)

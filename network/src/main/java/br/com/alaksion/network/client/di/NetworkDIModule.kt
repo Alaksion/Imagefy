@@ -13,7 +13,6 @@ import br.com.alaksion.network.client.domain.usecase.StoreAuthTokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -55,8 +54,8 @@ object NetworkDIModule {
 
     @Provides
     @Singleton
-    fun provideGetAuthorizationHeaderUseCase(sharedPreferences: SharedPreferences): GetAuthorizationHeaderUseCase {
-        return GetAuthorizationHeaderUseCase(sharedPreferences)
+    fun provideGetAuthorizationHeaderUseCase(repository: NetworkClientRepository): GetAuthorizationHeaderUseCase {
+        return GetAuthorizationHeaderUseCase(repository)
     }
 
 }

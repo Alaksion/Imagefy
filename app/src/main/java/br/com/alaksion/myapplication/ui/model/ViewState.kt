@@ -1,6 +1,6 @@
 package br.com.alaksion.myapplication.ui.model
 
-import br.com.alaksion.network.NetworkError
+import br.com.alaksion.network.model.NetworkError
 
 sealed class ViewState<out T> {
 

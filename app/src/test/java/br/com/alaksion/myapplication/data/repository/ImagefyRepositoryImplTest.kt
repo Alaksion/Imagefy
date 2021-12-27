@@ -5,7 +5,7 @@ import br.com.alaksion.myapplication.data.datasource.ImagefyRemoteDataSource
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.*
 import br.com.alaksion.myapplication.utils.ImagefyBaseTest
-import br.com.alaksion.network.Source
+import br.com.alaksion.network.model.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified

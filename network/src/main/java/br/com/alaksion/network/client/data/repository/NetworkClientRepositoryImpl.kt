@@ -16,4 +16,8 @@ class NetworkClientRepositoryImpl @Inject constructor(
         localDataSource.clearAuthorizationHeader()
     }
 
+    override fun getAuthorizationHeader(): String {
+        return localDataSource.getAuthorizationHeader()
+    }
+
 }

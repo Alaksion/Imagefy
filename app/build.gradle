@@ -72,7 +72,6 @@ android {
 dependencies {
 
     implementation project(path: ':network')
-    implementation project(path: ':di')
     implementation project(path: ':core-ui')
 
     implementation 'androidx.core:core-ktx:1.7.0'

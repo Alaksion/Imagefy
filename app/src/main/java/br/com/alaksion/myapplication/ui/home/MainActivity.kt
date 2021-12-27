@@ -11,7 +11,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -20,8 +22,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.ui.components.HomeScreenNavigationDrawer
-import br.com.alaksion.myapplication.ui.navigator.*
+import br.com.alaksion.myapplication.ui.navigator.HomeNavigator
 import br.com.alaksion.myapplication.ui.navigator.bottomnav.HomeBottomNavigation
+import br.com.alaksion.myapplication.ui.navigator.navigateToAuthorDetails
+import br.com.alaksion.myapplication.ui.navigator.navigateToLogin
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,27 +46,25 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         setContent {
             ImagefyTheme(isDarkMode = viewModel.isConfigDarkMode.collectAsState().value) {
-                val systemUiController = rememberSystemUiController()
-                val scope = rememberCoroutineScope()
-                val colors = MaterialTheme.colors
-
-                LaunchedEffect(key1 = viewModel.isConfigDarkMode.collectAsState().value) {
-                    systemUiController.setStatusBarColor(
-                        color = colors.background,
-                        darkIcons = viewModel.isConfigDarkMode.value.not()
-                    )
-                }
-
                 ProvideWindowInsets() {
+
+                    val systemUiController = rememberSystemUiController()
+                    val scope = rememberCoroutineScope()
+                    val colors = MaterialTheme.colors
                     val navController = rememberNavController()
                     val scaffoldState = rememberScaffoldState()
-                    val currentUserData = viewModel.currentUserData
-                    val isBottomsheetVisible = remember { mutableStateOf(false) }
                     val currentRoute = navController.currentBackStackEntryAsState()
 
+                    LaunchedEffect(key1 = viewModel.isConfigDarkMode.collectAsState().value) {
+                        systemUiController.setStatusBarColor(
+                            color = colors.background,
+                            darkIcons = viewModel.isConfigDarkMode.value.not()
+                        )
+                    }
+
                     LaunchedEffect(key1 = currentRoute.value) {
-                        isBottomsheetVisible.value =
-                            shouldShowBottomNav(currentRoute.value?.destination?.route)
+                        viewModel.showOrHideBottomNav(currentRoute.value?.destination?.route)
+                        viewModel.enableOrDisableNavDrawer(currentRoute.value?.destination?.route)
                     }
 
                     fun toggleDrawer() {
@@ -77,13 +79,17 @@ class MainActivity : AppCompatActivity() {
                     Scaffold(
                         scaffoldState = scaffoldState,
                         drawerBackgroundColor = MaterialTheme.colors.background,
+                        drawerGesturesEnabled = viewModel.isNavDrawerEnabled.collectAsState().value,
                         drawerElevation = 0.dp,
                         drawerContent = {
                             HomeScreenNavigationDrawer(
-                                userData = currentUserData.collectAsState().value,
+                                userData = viewModel.currentUserData.collectAsState().value,
                                 navigateToAuthorProfile = {
                                     scope.launch {
-                                        navigateToAuthorDetails(navController, currentUserData.value.userName)
+                                        navigateToAuthorDetails(
+                                            navController,
+                                            viewModel.currentUserData.value.userName
+                                        )
                                         scaffoldState.drawerState.close()
                                     }
                                 },
@@ -96,7 +102,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         },
                         bottomBar = {
-                            if (isBottomsheetVisible.value)
+                            if (viewModel.isBottomNavVisible.collectAsState().value)
                                 HomeBottomNavigation(navController = navController)
                         },
                     ) { screenPadding ->
@@ -104,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                             navHostController = navController,
                             modifier = Modifier.padding(screenPadding),
                             toggleDrawer = { toggleDrawer() },
-                            userData = currentUserData.collectAsState().value,
+                            userData = viewModel.currentUserData.collectAsState().value,
                             updateUserData = { viewModel.updateUserData(it) }
                         )
                     }
@@ -112,9 +118,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    private fun shouldShowBottomNav(currentRoute: String?): Boolean {
-        return currentRoute == HomeScreen.PhotosList().route || currentRoute == HomeScreen.SearchPhotos().route
-    }
-
 }

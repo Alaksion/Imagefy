@@ -6,14 +6,13 @@ import br.com.alaksion.myapplication.domain.model.SearchPhotos
 import br.com.alaksion.myapplication.domain.usecase.SearchPhotosUseCase
 import br.com.alaksion.myapplication.testdata.SearchPhotosTestData
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
-import br.com.alaksion.network.NetworkError
-import br.com.alaksion.network.Source
+import br.com.alaksion.network.model.NetworkError
+import br.com.alaksion.network.model.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

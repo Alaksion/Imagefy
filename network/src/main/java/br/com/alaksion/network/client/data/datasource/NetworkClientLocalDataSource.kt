@@ -6,4 +6,6 @@ interface NetworkClientLocalDataSource {
 
     fun clearAuthorizationHeader()
 
+    fun getAuthorizationHeader(): String
+
 }

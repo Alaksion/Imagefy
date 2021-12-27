@@ -9,14 +9,13 @@ import br.com.alaksion.myapplication.testdata.AuthorPhotosTestData
 import br.com.alaksion.myapplication.testdata.AuthorProfileTestData
 import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
-import br.com.alaksion.network.NetworkError
-import br.com.alaksion.network.Source
+import br.com.alaksion.network.model.NetworkError
+import br.com.alaksion.network.model.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest

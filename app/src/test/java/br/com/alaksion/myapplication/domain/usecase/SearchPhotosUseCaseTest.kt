@@ -4,7 +4,7 @@ import br.com.alaksion.myapplication.domain.model.SearchPhotosRequest
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.SearchPhotosTestData
 import br.com.alaksion.myapplication.utils.ImagefyBaseTest
-import br.com.alaksion.network.Source
+import br.com.alaksion.network.model.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified

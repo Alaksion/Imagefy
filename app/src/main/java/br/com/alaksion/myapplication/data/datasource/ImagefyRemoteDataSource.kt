@@ -6,7 +6,7 @@ import br.com.alaksion.myapplication.data.model.currentuser.CurrentUserResponseD
 import br.com.alaksion.myapplication.data.model.photo.PhotoData
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosRequestData
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
-import br.com.alaksion.network.Source
+import br.com.alaksion.network.model.Source
 import kotlinx.coroutines.flow.Flow
 
 interface ImagefyRemoteDataSource {

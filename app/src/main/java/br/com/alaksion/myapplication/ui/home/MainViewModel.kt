@@ -2,10 +2,11 @@ package br.com.alaksion.myapplication.ui.home
 
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.common.extensions.invert
-import br.com.alaksion.myapplication.ui.model.BaseViewModel
 import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.domain.usecase.GetCurrentDarkModeConfigUseCase
 import br.com.alaksion.myapplication.domain.usecase.StoreDarkModeConfigUseCase
+import br.com.alaksion.myapplication.ui.model.BaseViewModel
+import br.com.alaksion.myapplication.ui.navigator.HomeScreen
 import br.com.alaksion.network.client.domain.usecase.ClearAuthTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,15 +30,16 @@ class MainViewModel @Inject constructor(
     val isConfigDarkMode: StateFlow<Boolean>
         get() = _isConfigDarkMode
 
+    private val _isBottomNavVisible = MutableStateFlow(false)
+    val isBottomNavVisible: StateFlow<Boolean>
+        get() = _isBottomNavVisible
+
+    private val _isNavDrawerEnabled = MutableStateFlow(false)
+    val isNavDrawerEnabled: StateFlow<Boolean>
+        get() = _isNavDrawerEnabled
+
     init {
         getCurrentDarkModeConfig()
-    }
-
-    fun toggleDarkMode() {
-        viewModelScope.launch {
-            _isConfigDarkMode.invert()
-            storeCurrentDarkModeConfigUseCase(_isConfigDarkMode.value)
-        }
     }
 
     fun clearAuthToken() {
@@ -55,4 +57,22 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun toggleDarkMode() {
+        viewModelScope.launch {
+            _isConfigDarkMode.invert()
+            storeCurrentDarkModeConfigUseCase(_isConfigDarkMode.value)
+        }
+    }
+
+    fun showOrHideBottomNav(currentRoute: String?) {
+        _isBottomNavVisible.value =
+            currentRoute == HomeScreen.PhotosList().route || currentRoute == HomeScreen.SearchPhotos().route
+    }
+
+    fun enableOrDisableNavDrawer(currentRoute: String?) {
+        _isNavDrawerEnabled.value =
+            currentRoute == HomeScreen.PhotosList().route || currentRoute == HomeScreen.SearchPhotos().route
+    }
+
 }

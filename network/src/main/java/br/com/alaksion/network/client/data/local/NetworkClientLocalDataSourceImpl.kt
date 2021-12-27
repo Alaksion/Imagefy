@@ -17,4 +17,8 @@ class NetworkClientLocalDataSourceImpl @Inject constructor(
         sharedPreferences.edit().remove(NetworkClientConfig.AUTH_TOKEN_KEY).apply()
     }
 
+    override fun getAuthorizationHeader(): String {
+        return sharedPreferences.getString(NetworkClientConfig.AUTH_TOKEN_KEY, "") ?: ""
+    }
+
 }

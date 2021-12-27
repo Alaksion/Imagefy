@@ -3,7 +3,7 @@ package br.com.alaksion.myapplication.domain.usecase
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
 import br.com.alaksion.myapplication.testdata.ValidateLoginTestData
 import br.com.alaksion.myapplication.utils.ImagefyBaseTest
-import br.com.alaksion.network.Source
+import br.com.alaksion.network.model.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified

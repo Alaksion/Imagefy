@@ -6,4 +6,6 @@ interface NetworkClientRepository {
 
     fun clearAuthorizationHeader()
 
+    fun getAuthorizationHeader(): String
+
 }

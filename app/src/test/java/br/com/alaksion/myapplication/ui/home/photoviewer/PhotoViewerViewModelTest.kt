@@ -6,8 +6,8 @@ import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import br.com.alaksion.myapplication.testdata.PhotoDetailsTestData
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
-import br.com.alaksion.network.NetworkError
-import br.com.alaksion.network.Source
+import br.com.alaksion.network.model.NetworkError
+import br.com.alaksion.network.model.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified

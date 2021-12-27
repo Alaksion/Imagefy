@@ -14,8 +14,7 @@ import br.com.alaksion.myapplication.data.model.storeduser.mapToData
 import br.com.alaksion.myapplication.data.model.storeduser.mapToDomain
 import br.com.alaksion.myapplication.domain.model.*
 import br.com.alaksion.myapplication.domain.repository.ImagefyRepository
-import br.com.alaksion.network.Source
-import br.com.alaksion.network.mapSource
+import br.com.alaksion.network.model.Source
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

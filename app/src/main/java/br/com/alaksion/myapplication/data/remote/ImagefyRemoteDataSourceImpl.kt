@@ -9,8 +9,8 @@ import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosRequest
 import br.com.alaksion.myapplication.data.model.searchphotos.SearchPhotosResponseData
 import br.com.alaksion.myapplication.data.remote.services.UnsplashAuthService
 import br.com.alaksion.myapplication.data.remote.services.UnsplashService
-import br.com.alaksion.network.Source
-import br.com.alaksion.network.utils.handleApiResponse
+import br.com.alaksion.network.client.RetrofitClient
+import br.com.alaksion.network.model.Source
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -29,26 +29,28 @@ class ImagefyRemoteDataSourceImpl @Inject constructor(
     ): Flow<Source<AuthValidationResponseData>> {
         return flow {
             emit(
-                authService.validateLogin(
-                    clientId,
-                    clientSecret,
-                    redirectUri,
-                    authCode,
-                    grantType
-                ).handleApiResponse()
+                RetrofitClient.makeApiCall {
+                    authService.validateLogin(
+                        clientId,
+                        clientSecret,
+                        redirectUri,
+                        authCode,
+                        grantType
+                    )
+                }
             )
         }
     }
 
     override suspend fun getPhotos(page: Int): Flow<Source<List<PhotoData>>> {
         return flow {
-            emit(service.getPhotos(page).handleApiResponse())
+            emit(RetrofitClient.makeApiCall { service.getPhotos(page) })
         }
     }
 
     override suspend fun getAuthorProfile(userName: String): Flow<Source<UserResponseData>> {
         return flow {
-            emit(service.getAuthorProfile(userName).handleApiResponse())
+            emit(RetrofitClient.makeApiCall { service.getAuthorProfile(userName) })
         }
     }
 
@@ -58,42 +60,49 @@ class ImagefyRemoteDataSourceImpl @Inject constructor(
     ): Flow<Source<List<PhotoData>>> {
         return flow {
             emit(
-                service.getAuthorPhotos(username = userName, page = page).handleApiResponse()
+                RetrofitClient.makeApiCall {
+                    service.getAuthorPhotos(
+                        username = userName,
+                        page = page
+                    )
+                }
             )
         }
     }
 
     override suspend fun getPhotoDetails(photoId: String): Flow<Source<PhotoData>> {
         return flow {
-            emit(service.getPhotoDetails(photoId).handleApiResponse())
+            emit(RetrofitClient.makeApiCall { service.getPhotoDetails(photoId) })
         }
     }
 
     override suspend fun likePhoto(photoId: String): Flow<Source<Unit>> {
         return flow {
-            emit(service.likePhoto(photoId).handleApiResponse())
+            emit(RetrofitClient.makeApiCall { service.likePhoto(photoId) })
         }
     }
 
     override suspend fun unlikePhoto(photoId: String): Flow<Source<Unit>> {
         return flow {
-            emit(service.unlikePhoto(photoId).handleApiResponse())
+            emit(RetrofitClient.makeApiCall { service.unlikePhoto(photoId) })
         }
     }
 
     override suspend fun getCurrentUsername(): Flow<Source<CurrentUserResponseData>> {
         return flow {
-            emit(service.getCurrentUsername().handleApiResponse())
+            emit(RetrofitClient.makeApiCall { service.getCurrentUsername() })
         }
     }
 
     override suspend fun searchPhotos(request: SearchPhotosRequestData): Flow<Source<SearchPhotosResponseData>> {
         return flow {
             emit(
-                service.searchPhotos(
-                    searchQuery = request.query,
-                    page = request.page
-                ).handleApiResponse()
+                RetrofitClient.makeApiCall {
+                    service.searchPhotos(
+                        searchQuery = request.query,
+                        page = request.page
+                    )
+                }
             )
         }
     }
