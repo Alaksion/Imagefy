@@ -27,18 +27,19 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
     private val ratePhotosUseCase: RatePhotoUseCase = mockk(relaxed = true)
 
 
-    override fun setUp() {
-        viewModel = PhotoListViewModel(getPhotosUseCase, ratePhotosUseCase)
-    }
-
 
     @Test
     fun `Should get images and add to list`() = runBlockingTest {
         coEvery { getPhotosUseCase(any()) } returns flow { emit(Source.Success(GetImagesTestData.DOMAIN_RESPONSE)) }
 
+        viewModel = PhotoListViewModel(getPhotosUseCase, ratePhotosUseCase)
+
         coVerify(exactly = 1) { getPhotosUseCase(any()) }
         confirmVerified(getPhotosUseCase)
-        assertEquals(GetImagesTestData.DOMAIN_RESPONSE, viewModel.photos.toList())
+        assertEquals(
+            GetImagesTestData.DOMAIN_RESPONSE,
+            (viewModel.screenState.value as ViewState.Ready).data.toList()
+        )
     }
 
     @Test
@@ -53,6 +54,7 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
                 )
             )
         }
+        viewModel = PhotoListViewModel(getPhotosUseCase, ratePhotosUseCase)
 
         coVerify(exactly = 1) { getPhotosUseCase(1) }
         confirmVerified(getPhotosUseCase)
@@ -63,6 +65,7 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
     fun `Should set viewstate to error if get images succeeds but returns a null object`() =
         runBlocking {
             coEvery { getPhotosUseCase(any()) } returns flow { emit(Source.Success(null)) }
+            viewModel = PhotoListViewModel(getPhotosUseCase, ratePhotosUseCase)
 
             coVerify(exactly = 1) { getPhotosUseCase(1) }
             confirmVerified(getPhotosUseCase)
@@ -72,13 +75,20 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should get more photos and add them to the photo list`() = runBlocking {
         coEvery { getPhotosUseCase(any()) } returns flow { emit(Source.Success(GetImagesTestData.DOMAIN_RESPONSE)) }
+        viewModel = PhotoListViewModel(getPhotosUseCase, ratePhotosUseCase)
+        val expectedResult = mutableListOf<Photo>()
+        expectedResult.addAll(GetImagesTestData.DOMAIN_RESPONSE)
+        expectedResult.addAll(GetImagesTestData.DOMAIN_RESPONSE)
 
         viewModel.loadMorePhotos()
 
         coVerify(exactly = 1) { getPhotosUseCase(1) }
         coVerify(exactly = 1) { getPhotosUseCase(2) }
         confirmVerified(getPhotosUseCase)
-        assertEquals(viewModel.photos.toList(), GetImagesTestData.DOMAIN_RESPONSE)
+        assertEquals(
+            expectedResult,
+            (viewModel.screenState.value as ViewState.Ready).data.toList()
+        )
     }
 
     @Test
@@ -93,6 +103,7 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
                 )
             )
         }
+        viewModel = PhotoListViewModel(getPhotosUseCase, ratePhotosUseCase)
 
 
         viewModel.events.test {
@@ -113,6 +124,7 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
     fun `Should set show error toast when get more photos succeeds with null response`() =
         runBlocking {
             coEvery { getPhotosUseCase(any()) } returns flow { emit(Source.Success(null)) }
+            viewModel = PhotoListViewModel(getPhotosUseCase, ratePhotosUseCase)
 
             viewModel.events.test {
 
@@ -132,6 +144,7 @@ class PhotoListViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should rate photo`() = runBlocking {
         coEvery { ratePhotosUseCase(any(), any()) } returns flow { emit(Source.Success(Unit)) }
+        viewModel = PhotoListViewModel(getPhotosUseCase, ratePhotosUseCase)
 
         viewModel.ratePhoto(
             Photo(

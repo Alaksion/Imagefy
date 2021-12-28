@@ -62,10 +62,13 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
         confirmVerified(getAuthorProfileUseCase)
         confirmVerified(getAuthorPhotoUseCase)
 
-        assertEquals(viewModel.authorPhotos.toList(), AuthorPhotosTestData.DOMAIN_RESPONSE)
         assertEquals(
-            (viewModel.authorData.value as ViewState.Ready).data,
-            AuthorProfileTestData.DOMAIN_RESPONSE
+            AuthorPhotosTestData.DOMAIN_RESPONSE,
+            (viewModel.authorPhotosState.value as ViewState.Ready).data.toList()
+        )
+        assertEquals(
+            AuthorProfileTestData.DOMAIN_RESPONSE,
+            (viewModel.authorData.value as ViewState.Ready).data
         )
     }
 
@@ -169,13 +172,27 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
                 any()
             )
         } returns flow { emit(Source.Success(AuthorPhotosTestData.DOMAIN_RESPONSE)) }
+        coEvery { getAuthorProfileUseCase(any()) } returns flow {
+            emit(
+                Source.Success(
+                    AuthorProfileTestData.DOMAIN_RESPONSE
+                )
+            )
+        }
+        val expectedPhotos = mutableListOf<AuthorPhotos>()
+        expectedPhotos.addAll(AuthorPhotosTestData.DOMAIN_RESPONSE)
+        expectedPhotos.addAll(AuthorPhotosTestData.DOMAIN_RESPONSE)
 
+        viewModel.getAuthorProfileData("")
         viewModel.getMoreAuthorPhotos()
 
-        coVerify(exactly = 1) { getAuthorPhotoUseCase(any(), any()) }
+        coVerify(exactly = 2) { getAuthorPhotoUseCase(any(), any()) }
         confirmVerified(getAuthorPhotoUseCase)
 
-        assertEquals(viewModel.authorPhotos.toList(), AuthorPhotosTestData.DOMAIN_RESPONSE)
+        assertEquals(
+            expectedPhotos,
+            (viewModel.authorPhotosState.value as ViewState.Ready).data.toList()
+        )
     }
 
     @Test

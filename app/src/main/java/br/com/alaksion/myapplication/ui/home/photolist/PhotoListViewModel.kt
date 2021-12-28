@@ -32,11 +32,9 @@ class PhotoListViewModel @Inject constructor(
         get() = _events
 
     private val _photos = mutableStateListOf<Photo>()
-    val photos: SnapshotStateList<Photo>
-        get() = _photos
 
-    private val _screenState = MutableStateFlow<ViewState<Unit>>(ViewState.Loading())
-    val screenState: StateFlow<ViewState<Unit>>
+    private val _screenState = MutableStateFlow<ViewState<SnapshotStateList<Photo>>>(ViewState.Loading())
+    val screenState: StateFlow<ViewState<SnapshotStateList<Photo>>>
         get() = _screenState
 
     private val _isMorePhotosLoading = MutableStateFlow(false)
@@ -65,7 +63,7 @@ class PhotoListViewModel @Inject constructor(
     private fun handleGetPhotosSuccess(data: List<Photo>?) {
         data?.let { response ->
             _photos.addAll(response)
-            _screenState.value = ViewState.Ready(Unit)
+            _screenState.value = ViewState.Ready(_photos)
             return
         }
         _screenState.value = ViewState.Error()

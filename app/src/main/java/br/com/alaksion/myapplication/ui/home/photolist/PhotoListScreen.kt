@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Report
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -58,7 +59,6 @@ fun PhotoListScreen(
 
     PhotoListScreenContent(
         screenState = viewModel.screenState.collectAsState().value,
-        photos = viewModel.photos.toList(),
         loadMorePhotos = { viewModel.loadMorePhotos() },
         onClickTryAgain = { viewModel.getImages() },
         navigateToAuthorDetails = navigateToAuthorDetails,
@@ -76,8 +76,7 @@ fun PhotoListScreen(
 @ExperimentalAnimationApi
 @Composable
 internal fun PhotoListScreenContent(
-    screenState: ViewState<Unit>,
-    photos: List<Photo>,
+    screenState: ViewState<SnapshotStateList<Photo>>,
     modifier: Modifier = Modifier,
     onClickTryAgain: () -> Unit,
     loadMorePhotos: () -> Unit,
@@ -136,7 +135,7 @@ internal fun PhotoListScreenContent(
                             paginatorOffset = 2,
                             onListEnd = { loadMorePhotos() }
                         ) {
-                            items(photos) { item ->
+                            items(screenState.data) { item ->
                                 PhotoCard(
                                     photoContent = item,
                                     navigateToAuthor = { authorId ->

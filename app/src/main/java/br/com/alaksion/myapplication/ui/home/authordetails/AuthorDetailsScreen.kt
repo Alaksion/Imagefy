@@ -1,22 +1,16 @@
 package br.com.alaksion.myapplication.ui.home.authordetails
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.CameraRoll
 import androidx.compose.material.icons.filled.Report
-import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,13 +26,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.core_ui.components.TryAgain
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
-import br.com.alaksion.core_ui.extensions.onBottomReached
 import br.com.alaksion.core_ui.theme.DimGray
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.domain.model.AuthorPhotos
-import br.com.alaksion.myapplication.ui.components.ImageLoader
+import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.ui.components.userdetails.UserDetailsInfo
 import br.com.alaksion.myapplication.ui.components.userdetails.header.UserDetailsHeader
 import br.com.alaksion.myapplication.ui.home.authordetails.components.AuthorPhotoGrid
@@ -81,7 +74,6 @@ fun AuthorDetailsScreen(
     AuthorDetailsScreenContent(
         authorData = viewModel.authorData.collectAsState().value,
         authorUsername = authorUsername,
-        authorPhotos = viewModel.authorPhotos.toList(),
         authorPhotoState = viewModel.authorPhotosState.collectAsState().value,
         popBackStack = popBackStack,
         getMorePhotos = { viewModel.getMoreAuthorPhotos() },
@@ -99,8 +91,7 @@ internal fun AuthorDetailsScreenContent(
     isPreview: Boolean = false,
     authorData: ViewState<Author>,
     authorUsername: String,
-    authorPhotos: List<AuthorPhotos>,
-    authorPhotoState: ViewState<Unit>,
+    authorPhotoState: ViewState<List<AuthorPhotos>>,
     popBackStack: () -> Boolean,
     getMorePhotos: () -> Unit,
     tryAgainGetAuthorData: () -> Unit,
@@ -138,7 +129,6 @@ internal fun AuthorDetailsScreenContent(
             is ViewState.Loading, is ViewState.Idle -> AuthorDetailsLoading()
             is ViewState.Ready -> AuthorDetailsReady(
                 authorData = authorData.data,
-                authorPhotos = authorPhotos,
                 getMorePhotos = getMorePhotos,
                 navigateToPhotoViewer = navigateToPhotoViewer,
                 authorPhotoState = authorPhotoState,
@@ -154,8 +144,7 @@ internal fun AuthorDetailsScreenContent(
 fun AuthorDetailsReady(
     isPreview: Boolean,
     authorData: Author,
-    authorPhotos: List<AuthorPhotos>,
-    authorPhotoState: ViewState<Unit>,
+    authorPhotoState: ViewState<List<AuthorPhotos>>,
     getMorePhotos: () -> Unit,
     navigateToPhotoViewer: (photoUrl: String) -> Unit
 ) {
@@ -196,8 +185,8 @@ fun AuthorDetailsReady(
             is ViewState.Ready -> {
                 AuthorPhotoGrid(
                     listState = listState,
-                    authorPhotos = authorPhotos,
-                    getMorePhotos =  getMorePhotos,
+                    authorPhotos = authorPhotoState.data,
+                    getMorePhotos = getMorePhotos,
                     navigateToPhotoViewer = navigateToPhotoViewer
                 )
             }
@@ -303,8 +292,7 @@ fun AuthorDetailsPreview() {
                     )
                 ),
                 authorUsername = "JohnDoe",
-                authorPhotos = listOf(),
-                authorPhotoState = ViewState.Ready(Unit),
+                authorPhotoState = ViewState.Ready(listOf()),
                 popBackStack = { true },
                 getMorePhotos = { },
                 tryAgainGetAuthorData = { },

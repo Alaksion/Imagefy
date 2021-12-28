@@ -37,14 +37,12 @@ class AuthorDetailsViewModel @Inject constructor(
     val authorData: StateFlow<ViewState<Author>>
         get() = _authorData
 
-    private val _authorPhotosState: MutableStateFlow<ViewState<Unit>> =
+    private val _authorPhotosState: MutableStateFlow<ViewState<SnapshotStateList<AuthorPhotos>>> =
         MutableStateFlow(ViewState.Loading())
-    val authorPhotosState: StateFlow<ViewState<Unit>>
+    val authorPhotosState: StateFlow<ViewState<SnapshotStateList<AuthorPhotos>>>
         get() = _authorPhotosState
 
     private val _authorPhotos = mutableStateListOf<AuthorPhotos>()
-    val authorPhotos: SnapshotStateList<AuthorPhotos>
-        get() = _authorPhotos
 
     private var authorUsername: String = ""
     private var page = 1
@@ -88,7 +86,7 @@ class AuthorDetailsViewModel @Inject constructor(
     private fun onGetAuthorPhotosSuccess(data: List<AuthorPhotos>?) {
         data?.let { response ->
             _authorPhotos.addAll(response)
-            _authorPhotosState.value = ViewState.Ready(Unit)
+            _authorPhotosState.value = ViewState.Ready(_authorPhotos)
             return
         }
         _authorPhotosState.value = ViewState.Error()

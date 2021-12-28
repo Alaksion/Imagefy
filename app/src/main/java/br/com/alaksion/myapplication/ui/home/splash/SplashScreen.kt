@@ -27,6 +27,7 @@ import br.com.alaksion.myapplication.domain.model.StoredUser
 import com.skydoves.landscapist.rememberDrawablePainter
 import kotlinx.coroutines.flow.collect
 
+// TODO -> Remove this Screen and use the Android 12 splash screen api as it was intended to be used
 @Composable
 fun SplashScreen(
     viewModel: SplashViewModel,
