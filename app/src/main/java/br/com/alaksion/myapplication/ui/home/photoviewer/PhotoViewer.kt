@@ -26,7 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.tryagain.TryAgain
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ErrorLightRed
 import br.com.alaksion.core_ui.theme.OffWhite

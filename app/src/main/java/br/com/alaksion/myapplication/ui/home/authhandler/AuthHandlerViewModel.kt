@@ -10,7 +10,6 @@ import br.com.alaksion.myapplication.domain.usecase.GetCurrentUsernameUseCase
 import br.com.alaksion.myapplication.domain.usecase.StoreUserDataUseCase
 import br.com.alaksion.myapplication.domain.usecase.ValidateLoginUseCase
 import br.com.alaksion.myapplication.ui.model.BaseViewModel
-import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.network.client.domain.usecase.StoreAuthTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -38,9 +37,9 @@ class AuthHandlerViewModel @Inject constructor(
     val events: SharedFlow<AuthHandlerEvents>
         get() = _events
 
-    private val _authenticationState: MutableStateFlow<ViewState<Unit>> =
-        MutableStateFlow(ViewState.Loading())
-    val authenticationState: StateFlow<ViewState<Unit>>
+    private val _authenticationState: MutableStateFlow<AuthHandlerState> =
+        MutableStateFlow(AuthHandlerState.Loading)
+    val authenticationState: StateFlow<AuthHandlerState>
         get() = _authenticationState
 
     fun authenticateUser(authCode: String?) {
@@ -52,7 +51,7 @@ class AuthHandlerViewModel @Inject constructor(
             )
             return
         }
-        _authenticationState.value = ViewState.Error()
+        _authenticationState.value = AuthHandlerState.Error
     }
 
 
@@ -62,7 +61,7 @@ class AuthHandlerViewModel @Inject constructor(
             getCurrentUsername()
             return
         }
-        _authenticationState.value = ViewState.Error()
+        _authenticationState.value = AuthHandlerState.Error
     }
 
     private fun getCurrentUsername() {
@@ -79,7 +78,7 @@ class AuthHandlerViewModel @Inject constructor(
             getCurrentUserData(response.username)
             return
         }
-        _authenticationState.value = ViewState.Error()
+        _authenticationState.value = AuthHandlerState.Error
     }
 
     private fun getCurrentUserData(username: String) {
@@ -106,11 +105,11 @@ class AuthHandlerViewModel @Inject constructor(
             }
             return
         }
-        _authenticationState.value = ViewState.Error()
+        _authenticationState.value = AuthHandlerState.Error
     }
 
     private fun onApiError() {
-        _authenticationState.value = ViewState.Error()
+        _authenticationState.value = AuthHandlerState.Error
     }
 
     private fun produceEvent(event: AuthHandlerEvents) {

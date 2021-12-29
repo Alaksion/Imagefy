@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.tryagain.TryAgain
 import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ImagefyTheme

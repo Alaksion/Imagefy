@@ -12,11 +12,11 @@ import br.com.alaksion.myapplication.testdata.AuthorProfileTestData
 import br.com.alaksion.myapplication.testdata.UserNameTestData
 import br.com.alaksion.myapplication.testdata.ValidateLoginTestData
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthHandlerEvents
+import br.com.alaksion.myapplication.ui.home.authhandler.AuthHandlerState
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthHandlerViewModel
-import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.utils.ImagefyBaseViewModelTest
-import br.com.alaksion.network.model.NetworkError
 import br.com.alaksion.network.client.domain.usecase.StoreAuthTokenUseCase
+import br.com.alaksion.network.model.NetworkError
 import br.com.alaksion.network.model.Source
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -188,7 +188,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 getUsernameCalls = 0
             )
 
-            assertTrue(viewModel.authenticationState.value is ViewState.Error)
+            assertTrue(viewModel.authenticationState.value is AuthHandlerState.Error)
         }
 
     @Test
@@ -207,7 +207,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 getUsernameCalls = 0
             )
 
-            assertTrue(viewModel.authenticationState.value is ViewState.Error)
+            assertTrue(viewModel.authenticationState.value is AuthHandlerState.Error)
         }
 
     @Test
@@ -225,7 +225,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 getAuthorProfileCalls = 0,
                 getUsernameCalls = 0
             )
-            assertTrue(viewModel.authenticationState.value is ViewState.Error)
+            assertTrue(viewModel.authenticationState.value is AuthHandlerState.Error)
         }
 
     @Test
@@ -259,7 +259,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 getAuthorProfileCalls = 0
             )
 
-            assertTrue(viewModel.authenticationState.value is ViewState.Error)
+            assertTrue(viewModel.authenticationState.value is AuthHandlerState.Error)
         }
 
     @Test
@@ -284,7 +284,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 getAuthorProfileCalls = 0
             )
 
-            assertTrue(viewModel.authenticationState.value is ViewState.Error)
+            assertTrue(viewModel.authenticationState.value is AuthHandlerState.Error)
         }
 
     @Test
@@ -325,7 +325,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 getUsernameCalls = 1
             )
 
-            assertTrue(viewModel.authenticationState.value is ViewState.Error)
+            assertTrue(viewModel.authenticationState.value is AuthHandlerState.Error)
         }
 
     @Test
@@ -357,7 +357,7 @@ class AuthHandlerViewModelTest : ImagefyBaseViewModelTest() {
                 getUsernameCalls = 1
             )
 
-            assertTrue(viewModel.authenticationState.value is ViewState.Error)
+            assertTrue(viewModel.authenticationState.value is AuthHandlerState.Error)
         }
 
     private fun checkCalls(

@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import com.skydoves.landscapist.glide.GlideImage
-import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun SearchPhotosTopBar(
@@ -68,7 +67,6 @@ fun SearchPhotosTopBar(
                         Box(
                             Modifier
                                 .fillMaxSize()
-                                .shimmer()
                         )
                     },
                     failure = {

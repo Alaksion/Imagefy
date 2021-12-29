@@ -31,7 +31,6 @@ import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.formatNumber
 import br.com.alaksion.myapplication.domain.model.StoredUser
 import com.skydoves.landscapist.glide.GlideImage
-import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun HomeScreenNavigationDrawer(
@@ -76,7 +75,6 @@ fun HomeScreenNavigationDrawer(
                             Box(
                                 Modifier
                                     .fillMaxSize()
-                                    .shimmer()
                             )
                         },
                         failure = {

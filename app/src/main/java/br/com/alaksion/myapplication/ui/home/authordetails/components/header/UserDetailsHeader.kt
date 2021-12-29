@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.components.userdetails.header
+package br.com.alaksion.myapplication.ui.home.authordetails.components.header
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -20,7 +20,6 @@ import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.common.extensions.formatNumber
 import com.skydoves.landscapist.glide.GlideImage
-import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun UserDetailsHeader(
@@ -56,7 +55,6 @@ fun UserDetailsHeader(
                     Box(
                         Modifier
                             .fillMaxSize()
-                            .shimmer()
                     )
                 },
                 failure = {

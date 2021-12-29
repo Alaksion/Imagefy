@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.components.userdetails
+package br.com.alaksion.myapplication.ui.home.authordetails.components
 
 import android.content.Intent
 import android.net.Uri

@@ -10,15 +10,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.tryagain.TryAgain
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.domain.model.StoredUser
-import br.com.alaksion.myapplication.ui.model.ViewState
 import kotlinx.coroutines.flow.collect
 
 @Composable
@@ -51,23 +52,25 @@ fun AuthenticationHandlerScreen(
 
 @Composable
 fun AuthHandlerContent(
-    screenState: ViewState<Unit>,
+    screenState: AuthHandlerState,
     onClickTryAgain: () -> Unit,
     goToLoginScreen: () -> Unit
 ) {
     when (screenState) {
-        is ViewState.Loading, is ViewState.Ready, is ViewState.Idle ->
-            AuthHandlerContentLoading()
-        is ViewState.Error -> AuthHandlerContentError(onClickTryAgain, goToLoginScreen)
+        is AuthHandlerState.Loading -> AuthHandlerContentLoading()
+        is AuthHandlerState.Error -> AuthHandlerContentError(onClickTryAgain, goToLoginScreen)
     }
 }
 
 @Composable
-fun AuthHandlerContentLoading() {
+fun AuthHandlerContentLoading(
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(all = 20.dp),
+            .padding(all = 20.dp)
+            .semantics { testTag = AuthHandlerTags.LOADING_STATE },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -87,11 +90,15 @@ fun AuthHandlerContentLoading() {
 @Composable
 fun AuthHandlerContentError(
     onClickTryAgain: () -> Unit,
-    goToLoginScreen: () -> Unit
+    goToLoginScreen: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .semantics {
+                testTag = AuthHandlerTags.ERROR_STATE
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -115,6 +122,7 @@ fun AuthHandlerContentError(
                 .padding(horizontal = 40.dp)
                 .padding(top = 25.dp)
                 .height(48.dp)
+                .semantics { testTag = AuthHandlerTags.GO_TO_HOME }
         ) {
             Text(
                 stringResource(id = R.string.auth_handler_go_to_login),
@@ -130,7 +138,7 @@ fun AuthHandlerPreview() {
     ImagefyTheme(false) {
         Scaffold() {
             AuthHandlerContent(
-                screenState = ViewState.Loading(),
+                screenState = AuthHandlerState.Loading,
                 onClickTryAgain = {},
                 goToLoginScreen = {}
             )

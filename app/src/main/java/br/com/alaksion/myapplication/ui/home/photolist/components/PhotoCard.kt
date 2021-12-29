@@ -38,7 +38,6 @@ import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import com.skydoves.landscapist.CircularReveal
 import com.skydoves.landscapist.glide.GlideImage
-import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -171,7 +170,6 @@ internal fun PhotoCardHeader(
                     Box(
                         Modifier
                             .fillMaxSize()
-                            .shimmer()
                     )
                 },
                 failure = {

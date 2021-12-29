@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.components.userdetails.header
+package br.com.alaksion.myapplication.ui.home.authordetails.components.header
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme

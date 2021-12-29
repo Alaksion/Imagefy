@@ -1,4 +1,4 @@
-package br.com.alaksion.core_ui.components
+package br.com.alaksion.core_ui.components.tryagain
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,11 +10,15 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alaksion.core_ui.theme.ImagefyTheme
+
+const val TRY_AGAIN_BUTTON_TAG = "try_again_button"
 
 @Composable
 fun TryAgain(
@@ -46,6 +50,7 @@ fun TryAgain(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
+                .semantics { testTag = TRY_AGAIN_BUTTON_TAG }
         ) {
             Text(
                 "Try Again",

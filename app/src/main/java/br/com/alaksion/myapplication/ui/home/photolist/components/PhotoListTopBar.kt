@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.rememberDrawablePainter
-import com.valentinilk.shimmer.shimmer
 
 @Composable
 fun PhotoListTopBar(
@@ -52,7 +51,6 @@ fun PhotoListTopBar(
                         Box(
                             Modifier
                                 .fillMaxSize()
-                                .shimmer()
                         )
                     },
                     failure = {

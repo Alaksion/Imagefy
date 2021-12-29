@@ -16,10 +16,9 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.core_ui.components.TryAgain
+import br.com.alaksion.core_ui.components.tryagain.TryAgain
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
 import br.com.alaksion.core_ui.components.paginatedlazycolumn.PaginatedLazyColumn
 import br.com.alaksion.core_ui.components.paginatedlazycolumn.rememberPaginatedLazyColumnState

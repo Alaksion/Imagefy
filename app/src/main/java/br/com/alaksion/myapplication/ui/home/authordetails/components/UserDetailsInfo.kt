@@ -1,4 +1,4 @@
-package br.com.alaksion.myapplication.ui.components.userdetails
+package br.com.alaksion.myapplication.ui.home.authordetails.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
