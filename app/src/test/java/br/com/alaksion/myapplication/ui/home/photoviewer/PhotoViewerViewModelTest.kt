@@ -1,6 +1,5 @@
 package br.com.alaksion.myapplication.ui.home.photoviewer
 
-import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.myapplication.domain.model.PhotoDetail
 import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
@@ -45,7 +44,7 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
         coVerify(exactly = 1) { getPhotoDetailsUseCase("id") }
         confirmVerified(getPhotoDetailsUseCase)
         assertEquals(
-            (viewModel.photoData.value as ViewState.Ready).data,
+            (viewModel.photoData.value as PhotoViewerState.Ready).photoData,
             PhotoDetailsTestData.DOMAIN_RESPONSE
         )
     }
@@ -67,7 +66,7 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
 
         coVerify(exactly = 1) { getPhotoDetailsUseCase("id") }
         confirmVerified(getPhotoDetailsUseCase)
-        assertTrue(viewModel.photoData.value is ViewState.Error)
+        assertTrue(viewModel.photoData.value is PhotoViewerState.Error)
     }
 
     @Test
@@ -79,7 +78,7 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
 
             coVerify(exactly = 1) { getPhotoDetailsUseCase("id") }
             confirmVerified(getPhotoDetailsUseCase)
-            assertTrue(viewModel.photoData.value is ViewState.Error)
+            assertTrue(viewModel.photoData.value is PhotoViewerState.Error)
         }
 
     @Test

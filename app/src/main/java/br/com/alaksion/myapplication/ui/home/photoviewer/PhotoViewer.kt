@@ -24,10 +24,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import br.com.alaksion.core_ui.components.tryagain.TryAgain
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
+import br.com.alaksion.core_ui.components.tryagain.TryAgain
 import br.com.alaksion.core_ui.theme.ErrorLightRed
 import br.com.alaksion.core_ui.theme.OffWhite
 import br.com.alaksion.myapplication.common.extensions.formatNumber
@@ -36,7 +38,6 @@ import br.com.alaksion.myapplication.domain.model.PhotoDetail
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.components.NumberScrollerAnimation
 import br.com.alaksion.myapplication.ui.home.photoviewer.components.PhotoInfoItem
-import br.com.alaksion.myapplication.ui.model.ViewState
 
 const val PHOTO_ID_ARG = "photo_url"
 
@@ -53,7 +54,7 @@ fun PhotoViewerScreen(
     }
 
     PhotoViewerScreenContent(
-        photoData = viewModel.photoData.collectAsState().value,
+        photoState = viewModel.photoData.collectAsState().value,
         popBackStack = popBackStack,
         onRateImage = { isLike ->
             viewModel.ratePhoto(photoId, isLike)
@@ -65,7 +66,7 @@ fun PhotoViewerScreen(
 @ExperimentalAnimationApi
 @Composable
 internal fun PhotoViewerScreenContent(
-    photoData: ViewState<PhotoDetail>,
+    photoState: PhotoViewerState,
     popBackStack: () -> Boolean,
     onRateImage: (isLike: Boolean) -> Unit,
     onClickTryAgain: () -> Unit
@@ -84,7 +85,11 @@ internal fun PhotoViewerScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                IconButton(onClick = { popBackStack() }, modifier = Modifier.size(48.dp)) {
+                IconButton(
+                    onClick = { popBackStack() },
+                    modifier = Modifier
+                        .size(48.dp)
+                        .semantics { testTag = PhotoViewerTags.BACK_BUTTON.name }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = null,
@@ -93,25 +98,31 @@ internal fun PhotoViewerScreenContent(
                 }
             }
         }
-        when (photoData) {
-            is ViewState.Ready -> {
+        when (photoState) {
+            is PhotoViewerState.Ready -> {
                 PhotoViewerReady(
-                    photoData = photoData.data,
+                    photoData = photoState.photoData,
                     context = context,
                     onRateImage = onRateImage
                 )
             }
-            is ViewState.Loading, is ViewState.Idle -> {
+            is PhotoViewerState.Loading -> {
                 Box(
                     modifier = Modifier
-                        .fillMaxSize(),
+                        .fillMaxSize()
+                        .semantics { testTag = PhotoViewerTags.LOADING.name },
                     contentAlignment = Alignment.Center
                 ) {
                     ProgressIndicator()
                 }
             }
-            is ViewState.Error -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            is PhotoViewerState.Error -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .semantics { testTag = PhotoViewerTags.ERROR.name },
+                    contentAlignment = Alignment.Center
+                ) {
                     TryAgain(
                         modifier = Modifier.padding(horizontal = 40.dp),
                         message = "An error occurred and this image could not be loaded, please try again",
@@ -179,9 +190,12 @@ internal fun PhotoViewerReady(
                 .clickable(interactionSource = MutableInteractionSource(), indication = null) {
                     toggleBottomBar()
                 }
+                .semantics { testTag = PhotoViewerTags.IMAGE_LOADER.name }
         )
         AnimatedVisibility(
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .semantics { testTag = PhotoViewerTags.STATS_BAR.name },
             visible = showPhotoViewerBottomBar.value,
             enter = slideInVertically(
                 initialOffsetY = {
@@ -208,6 +222,7 @@ internal fun PhotoViewerReady(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(
+                        modifier = Modifier.semantics { testTag = PhotoViewerTags.RATE_IMAGE.name },
                         onClick = { rateImage() },
                     ) {
                         Icon(
