@@ -55,8 +55,6 @@ fun AuthorDetailsScreen(
         key2 = viewModel,
         key3 = authorUsername
     ) {
-        viewModel.getAuthorProfileData(authorUsername)
-
         viewModel.events.collect { event ->
             when (event) {
                 is AuthorDetailsEvents.ShowErrorToast -> {
@@ -76,7 +74,7 @@ fun AuthorDetailsScreen(
         authorPhotoState = viewModel.authorPhotosState.collectAsState().value,
         popBackStack = popBackStack,
         getMorePhotos = { viewModel.getMoreAuthorPhotos() },
-        tryAgainGetAuthorData = { viewModel.getAuthorProfileData(authorUsername) },
+        tryAgainGetAuthorData = { viewModel.getAuthorProfileData() },
         navigateToPhotoViewer = { photoUrl ->
             navigateToPhotoViewer(photoUrl)
         }

@@ -25,8 +25,8 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
     private val getPhotoDetailsUseCase: GetPhotoDetailsUseCase = mockk(relaxed = true)
     private val ratePhotoUseCase: RatePhotoUseCase = mockk(relaxed = true)
 
-    override fun setUp() {
-        viewModel = PhotoViewerViewModel(getPhotoDetailsUseCase, ratePhotoUseCase)
+    private fun setUpViewModel() {
+        viewModel = PhotoViewerViewModel("photoId", getPhotoDetailsUseCase, ratePhotoUseCase)
     }
 
     @Test
@@ -39,9 +39,9 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
             )
         }
 
-        viewModel.getPhotoDetails("id")
+        setUpViewModel()
 
-        coVerify(exactly = 1) { getPhotoDetailsUseCase("id") }
+        coVerify(exactly = 1) { getPhotoDetailsUseCase("photoId") }
         confirmVerified(getPhotoDetailsUseCase)
         assertEquals(
             (viewModel.photoData.value as PhotoViewerState.Ready).photoData,
@@ -62,9 +62,9 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
             )
         }
 
-        viewModel.getPhotoDetails("id")
+        setUpViewModel()
 
-        coVerify(exactly = 1) { getPhotoDetailsUseCase("id") }
+        coVerify(exactly = 1) { getPhotoDetailsUseCase("photoId") }
         confirmVerified(getPhotoDetailsUseCase)
         assertTrue(viewModel.photoData.value is PhotoViewerState.Error)
     }
@@ -74,9 +74,9 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
         runBlocking {
             coEvery { getPhotoDetailsUseCase(any()) } returns flow { emit(Source.Success(null)) }
 
-            viewModel.getPhotoDetails("id")
+            setUpViewModel()
 
-            coVerify(exactly = 1) { getPhotoDetailsUseCase("id") }
+            coVerify(exactly = 1) { getPhotoDetailsUseCase("photoId") }
             confirmVerified(getPhotoDetailsUseCase)
             assertTrue(viewModel.photoData.value is PhotoViewerState.Error)
         }
@@ -84,6 +84,8 @@ class PhotoViewerViewModelTest : ImagefyBaseViewModelTest() {
     @Test
     fun `Should rate photo`() = runBlocking {
         coEvery { ratePhotoUseCase(any(), any()) } returns flow { emit(Source.Success(Unit)) }
+
+        setUpViewModel()
 
         viewModel.ratePhoto("photoId", false)
 

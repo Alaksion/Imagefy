@@ -2,6 +2,7 @@ package br.com.alaksion.myapplication.ui.navigator
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -13,6 +14,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import br.com.alaksion.myapplication.BuildConfig
 import br.com.alaksion.myapplication.common.extensions.getVmStoreOwner
+import br.com.alaksion.myapplication.di.viewmodels.VmFactories
 import br.com.alaksion.myapplication.domain.model.StoredUser
 import br.com.alaksion.myapplication.ui.home.authhandler.AuthenticationHandlerScreen
 import br.com.alaksion.myapplication.ui.home.authordetails.AUTHOR_USERNAME_ARG
@@ -26,6 +28,7 @@ import br.com.alaksion.myapplication.ui.home.splash.SplashScreen
 
 private const val uri = BuildConfig.REDIRECT_URI
 
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @ExperimentalFoundationApi
 @Composable
@@ -101,7 +104,7 @@ fun HomeNavigator(
         ) {
             it.arguments?.getString(AUTHOR_USERNAME_ARG)?.let { authorUsername ->
                 AuthorDetailsScreen(
-                    viewModel = hiltViewModel(it),
+                    viewModel = VmFactories.authorDetailsViewModel(authorUsername = authorUsername),
                     authorUsername = authorUsername,
                     popBackStack = { navHostController.popBackStack() },
                     navigateToPhotoViewer = { photoId ->
@@ -120,7 +123,7 @@ fun HomeNavigator(
             it.arguments?.getString(PHOTO_ID_ARG)
                 ?.let { photoId ->
                     PhotoViewerScreen(
-                        viewModel = hiltViewModel(viewModelStoreOwner = navHostController.getVmStoreOwner()),
+                        viewModel = VmFactories.photoViewerViewModel(photoId),
                         photoId = photoId,
                         popBackStack = { navHostController.popBackStack() },
                     )

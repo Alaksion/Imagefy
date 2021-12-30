@@ -1,16 +1,19 @@
 package br.com.alaksion.myapplication.ui.home.photoviewer
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import br.com.alaksion.myapplication.domain.model.PhotoDetail
 import br.com.alaksion.myapplication.domain.usecase.GetPhotoDetailsUseCase
 import br.com.alaksion.myapplication.domain.usecase.RatePhotoUseCase
 import br.com.alaksion.myapplication.ui.model.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
-@HiltViewModel
-class PhotoViewerViewModel @Inject constructor(
+class PhotoViewerViewModel @AssistedInject constructor(
+    @Assisted private val photoId: String,
     private val getPhotoDetailsUseCase: GetPhotoDetailsUseCase,
     private val ratePhotoUseCase: RatePhotoUseCase
 ) : BaseViewModel() {
@@ -20,18 +23,19 @@ class PhotoViewerViewModel @Inject constructor(
     val photoData: StateFlow<PhotoViewerState>
         get() = _photoData
 
-    private val photoId: String = ""
-
-    fun getPhotoDetails(currentPhotoId: String) {
-        if (photoId != currentPhotoId) {
-            _photoData.value = PhotoViewerState.Loading
-            handleApiResponse(
-                source = { getPhotoDetailsUseCase(currentPhotoId) },
-                onSuccess = { data -> onGetPhotoDetailsSuccess(data) },
-                onError = { onGetPhotoDetailsError() }
-            )
-        }
+    init {
+        getPhotoDetails()
     }
+
+    fun getPhotoDetails() {
+        _photoData.value = PhotoViewerState.Loading
+        handleApiResponse(
+            source = { getPhotoDetailsUseCase(photoId) },
+            onSuccess = { data -> onGetPhotoDetailsSuccess(data) },
+            onError = { onGetPhotoDetailsError() }
+        )
+    }
+
 
     private fun onGetPhotoDetailsError() {
         _photoData.value = PhotoViewerState.Error
@@ -52,6 +56,22 @@ class PhotoViewerViewModel @Inject constructor(
             onSuccess = { },
             onError = { }
         )
+    }
 
+    @AssistedFactory
+    interface Factory {
+        fun create(photoId: String): PhotoViewerViewModel
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    companion object {
+        fun provideFactory(
+            factory: Factory,
+            photoId: String
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return factory.create(photoId) as T
+            }
+        }
     }
 }

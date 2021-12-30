@@ -30,8 +30,13 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase = mockk(relaxed = true)
     private val getAuthorPhotoUseCase: GetAuthorPhotosUseCase = mockk(relaxed = true)
 
-    override fun setUp() {
-        viewModel = AuthorDetailsViewModel(getAuthorProfileUseCase, getAuthorPhotoUseCase)
+    /*
+    * This method must be called instead of a regular @Before annotated function because the init block
+    * generated inside the @Before block cannot be accessed in test runtime
+    * */
+    private fun setupViewModel() {
+        viewModel =
+            AuthorDetailsViewModel("username", getAuthorProfileUseCase, getAuthorPhotoUseCase)
     }
 
     @Test
@@ -50,15 +55,15 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
             )
         } returns flow { emit(Source.Success(AuthorPhotosTestData.DOMAIN_RESPONSE)) }
 
-        viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
+        setupViewModel()
 
         coVerify(exactly = 1) {
             getAuthorPhotoUseCase(
-                AuthorProfileTestData.DOMAIN_RESPONSE.username,
+                "username",
                 1
             )
         }
-        coVerify(exactly = 1) { getAuthorProfileUseCase(AuthorProfileTestData.DOMAIN_RESPONSE.username) }
+        coVerify(exactly = 1) { getAuthorProfileUseCase("username") }
         confirmVerified(getAuthorProfileUseCase)
         confirmVerified(getAuthorPhotoUseCase)
 
@@ -84,11 +89,10 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
                 )
             )
         }
-
-        viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
+        setupViewModel()
 
         coVerify(exactly = 0) { getAuthorPhotoUseCase(any(), any()) }
-        coVerify(exactly = 1) { getAuthorProfileUseCase(AuthorProfileTestData.DOMAIN_RESPONSE.username) }
+        coVerify(exactly = 1) { getAuthorProfileUseCase("username") }
         confirmVerified(getAuthorProfileUseCase)
         confirmVerified(getAuthorPhotoUseCase)
 
@@ -100,10 +104,10 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
         runBlocking {
             coEvery { getAuthorProfileUseCase(any()) } returns flow { emit(Source.Success(null)) }
 
-            viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
+            setupViewModel()
 
             coVerify(exactly = 0) { getAuthorPhotoUseCase(any(), any()) }
-            coVerify(exactly = 1) { getAuthorProfileUseCase(AuthorProfileTestData.DOMAIN_RESPONSE.username) }
+            coVerify(exactly = 1) { getAuthorProfileUseCase("username") }
             confirmVerified(getAuthorProfileUseCase)
             confirmVerified(getAuthorPhotoUseCase)
 
@@ -127,10 +131,10 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
             )
         }
 
-        viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
+        setupViewModel()
 
         coVerify(exactly = 1) { getAuthorPhotoUseCase(any(), any()) }
-        coVerify(exactly = 1) { getAuthorProfileUseCase(AuthorProfileTestData.DOMAIN_RESPONSE.username) }
+        coVerify(exactly = 1) { getAuthorProfileUseCase("username") }
         confirmVerified(getAuthorProfileUseCase)
         confirmVerified(getAuthorPhotoUseCase)
 
@@ -154,10 +158,10 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
                 )
             } returns flow { emit(Source.Success(null)) }
 
-            viewModel.getAuthorProfileData(AuthorProfileTestData.DOMAIN_RESPONSE.username)
+            setupViewModel()
 
             coVerify(exactly = 1) { getAuthorPhotoUseCase(any(), any()) }
-            coVerify(exactly = 1) { getAuthorProfileUseCase(AuthorProfileTestData.DOMAIN_RESPONSE.username) }
+            coVerify(exactly = 1) { getAuthorProfileUseCase("username") }
             confirmVerified(getAuthorProfileUseCase)
             confirmVerified(getAuthorPhotoUseCase)
 
@@ -179,11 +183,12 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
                 )
             )
         }
+        setupViewModel()
+
         val expectedPhotos = mutableListOf<AuthorPhotos>()
         expectedPhotos.addAll(AuthorPhotosTestData.DOMAIN_RESPONSE)
         expectedPhotos.addAll(AuthorPhotosTestData.DOMAIN_RESPONSE)
 
-        viewModel.getAuthorProfileData("")
         viewModel.getMoreAuthorPhotos()
 
         coVerify(exactly = 2) { getAuthorPhotoUseCase(any(), any()) }
@@ -213,6 +218,8 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
             )
         }
 
+        setupViewModel()
+
         viewModel.events.test {
 
             viewModel.getMoreAuthorPhotos()
@@ -236,6 +243,8 @@ class AuthorDetailsViewModelTest : ImagefyBaseViewModelTest() {
                     any()
                 )
             } returns flow { emit(Source.Success(null)) }
+
+            setupViewModel()
 
             viewModel.events.test {
                 viewModel.getMoreAuthorPhotos()

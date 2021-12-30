@@ -22,13 +22,18 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.ui.components.HomeScreenNavigationDrawer
+import br.com.alaksion.myapplication.ui.home.authordetails.AuthorDetailsViewModel
+import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerViewModel
 import br.com.alaksion.myapplication.ui.navigator.HomeNavigator
 import br.com.alaksion.myapplication.ui.navigator.bottomnav.HomeBottomNavigation
 import br.com.alaksion.myapplication.ui.navigator.navigateToAuthorDetails
 import br.com.alaksion.myapplication.ui.navigator.navigateToLogin
 import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.components.ActivityComponent
 import kotlinx.coroutines.launch
 
 @ExperimentalFoundationApi

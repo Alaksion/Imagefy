@@ -2,6 +2,8 @@ package br.com.alaksion.myapplication.ui.home.authordetails
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import br.com.alaksion.myapplication.domain.model.Author
 import br.com.alaksion.myapplication.domain.model.AuthorPhotos
@@ -10,20 +12,22 @@ import br.com.alaksion.myapplication.domain.usecase.GetAuthorProfileUseCase
 import br.com.alaksion.myapplication.ui.model.BaseViewModel
 import br.com.alaksion.myapplication.ui.model.ViewState
 import br.com.alaksion.network.model.NetworkError
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 sealed class AuthorDetailsEvents() {
     class ShowErrorToast() : AuthorDetailsEvents()
 }
 
-@HiltViewModel
-class AuthorDetailsViewModel @Inject constructor(
+class AuthorDetailsViewModel @AssistedInject constructor(
+    @Assisted private val authorUsername: String,
     private val getAuthorProfileUseCase: GetAuthorProfileUseCase,
     private val getAuthorPhotosUseCase: GetAuthorPhotosUseCase
 ) : BaseViewModel() {
@@ -44,14 +48,16 @@ class AuthorDetailsViewModel @Inject constructor(
 
     private val _authorPhotos = mutableStateListOf<AuthorPhotos>()
 
-    private var authorUsername: String = ""
     private var page = 1
     private var shouldLoadMorePhotos = true
 
-    fun getAuthorProfileData(currentAuthorUsername: String) {
-        this.authorUsername = currentAuthorUsername
+    init {
+        getAuthorProfileData()
+    }
+
+    fun getAuthorProfileData() {
         handleApiResponse(
-            source = { getAuthorProfileUseCase(currentAuthorUsername) },
+            source = { getAuthorProfileUseCase(authorUsername) },
             onError = { error -> onGetAuthorDataError(error) },
             onSuccess = { data -> onGetAuthorDataSuccess(data) }
         )
@@ -129,6 +135,23 @@ class AuthorDetailsViewModel @Inject constructor(
     private fun produceEvent(event: AuthorDetailsEvents) {
         viewModelScope.launch {
             _events.emit(event)
+        }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(authorUsername: String): AuthorDetailsViewModel
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    companion object {
+        fun provideFactory(
+            assistedFactory: Factory,
+            authorUsername: String
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+                return assistedFactory.create(authorUsername) as T
+            }
         }
     }
 

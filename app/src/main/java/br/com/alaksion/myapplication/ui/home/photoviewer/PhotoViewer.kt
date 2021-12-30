@@ -16,7 +16,10 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -49,17 +52,13 @@ fun PhotoViewerScreen(
     popBackStack: () -> Boolean,
 ) {
 
-    LaunchedEffect(key1 = photoId) {
-        viewModel.getPhotoDetails(photoId)
-    }
-
     PhotoViewerScreenContent(
         photoState = viewModel.photoData.collectAsState().value,
         popBackStack = popBackStack,
         onRateImage = { isLike ->
             viewModel.ratePhoto(photoId, isLike)
         },
-        onClickTryAgain = { viewModel.getPhotoDetails(photoId) }
+        onClickTryAgain = { viewModel.getPhotoDetails() }
     )
 }
 
