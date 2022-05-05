@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.com.alaksion.myapplication.ui.home.authordetails.AuthorDetailsViewModel
 import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerViewModel
+import br.com.alaksion.myapplication.ui.home.photoviewer.PhotoViewerViewModel.Companion.provideFactory
 import dagger.hilt.android.EntryPointAccessors
 
 @ExperimentalMaterialApi
@@ -33,7 +34,7 @@ object VmFactories {
             VmProviderFactory::class.java
         ).photoViewerVmFactory()
 
-        return viewModel(factory = PhotoViewerViewModel.provideFactory(factory, photoId))
+        return viewModel(factory = provideFactory(factory, photoId))
     }
 
 }

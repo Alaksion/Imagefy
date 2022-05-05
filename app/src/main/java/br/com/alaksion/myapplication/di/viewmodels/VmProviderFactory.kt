@@ -9,6 +9,6 @@ import dagger.hilt.android.components.ActivityComponent
 @EntryPoint
 @InstallIn(ActivityComponent::class)
 interface VmProviderFactory {
-    fun authorDetailsVmFactory(): AuthorDetailsViewModel.Factory
+    fun authorDetailsVmFactory(): AuthorDetailsViewModel.VmFactory
     fun photoViewerVmFactory(): PhotoViewerViewModel.Factory
 }

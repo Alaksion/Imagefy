@@ -5,7 +5,8 @@ import androidx.datastore.core.CorruptionException
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
-import br.com.alaksion.myapplication.CurrentUser
+import androidx.datastore.preferences.PreferencesProto.PreferenceMap.getDefaultInstance
+import br.com.alaksion.myapplication.domain.model.CurrentUser
 import java.io.InputStream
 import java.io.OutputStream
 

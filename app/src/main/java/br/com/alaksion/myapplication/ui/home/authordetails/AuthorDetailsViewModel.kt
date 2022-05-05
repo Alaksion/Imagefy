@@ -15,7 +15,6 @@ import br.com.alaksion.network.model.NetworkError
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -139,14 +138,14 @@ class AuthorDetailsViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
+    interface VmFactory {
         fun create(authorUsername: String): AuthorDetailsViewModel
     }
 
     @Suppress("UNCHECKED_CAST")
     companion object {
         fun provideFactory(
-            assistedFactory: Factory,
+            assistedFactory: VmFactory,
             authorUsername: String
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {

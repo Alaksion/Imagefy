@@ -1,7 +1,6 @@
 package br.com.alaksion.network.client.domain.usecase
 
-import android.content.SharedPreferences
-import br.com.alaksion.network.client.NetworkClientConfig
+import br.com.alaksion.network.client.domain.repository.NetworkClientRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
@@ -13,7 +12,7 @@ import org.junit.Test
 class GetAuthorizationHeaderUseCaseTest {
 
     private lateinit var useCase: GetAuthorizationHeaderUseCase
-    private val sharedPrefs: SharedPreferences = mockk()
+    private val sharedPrefs: NetworkClientRepository = mockk()
 
     @Before
     fun setUp() {
@@ -22,11 +21,11 @@ class GetAuthorizationHeaderUseCaseTest {
 
     @Test
     fun `Should get auth token from shared preferences`() = runBlocking {
-        coEvery { sharedPrefs.getString(NetworkClientConfig.AUTH_TOKEN_KEY, "") } returns "Token"
+        coEvery { sharedPrefs.getAuthorizationHeader() } returns "Token"
 
         useCase()
 
-        coVerify(exactly = 1) { sharedPrefs.getString(any(), any()) }
+        coVerify(exactly = 1) { sharedPrefs.getAuthorizationHeader() }
         confirmVerified(sharedPrefs)
     }
 

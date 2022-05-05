@@ -5,7 +5,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -28,16 +28,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import br.com.alaksion.core_ui.components.tryagain.TryAgain
 import br.com.alaksion.core_ui.components.loaders.MorePhotosLoader
 import br.com.alaksion.core_ui.components.loaders.ProgressIndicator
+import br.com.alaksion.core_ui.components.tryagain.TryAgain
 import br.com.alaksion.core_ui.theme.ImagefyTheme
 import br.com.alaksion.myapplication.R
 import br.com.alaksion.myapplication.domain.model.Photo
 import br.com.alaksion.myapplication.ui.components.ImageLoader
 import br.com.alaksion.myapplication.ui.home.searchphotos.components.SearchPhotosTopBar
 import br.com.alaksion.myapplication.ui.model.ViewState
-import kotlinx.coroutines.flow.collect
 
 @ExperimentalFoundationApi
 @Composable
@@ -90,12 +89,13 @@ fun SearchPhotosContent(
     screenState: ViewState<Unit>,
     isMorePhotosLoading: Boolean,
     loadMorePhotos: () -> Unit,
-    onClickTryAgain: () -> Unit
+    onClickTryAgain: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val listState = rememberLazyListState()
+    val listState = rememberLazyGridState()
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         SearchPhotosTopBar(
             toggleDrawer = toggleDrawer,
@@ -215,13 +215,13 @@ fun SearchPhotosEmpty(modifier: Modifier = Modifier) {
 @Composable
 fun SearchPhotosList(
     photos: List<Photo>,
-    listState: LazyListState,
+    listState: LazyGridState,
     onLoadMorePhotos: () -> Unit,
     modifier: Modifier = Modifier,
     isPreview: Boolean = false,
 ) {
     LazyVerticalGrid(
-        cells = GridCells.Fixed(3),
+        columns = GridCells.Fixed(3),
         state = listState,
         modifier = modifier.scale(1.01f)
     ) {
@@ -259,6 +259,7 @@ fun SearchPhotosScreenPreview() {
     ImagefyTheme {
         Scaffold {
             SearchPhotosContent(
+                modifier = Modifier.padding(it),
                 toggleDrawer = {},
                 userProfileUrl = "",
                 isPreview = true,

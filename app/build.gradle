@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    id "com.google.protobuf" version "0.8.12"
     id 'dagger.hilt.android.plugin'
 }
 
@@ -58,8 +57,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.31'
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
 
     packagingOptions {
@@ -74,47 +72,38 @@ dependencies {
     implementation project(path: ':network')
     implementation project(path: ':core-ui')
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.4.0'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.lifecycle.runtime)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
 
     // Tests
-    testImplementation "io.mockk:mockk:1.12.0"
+    testImplementation "io.mockk:mockk:1.12.3"
     testImplementation "android.arch.core:core-testing:1.1.1"
     testImplementation 'androidx.test:core:1.4.0'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.1'
     testImplementation 'app.cash.turbine:turbine:0.7.0'
 
     // Instrumented tests
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_version")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_version")
+    androidTestImplementation(libs.androidx.compose.uijunit)
+    debugImplementation(libs.androidx.compose.uimanifest)
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    implementation "com.google.dagger:dagger:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    kapt "com.google.dagger:dagger-compiler:$hilt_version"
+    implementation libs.hilt.core
+    kapt libs.hilt.compiler
 
     // Navigation
-    implementation "androidx.navigation:navigation-compose:2.4.0-rc01"
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-rc01'
-
-    // LandScapist
-    implementation 'com.github.skydoves:landscapist-glide:1.3.7'
-
-    //Constraint layout
-    implementation 'androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02'
+    implementation "androidx.navigation:navigation-compose:2.5.0-beta01"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     //Icons
-    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation libs.androidx.compose.material.icons
 
     // Splash Provider
-    implementation "androidx.core:core-splashscreen:1.0.0-alpha02"
+    implementation "androidx.core:core-splashscreen:1.0.0-beta02"
 
     // Data Store
     implementation("androidx.datastore:datastore:1.0.0")
@@ -122,28 +111,8 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation "com.google.protobuf:protobuf-javalite:3.10.0"
 
-    //Accompanist
-    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
-    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
-
 }
 
-protobuf {
-    protoc {
-        artifact = "com.google.protobuf:protoc:3.10.0"
-    }
-
-    // Generates the java Protobuf-lite code for the Protobufs in this project. See
-    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
-    // for more information.
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                java {
-                    option 'lite'
-                }
-            }
-        }
-    }
+kapt {
+    correctErrorTypes true
 }

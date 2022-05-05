@@ -49,7 +49,7 @@ class ImagefyLocalDataSourceImpl @Inject constructor(
     override suspend fun getCurrentUser(): Flow<StoredUserData> {
         return userDataStore.data.map { storedUser ->
             StoredUserData(
-                userName = storedUser.userName,
+                userName = storedUser.username,
                 name = storedUser.name,
                 followersCount = storedUser.followersCount,
                 followingCount = storedUser.followingCount,
