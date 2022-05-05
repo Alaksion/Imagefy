@@ -16,6 +16,8 @@ retrofit = "2.9.0"
 coroutines = "1.6.1"
 mockk = "1.12.3"
 junit = "4.13.2"
+truth = "1.1.3"
+turbine = "0.7.0"
 
 [libraries]
 android-kotlin-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -56,9 +58,11 @@ coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", ve
 
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 junit = { module = "junit:junit", version.ref = "junit" }
+truth = { module = " com.google.truth:truth", version.ref = "truth" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [bundles]
 compose-ui = ["androidx-compose-core", "androidx-compose-material", "androidx-compose-preview", "androidx-compose-activity", "androidx-compose-constraintlayout"]
 accompanist = ["accompanist-systemuicontroller", "accompanist-insets", "accompanist-swiper"]
 retrofit = ["retrofit-core", "retrofit-gson"]
-test-unit = ["mockk", "junit"]
+test-unit = ["mockk", "junit", "truth"]

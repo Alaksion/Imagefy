@@ -153,5 +153,6 @@ class AuthorDetailsViewModel @AssistedInject constructor(
             }
         }
     }
-
 }
+
+

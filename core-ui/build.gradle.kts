@@ -14,10 +14,8 @@ android {
     }
 
     buildTypes {
-        buildTypes {
-            getByName("release") {
-                isMinifyEnabled = false
-            }
+        getByName("release") {
+            isMinifyEnabled = false
         }
     }
 
