@@ -1,3 +1,6 @@
+# Warning
+> This project isn't working anymore and i can't figure out why, i don't have much time to work on this so it's probably going to stay broken for a while
+
 # Imagefy
 > Imagefy is an application developed with Android Jetpack Compose along with the Unsplash Api to serve as a Compose code sample, this project is still in development, so new features and code refactors will oftenly occur.
 
